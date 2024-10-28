@@ -1,7 +1,16 @@
 <template>
   <div>
-    <q-card class="q-mb-xl" v-for="(items, index) in 2" :key="index">
-      <section class="row q-gutter-md" style="align-items: stretch">
+    <div class="col" align="right">
+      <q-btn
+        color="primary"
+        class="q-mb-md"
+        icon="download"
+        label="Скачать"
+        @click="download"
+      />
+    </div>
+    <q-card class="q-mb-xl">
+      <section class="row" style="align-items: stretch">
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">№ (порядковый)</span>
@@ -74,6 +83,10 @@ const viewDetailedInformation = () => {
 
 const closeWindow = () => {
   isOpen.value = false;
+};
+
+const download = () => {
+  console.log("Download");
 };
 </script>
 
