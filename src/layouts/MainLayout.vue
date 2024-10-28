@@ -21,6 +21,8 @@
             v-ripple
             v-for="(items, id) in navigationButtons"
             :key="id"
+            @click="navigation(items.link)"
+            :class="items.link == currentPath ? 'activePage' : ''"
           >
             <q-item-section avatar>
               <q-icon :name="items.icon" />
@@ -39,7 +41,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { route } from "quasar/wrappers";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const drawer = ref(true);
 const navigationButtons = ref([
@@ -49,6 +53,24 @@ const navigationButtons = ref([
     icon: "phone",
   },
 ]);
+
+const router = useRouter();
+const defineRoute = useRoute();
+const currentPath = ref(defineRoute.fullPath);
+watch(
+  () => defineRoute.fullPath,
+  (newVal) => {
+    currentPath.value = newVal;
+    console.log("Текущий маршрут:", newVal);
+  }
+);
+const navigation = (route) => {
+  router.push(route);
+};
 </script>
 
-<style></style>
+<style scoped>
+.activePage {
+  color: #779fc2;
+}
+</style>

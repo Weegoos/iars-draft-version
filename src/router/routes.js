@@ -1,10 +1,6 @@
 const routes = [
   {
     path: "/",
-    component: () => import("pages/IndexPage.vue"),
-  },
-  {
-    path: "/card",
     component: () => import("pages/CardPage.vue"),
   },
 
