@@ -49,6 +49,9 @@
             </q-tab-panel>
           </q-tab-panels>
         </div>
+        <q-card-actions align="right">
+          <q-btn color="negative" flat label="Закрыть" @click="closeWindow" />
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
