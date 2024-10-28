@@ -48,17 +48,29 @@
               no-caps
               label="Просмотреть"
               class="q-mb-md"
+              @click="viewDetailedInformation"
             />
             <q-btn color="positive" no-caps label="Согласовать" />
           </q-card-actions>
         </div>
       </section>
     </q-card>
+    <DetailedInformation :isOpen="isOpen" @closeWindow="closeWindow" />
   </div>
 </template>
 
-<script>
-export default {};
+<script setup>
+import { ref } from "vue";
+import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
+
+const isOpen = ref(false);
+const viewDetailedInformation = () => {
+  isOpen.value = true;
+};
+
+const closeWindow = () => {
+  isOpen.value = false;
+};
 </script>
 
 <style></style>
