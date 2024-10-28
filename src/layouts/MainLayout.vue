@@ -11,7 +11,7 @@
       <q-drawer
         v-model="drawer"
         bordered
-        :width="230"
+        :width="250"
         :breakpoint="500"
         content-class="bg-grey-3"
       >
@@ -49,8 +49,13 @@ const drawer = ref(true);
 const navigationButtons = ref([
   {
     name: "Журнал заключений",
-    link: "/card",
+    link: "/",
     icon: "phone",
+  },
+  {
+    name: "Создание заключений",
+    link: "/create",
+    icon: "create",
   },
 ]);
 
