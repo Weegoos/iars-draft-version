@@ -2,12 +2,53 @@
   <div>
     <q-dialog v-model="confirm" persistent>
       <q-card>
-        <q-card-section class="row items-center">
-          <span>Подробная информация будет здесь</span>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Закрыть" color="primary" @click="closeWindow" />
-        </q-card-actions>
+        <div>
+          <q-tabs v-model="tab" class="text-teal">
+            <q-tab name="info" icon="info" label="Подробная информация" />
+            <q-tab name="history" icon="history" label="История" />
+          </q-tabs>
+
+          <q-tab-panels
+            v-model="tab"
+            animated
+            swipeable
+            vertical
+            transition-prev="jump-up"
+            transition-next="jump-up"
+          >
+            <q-tab-panel name="info">
+              <div class="text-h4 q-mb-md">Mails</div>
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis
+                praesentium cumque magnam odio iure quidem, quod illum numquam
+                possimus obcaecati commodi minima assumenda consectetur culpa
+                fuga nulla ullam. In, libero.
+              </p>
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis
+                praesentium cumque magnam odio iure quidem, quod illum numquam
+                possimus obcaecati commodi minima assumenda consectetur culpa
+                fuga nulla ullam. In, libero.
+              </p>
+            </q-tab-panel>
+
+            <q-tab-panel name="history">
+              <div class="text-h4 q-mb-md">Alarms</div>
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis
+                praesentium cumque magnam odio iure quidem, quod illum numquam
+                possimus obcaecati commodi minima assumenda consectetur culpa
+                fuga nulla ullam. In, libero.
+              </p>
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis
+                praesentium cumque magnam odio iure quidem, quod illum numquam
+                possimus obcaecati commodi minima assumenda consectetur culpa
+                fuga nulla ullam. In, libero.
+              </p>
+            </q-tab-panel>
+          </q-tab-panels>
+        </div>
       </q-card>
     </q-dialog>
   </div>
@@ -35,6 +76,8 @@ const emit = defineEmits(["closeWindow"]);
 const closeWindow = () => {
   emit("closeWindow");
 };
+
+const tab = ref("info");
 </script>
 
 <style></style>
