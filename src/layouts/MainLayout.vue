@@ -11,19 +11,29 @@
       <q-drawer
         v-model="drawer"
         bordered
-        :width="200"
+        :width="230"
         :breakpoint="500"
         content-class="bg-grey-3"
       >
         <q-list bordered>
-          <q-item clickable v-ripple>
+          <q-item
+            clickable
+            v-ripple
+            v-for="(items, id) in navigationButtons"
+            :key="id"
+          >
             <q-item-section avatar>
-              <q-icon color="primary" name="bluetooth" />
+              <q-icon :name="items.icon" />
             </q-item-section>
-            <q-item-section>Icon as avatar</q-item-section>
+            <q-item-section>{{ items.name }}</q-item-section>
           </q-item>
         </q-list>
       </q-drawer>
+      <q-page-container>
+        <q-page padding>
+          <router-view />
+        </q-page>
+      </q-page-container>
     </q-layout>
   </div>
 </template>
@@ -32,6 +42,13 @@
 import { ref } from "vue";
 
 const drawer = ref(true);
+const navigationButtons = ref([
+  {
+    name: "Журнал заключений",
+    link: "/card",
+    icon: "phone",
+  },
+]);
 </script>
 
 <style></style>
