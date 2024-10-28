@@ -42,9 +42,14 @@
           </q-card-section>
         </div>
         <div class="col">
-          <q-card-actions vertical align="center">
-            <q-btn flat label="Подробнее" />
-            <q-btn flat label="Согласовать" />
+          <q-card-actions vertical align="center" class="q-mt-lg">
+            <q-btn
+              color="primary"
+              no-caps
+              label="Просмотреть"
+              class="q-mb-md"
+            />
+            <q-btn color="positive" no-caps label="Согласовать" />
           </q-card-actions>
         </div>
       </section>
