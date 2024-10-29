@@ -2,11 +2,13 @@
   <div>
     <q-dialog v-model="openAgreementPage" persistent>
       <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-          <span class="q-ml-sm"
-            >You are currently not connected to any network.</span
-          >
+        <q-card-section>
+          <q-select
+            v-model="select"
+            :options="options"
+            label="Standard"
+            filled
+          />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
@@ -25,6 +27,8 @@
 <script setup>
 import { ref, watch } from "vue";
 
+const select = ref("Выберите согласующего");
+const options = ref(["Аналитик"]);
 const props = defineProps({
   isOpenAgreementPage: {
     type: Boolean,
