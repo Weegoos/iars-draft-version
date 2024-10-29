@@ -65,16 +65,23 @@
           label="Просмотреть"
           @click="viewDetailedInformation"
         />
-        <q-btn color="positive" no-caps label="Согласовать" />
+        <q-btn
+          color="positive"
+          no-caps
+          label="Согласовать"
+          @click="viewAgreementComponent"
+        />
       </q-card-actions>
     </q-card>
     <DetailedInformation :isOpen="isOpen" @closeWindow="closeWindow" />
+    <AgreementComponent :isOpenAgreementPage="isOpenAgreementPage" />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
+import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {
@@ -87,6 +94,11 @@ const closeWindow = () => {
 
 const download = () => {
   console.log("Download");
+};
+
+const isOpenAgreementPage = ref(false);
+const viewAgreementComponent = () => {
+  isOpenAgreementPage.value = true;
 };
 </script>
 
