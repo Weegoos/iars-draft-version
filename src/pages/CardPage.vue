@@ -1,5 +1,16 @@
 <template>
   <div>
+    <q-input
+      v-model="statusOfDocuments"
+      type="text"
+      label="Статус документа"
+      list="documentsList"
+    />
+    <datalist id="documentsList">
+      <div v-for="(item, index) in documentsOptions" :key="index">
+        <option :value="item.name"></option>
+      </div>
+    </datalist>
     <div class="col" align="right">
       <q-btn
         color="primary"
@@ -107,6 +118,16 @@ const viewAgreementComponent = () => {
 const closeAgreementWindow = () => {
   isOpenAgreementPage.value = false;
 };
+
+const statusOfDocuments = ref("");
+const documentsOptions = ref([
+  {
+    name: "На рассмотрении",
+  },
+  {
+    name: "На согласовании",
+  },
+]);
 </script>
 
 <style></style>
