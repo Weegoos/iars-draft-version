@@ -74,7 +74,10 @@
       </q-card-actions>
     </q-card>
     <DetailedInformation :isOpen="isOpen" @closeWindow="closeWindow" />
-    <AgreementComponent :isOpenAgreementPage="isOpenAgreementPage" />
+    <AgreementComponent
+      :isOpenAgreementPage="isOpenAgreementPage"
+      @closeAgreementWindow="closeAgreementWindow"
+    />
   </div>
 </template>
 
@@ -99,6 +102,10 @@ const download = () => {
 const isOpenAgreementPage = ref(false);
 const viewAgreementComponent = () => {
   isOpenAgreementPage.value = true;
+};
+
+const closeAgreementWindow = () => {
+  isOpenAgreementPage.value = false;
 };
 </script>
 
