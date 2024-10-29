@@ -1,16 +1,33 @@
 <template>
   <div>
-    <q-input
-      v-model="statusOfDocuments"
-      type="text"
-      label="Статус документа"
-      list="documentsList"
-    />
-    <datalist id="documentsList">
-      <div v-for="(item, index) in documentsOptions" :key="index">
-        <option :value="item.name"></option>
+    <div class="row q-gutter-md q-pa-sm">
+      <div class="col">
+        <q-input
+          v-model="statusOfDocuments"
+          type="text"
+          label="Статус документа"
+          list="documentsList"
+        />
+        <datalist id="documentsList">
+          <div v-for="(item, index) in documentsOptions" :key="index">
+            <option :value="item.name"></option>
+          </div>
+        </datalist>
       </div>
-    </datalist>
+      <div class="col">
+        <q-input
+          v-model="registrationNumber"
+          type="text"
+          label="Регистрационный номер"
+          list="regNum"
+        />
+        <datalist id="regNum">
+          <div v-for="(items, index) in registrationNumberList" :key="index">
+            <option :value="items.id"></option>
+          </div>
+        </datalist>
+      </div>
+    </div>
     <div class="col" align="right">
       <q-btn
         color="primary"
@@ -126,6 +143,16 @@ const documentsOptions = ref([
   },
   {
     name: "На согласовании",
+  },
+]);
+
+const registrationNumber = ref("");
+const registrationNumberList = ref([
+  {
+    id: 123456789000,
+  },
+  {
+    id: 789456123777,
   },
 ]);
 </script>
