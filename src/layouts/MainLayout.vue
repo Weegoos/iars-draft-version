@@ -1,10 +1,15 @@
 <template>
   <div>
     <q-layout view="hHr LpR lFf" container style="height: 100vh">
-      <q-header reveal elevated>
+      <q-header reveal elevated class="bg-white">
         <q-toolbar class="bg-white text-black">
           <q-btn flat round dense icon="menu" @click="drawer = !drawer" />
-          <q-toolbar-title> IARS </q-toolbar-title>
+          <q-toolbar-title
+            style="position: relative; left: 50px"
+            class="headline"
+          >
+            Госуслуги
+          </q-toolbar-title>
           <q-btn flat round dense icon="person" />
         </q-toolbar>
       </q-header>
