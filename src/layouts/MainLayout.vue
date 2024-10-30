@@ -3,7 +3,14 @@
     <q-layout view="hHr LpR lFf" container style="height: 100vh">
       <q-header reveal elevated class="bg-white">
         <q-toolbar class="bg-white text-black">
-          <q-btn flat round dense icon="menu" @click="drawer = !drawer" />
+          <q-btn
+            flat
+            round
+            dense
+            icon="menu"
+            v-if="$q.screen.width < screenWidth"
+            @click="drawer = !drawer"
+          />
           <q-toolbar-title
             class="headline"
             :class="
@@ -25,10 +32,10 @@
               @click="navigation(items.link)"
             />
           </div>
-          <q-btn flat round dense icon="person" />
         </q-toolbar>
       </q-header>
       <q-drawer
+        v-if="$q.screen.width < screenWidth"
         v-model="drawer"
         show-if-above
         :mini="miniState"
@@ -86,6 +93,11 @@ const navigationButtons = ref([
     name: "Создание заключений",
     link: "/create",
     icon: "create",
+  },
+  {
+    name: "Профиль",
+    link: "/profile",
+    icon: "person",
   },
 ]);
 
