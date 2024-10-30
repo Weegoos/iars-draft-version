@@ -5,20 +5,40 @@
         <q-toolbar class="bg-white text-black">
           <q-btn flat round dense icon="menu" @click="drawer = !drawer" />
           <q-toolbar-title
-            style="position: relative; left: 50px"
             class="headline"
+            :class="
+              $q.screen.width > screenWidth ? 'configuredHeadlineClass' : ''
+            "
           >
             Госуслуги
           </q-toolbar-title>
+          <div
+            class="row q-gutter-sm"
+            v-for="(items, index) in navigationButtons"
+            :key="index"
+          >
+            <q-btn
+              no-caps
+              v-if="$q.screen.width > screenWidth"
+              flat
+              :label="items.name"
+              @click="navigation(items.link)"
+            />
+          </div>
           <q-btn flat round dense icon="person" />
         </q-toolbar>
       </q-header>
       <q-drawer
         v-model="drawer"
-        bordered
+        show-if-above
+        :mini="miniState"
+        @mouseover="miniState = false"
+        @mouseout="miniState = true"
+        mini-to-overlay
         :width="250"
         :breakpoint="500"
-        content-class="bg-grey-3"
+        bordered
+        behavior="desktop"
       >
         <q-list bordered>
           <q-item
@@ -46,11 +66,16 @@
 </template>
 
 <script setup>
-import { route } from "quasar/wrappers";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { getCurrentInstance } from "vue";
 
-const drawer = ref(true);
+const { proxy } = getCurrentInstance();
+const screenWidth = proxy.$screenWidth;
+console.log(screenWidth);
+
+const drawer = ref(false);
+const miniState = ref(true);
 const navigationButtons = ref([
   {
     name: "Журнал заключений",
@@ -82,5 +107,9 @@ const navigation = (route) => {
 <style scoped>
 .activePage {
   color: #779fc2;
+}
+.configuredHeadlineClass {
+  position: relative;
+  margin-left: 50px;
 }
 </style>
