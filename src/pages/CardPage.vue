@@ -27,6 +27,68 @@
           </div>
         </datalist>
       </div>
+      <div class="col">
+        <q-input v-model="region" type="text" label="Регион" list="region" />
+        <datalist id="region">
+          <div v-for="(items, index) in regionList" :key="index">
+            <option :value="items.name"></option>
+          </div>
+        </datalist>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row q-gutter-sm">
+          <div class="col">
+            <q-input v-model="startDate" mask="date" :rules="['date']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="startDate">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+          <div class="col">
+            <q-input v-model="endDate" mask="date" :rules="['date']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="endDate">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col" align="right">
       <q-btn
@@ -155,6 +217,19 @@ const registrationNumberList = ref([
     id: 789456123777,
   },
 ]);
+
+const region = ref("");
+const regionList = ref([
+  {
+    name: "Астана",
+  },
+  {
+    name: "Алматы",
+  },
+]);
+
+const startDate = ref("2019/05/05");
+const endDate = ref("2024/03/03");
 </script>
 
 <style></style>
