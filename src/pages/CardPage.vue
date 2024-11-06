@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row q-gutter-md q-pa-sm">
+    <div class="row q-gutter-md">
       <div class="col">
         <q-input
           v-model="statusOfDocuments"
@@ -36,7 +36,7 @@
         </datalist>
       </div>
     </div>
-    <div class="row">
+    <div class="row q-gutter-sm">
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
@@ -88,6 +88,28 @@
             </q-input>
           </div>
         </div>
+      </div>
+      <div class="col">
+        <q-input v-model="iin" type="text" label="ИИН вызываемого" list="iin" />
+
+        <datalist id="iin">
+          <div v-for="(items, index) in iinList" :key="index">
+            <option :value="items.iin"></option>
+          </div>
+        </datalist>
+      </div>
+      <div class="col">
+        <q-input
+          v-model="idNumber"
+          type="text"
+          label="Номер удостоверения"
+          list="idNumberList"
+        />
+        <datalist id="idNumberList">
+          <div>
+            <option value=""></option>
+          </div>
+        </datalist>
       </div>
     </div>
     <div class="col" align="right">
@@ -230,6 +252,17 @@ const regionList = ref([
 
 const startDate = ref("2019/05/05");
 const endDate = ref("2024/03/03");
+const iin = ref("");
+const iinList = ref([
+  {
+    iin: 123456789000,
+  },
+  {
+    iin: 789111000777,
+  },
+]);
+
+const idNumber = ref("");
 </script>
 
 <style></style>
