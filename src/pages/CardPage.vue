@@ -1,18 +1,35 @@
 <template>
   <div>
-    <div class="row q-gutter-md">
+    <div class="row q-gutter-sm">
       <div class="col">
-        <q-input
-          v-model="statusOfDocuments"
-          type="text"
-          label="Статус документа"
-          list="documentsList"
-        />
-        <datalist id="documentsList">
-          <div v-for="(item, index) in documentsOptions" :key="index">
-            <option :value="item.name"></option>
+        <div class="row q-gutter-sm">
+          <div class="col">
+            <q-input
+              v-model="statusOfDocuments"
+              type="text"
+              label="Статус документа"
+              list="documentsList"
+            />
+            <datalist id="documentsList">
+              <div v-for="(item, index) in documentsOptions" :key="index">
+                <option :value="item.name"></option>
+              </div>
+            </datalist>
           </div>
-        </datalist>
+          <div class="col">
+            <q-input
+              v-model="fcsConcordant"
+              type="text"
+              label="ФИО согласующего"
+              list="concordant"
+            />
+            <datalist id="concordant">
+              <div v-for="(items, index) in concordantList" :key="index">
+                <option :value="items.name"></option>
+              </div>
+            </datalist>
+          </div>
+        </div>
       </div>
       <div class="col">
         <q-input
@@ -106,8 +123,8 @@
           list="idNumberList"
         />
         <datalist id="idNumberList">
-          <div>
-            <option value=""></option>
+          <div v-for="(items, index) in idNumberList" :key="index">
+            <option :value="items.id"></option>
           </div>
         </datalist>
       </div>
@@ -263,6 +280,24 @@ const iinList = ref([
 ]);
 
 const idNumber = ref("");
+const idNumberList = ref([
+  {
+    id: 789456,
+  },
+  {
+    id: 123456,
+  },
+]);
+
+const fcsConcordant = ref("");
+const concordantList = ref([
+  {
+    name: "Ашим Батыр",
+  },
+  {
+    name: "Хайруллин Алишер",
+  },
+]);
 </script>
 
 <style></style>
