@@ -211,9 +211,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
 import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
+import axios from "axios";
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {
@@ -290,6 +291,7 @@ const idNumberList = ref([
 ]);
 
 const fcsConcordant = ref("");
+
 const concordantList = ref([
   {
     name: "Ашим Батыр",
@@ -298,6 +300,30 @@ const concordantList = ref([
     name: "Хайруллин Алишер",
   },
 ]);
+
+const concordantListAPI = "http://localhost:5002/allNames";
+const getAllNames = async () => {
+  try {
+    const response = await axios.get(concordantListAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true, // Если сервер использует cookies для авторизации
+    });
+
+    console.log(
+      "Тип данных:",
+      Array.isArray(response.data) ? "Массив" : "Не массив"
+    );
+    console.log("Ответ от сервера:", response); // Полный вывод объекта ответа
+    console.log("Данные:", response.data); // Данные, которые приходят в ответе
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+getAllNames();
 </script>
 
 <style></style>

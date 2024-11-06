@@ -89,8 +89,62 @@
               label="Место проведения"
             />
           </div>
+          <div class="col">
+            <q-input
+              v-model="relationshipOfTheCaller"
+              type="text"
+              label="Отношение вызывающего к событию и субъекту"
+            />
+          </div>
         </div>
       </q-card-section>
+      <q-card-section>
+        <div class="row q-gutter-sm">
+          <div class="col">
+            <q-input
+              v-model="typesOfPlannedInvestigation"
+              type="text"
+              label="Виды планируемого следствия"
+            />
+          </div>
+          <div class="col">
+            <q-input
+              v-model="isApplyToBusiness"
+              type="text"
+              label="Относится ли к бизнесу"
+            />
+          </div>
+          <div class="col">
+            <q-input
+              v-model="iinOfTheDefender"
+              type="text"
+              label="ИИН защитника"
+            />
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-section>
+        <div class="row q-gutter-sm">
+          <div class="col">
+            <q-input
+              v-model="entrepreneurParticipation"
+              type="text"
+              label="Обоснование и необходимость участия предпринимателя"
+            />
+          </div>
+          <div class="col">
+            <q-input
+              v-model="results"
+              type="text"
+              label="Результат от планируемого следственного действия"
+            />
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn color="primary" no-caps label="Сохранить" />
+        <q-btn color="positive" no-caps label="На согласование" />
+      </q-card-actions>
     </q-card>
   </div>
 </template>
@@ -106,6 +160,12 @@ const region = ref("");
 const plannedInvestigateActions = ref("");
 const date = ref("Дата и время проведения");
 const locationOfTheEvent = ref("");
+const relationshipOfTheCaller = ref("");
+const typesOfPlannedInvestigation = ref("");
+const isApplyToBusiness = ref("");
+const iinOfTheDefender = ref("");
+const entrepreneurParticipation = ref("");
+const results = ref("");
 </script>
 
 <style></style>
