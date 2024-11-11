@@ -126,37 +126,53 @@
         @click="download"
       />
     </div>
-    <q-card class="q-mb-xl">
+    <q-card class="q-mb-xl" v-for="(items, index) in conclusions" :key="index">
       <section class="row" style="align-items: stretch">
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">№ (порядковый)</span>
             <p class="infoStyle text-capitalize"></p>
             <span class="infoHeadline">Регистрационный номер</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.registrationNumber || "Не указано" }}
+            </p>
             <span class="infoHeadline">Дата создания документа</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.creationDate || "Не указано" }}
+            </p>
             <span class="infoHeadline">ИИН вызываемого</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.calledPersonIIN || "Не указано" }}
+            </p>
           </q-card-section>
         </div>
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">ФИО вызываемого</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.calledPersonFullName || "Не указано" }}
+            </p>
             <span class="infoHeadline">Номер УД</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.udNumber || "Не указано" }}
+            </p>
             <span class="infoHeadline">Статья УК</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.article || "Не указано" }}
+            </p>
             <span class="infoHeadline">Время прихода</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.eventDateTime || "Не указано" }}
+            </p>
           </q-card-section>
         </div>
 
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">Место работы</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.workPlace || "Не указано" }}
+            </p>
             <div class="row q-gutter-sm">
               <section class="col">
                 <span class="infoHeadline">Должность</span>
@@ -313,6 +329,29 @@ getAllDocuments();
 getAllRegions();
 getAllNames();
 getAllUD();
+
+// Conclusion
+const conclusions = ref("");
+const getAllConclusionByIIN = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:5002/long?IIN=020202131313",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(response.data);
+    conclusions.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+getAllConclusionByIIN();
 </script>
 
 <style></style>
