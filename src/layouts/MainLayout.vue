@@ -131,18 +131,16 @@ const redirectToKeycloakLogin = () => {
 
 onBeforeMount(() => {
   (async () => {
-    const token = getCookie("accessToken"); // Измените на accessToken
-    console.log("Access Token:", token);
+    // const token = getCookie("accessToken");
+    // console.log("Access Token:", token);
 
-    if (!token) {
-      console.error("No access token found");
-      // redirectToKeycloakLogin();
-      return;
+    const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
+    if (!accessToken) {
+      redirectToKeycloakLogin();
     }
-
     try {
       // Если токен найден, выполняйте нужные действия
-      console.log("Token found:", token);
       // Можно выполнить запрос или другую логику
     } catch (error) {
       console.error("Ошибка при получении данных пользователя:", error);

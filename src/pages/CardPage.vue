@@ -225,6 +225,7 @@ import { onBeforeMount, onMounted, ref } from "vue";
 import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
 import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {
@@ -365,6 +366,19 @@ const getAllConclusionByIIN = async () => {
 };
 
 getAllConclusionByIIN();
+
+const router = useRouter();
+
+const redirectToKeycloakLogin = () => {
+  router.push("/authorization");
+  window.location.href = "http://localhost:9000/#/authorization";
+};
+onBeforeMount(() => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    redirectToKeycloakLogin();
+  }
+});
 </script>
 
 <style></style>

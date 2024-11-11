@@ -63,12 +63,19 @@ const login = async () => {
       },
       withCredentials: true,
     });
-    console.log("The user has successfully logged in", response.data);
+    console.log(
+      "The user has successfully logged in",
+      response.data.accessToken
+    );
+    localStorage.setItem("accessToken", response.data.accessToken);
     $q.notify({
       message: `The user has successfully logged in`,
       color: "positive",
       icon: "check",
     });
+    setTimeout(() => {
+      router.push("/");
+    }, 2500);
   } catch (error) {
     console.error("Error during registration:", error);
     $q.notify({
