@@ -26,12 +26,19 @@
           >
             <q-btn
               no-caps
-              v-if="$q.screen.width > screenWidth"
+              v-if="$q.screen.width > screenWidth && accessToken != null"
               flat
               :label="items.name"
               @click="navigation(items.link)"
             />
           </div>
+          <q-btn
+            v-if="accessToken != null"
+            color="negative"
+            icon="logout"
+            label="Выйти"
+            @click="logout"
+          />
         </q-toolbar>
       </q-header>
       <q-drawer
@@ -79,7 +86,8 @@ import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 const screenWidth = proxy.$screenWidth;
-console.log(screenWidth);
+const serverUrl = proxy.$serverUrl;
+console.log(serverUrl);
 
 const drawer = ref(false);
 const miniState = ref(true);
@@ -129,12 +137,12 @@ const redirectToKeycloakLogin = () => {
   window.location.href = "http://localhost:9000/#/authorization";
 };
 
+const accessToken = localStorage.getItem("accessToken");
 onBeforeMount(() => {
   (async () => {
     // const token = getCookie("accessToken");
     // console.log("Access Token:", token);
 
-    const accessToken = localStorage.getItem("accessToken");
     console.log(accessToken);
     if (!accessToken) {
       redirectToKeycloakLogin();
@@ -150,6 +158,11 @@ onBeforeMount(() => {
     }
   })();
 });
+
+const logout = () => {
+  localStorage.clear();
+  window.location.reload();
+};
 </script>
 
 <style scoped>

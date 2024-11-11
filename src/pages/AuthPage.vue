@@ -19,7 +19,7 @@
               v-model="password"
               type="password"
               label="Напишите пароль"
-              hint="Не менее 8 символов"
+              hint="Не менее 6 символов"
             />
           </div>
         </div>
@@ -42,6 +42,11 @@ import { useQuasar } from "quasar";
 import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { getCurrentInstance } from "vue";
+
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+console.log(serverUrl);
 
 const email = ref("");
 const password = ref("");
@@ -57,7 +62,7 @@ const login = async () => {
 
     const jsonData = JSON.stringify(data);
 
-    const response = await axios.post("http://localhost:5002/login", jsonData, {
+    const response = await axios.post(`${serverUrl}login`, jsonData, {
       headers: {
         "Content-Type": "application/json",
       },

@@ -226,6 +226,11 @@ import DetailedInformation from "../components/CardPage/DetailedInformation.vue"
 import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { getCurrentInstance } from "vue";
+
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+console.log(serverUrl);
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {
@@ -267,7 +272,7 @@ const idNumberList = ref();
 const fcsConcordant = ref("");
 
 const concordantList = ref("");
-const concordantListAPI = "http://localhost:5002/allNames";
+const concordantListAPI = `${serverUrl}allNames`;
 const getAllNames = async () => {
   try {
     const response = await axios.get(concordantListAPI, {
@@ -284,7 +289,7 @@ const getAllNames = async () => {
   }
 };
 
-const documentOptionsAPI = "http://localhost:5002/allStatus";
+const documentOptionsAPI = `${serverUrl}allStatus`;
 const getAllDocuments = async () => {
   try {
     const response = await axios.get(documentOptionsAPI, {
@@ -300,7 +305,7 @@ const getAllDocuments = async () => {
   }
 };
 
-const regionListAPI = "http://localhost:5002/allRegions";
+const regionListAPI = `${serverUrl}allRegions`;
 const getAllRegions = async () => {
   try {
     const response = await axios.get(regionListAPI, {
@@ -316,7 +321,7 @@ const getAllRegions = async () => {
   }
 };
 
-const UDAPI = "http://localhost:5002/allUD";
+const UDAPI = `${serverUrl}allUD`;
 const getAllUD = async () => {
   try {
     const response = await axios.get(UDAPI, {
@@ -341,16 +346,13 @@ getAllUD();
 const conclusions = ref("");
 const getAllConclusionByIIN = async () => {
   try {
-    const response = await axios.get(
-      "http://localhost:5002/long?IIN=020202131313",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.get(`${serverUrl}long?IIN=020202131313`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
 
     console.log(response.data);
 
@@ -377,6 +379,7 @@ onBeforeMount(() => {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     redirectToKeycloakLogin();
+    window.location.reload();
   }
 });
 </script>

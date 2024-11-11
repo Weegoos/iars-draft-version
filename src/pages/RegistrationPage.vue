@@ -94,6 +94,11 @@ const iin = ref("");
 const region = ref("");
 const $q = useQuasar();
 
+import { getCurrentInstance } from "vue";
+
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+
 const registration = async () => {
   try {
     const data = {
@@ -110,16 +115,12 @@ const registration = async () => {
 
     const jsonData = JSON.stringify(data);
 
-    const response = await axios.post(
-      "http://localhost:5002/register",
-      jsonData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.post(`${serverUrl}register`, jsonData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
     console.log("Registration successful:", response.data);
     $q.notify({
       message: `The user has been successfully registered`,
