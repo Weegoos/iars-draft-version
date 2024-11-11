@@ -97,13 +97,20 @@ const registration = async () => {
       iin: iin.value,
     };
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
+    console.log(data);
 
-    const response = await axios.post("http://localhost:5002/register", data, {
-      headers,
-    });
+    const jsonData = JSON.stringify(data);
+
+    const response = await axios.post(
+      "http://localhost:5002/register",
+      jsonData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
     console.log("Registration successful:", response.data);
     $q.notify({
       message: `Registration successful`,
@@ -114,6 +121,8 @@ const registration = async () => {
     console.error("Error during registration:", error);
     $q.notify({
       message: `Error during registration: ${error}`,
+      color: "negative",
+      icon: "error",
     });
   }
 };
