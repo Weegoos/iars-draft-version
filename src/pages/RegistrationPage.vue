@@ -1,6 +1,6 @@
 <template>
   <div class="fixed-center">
-    <q-card class="my-card" style="width: 70vw">
+    <q-card class="my-card" style="width: 50vw">
       <q-card-section>
         <div class="row q-gutter-sm">
           <div class="col">
@@ -51,7 +51,7 @@
             />
           </div>
           <div class="col">
-            <q-input v-model="iin" type="text" label="Напишите ИИН" />
+            <q-input v-model="iin" type="number" label="Напишите ИИН" />
           </div>
         </div>
       </q-card-section>
@@ -113,14 +113,14 @@ const registration = async () => {
     );
     console.log("Registration successful:", response.data);
     $q.notify({
-      message: `Registration successful`,
+      message: `The user has been successfully registered`,
       color: "positive",
       icon: "check",
     });
   } catch (error) {
     console.error("Error during registration:", error);
     $q.notify({
-      message: `Error during registration: ${error}`,
+      message: `Error during registration: ${error.response.data}`,
       color: "negative",
       icon: "error",
     });
