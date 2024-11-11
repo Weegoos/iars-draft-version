@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
 
@@ -114,6 +114,45 @@ watch(
 const navigation = (route) => {
   router.push(route);
 };
+
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(";").shift();
+  }
+  return null;
+};
+
+const redirectToKeycloakLogin = () => {
+  router.push("/authorization");
+  window.location.href = "http://localhost:9000/#/authorization";
+};
+
+onBeforeMount(() => {
+  (async () => {
+    console.log("Cookies:", document.cookie); // Добавьте вывод cookies
+    const token = getCookie("accessToken"); // Измените на accessToken
+    console.log("Access Token:", token);
+
+    if (!token) {
+      console.error("No access token found");
+      // redirectToKeycloakLogin();
+      return;
+    }
+
+    try {
+      // Если токен найден, выполняйте нужные действия
+      console.log("Token found:", token);
+      // Можно выполнить запрос или другую логику
+    } catch (error) {
+      console.error("Ошибка при получении данных пользователя:", error);
+      if (error.response && error.response.status === 401) {
+        // redirectToKeycloakLogin();
+      }
+    }
+  })();
+});
 </script>
 
 <style scoped>

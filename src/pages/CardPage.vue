@@ -12,7 +12,7 @@
             />
             <datalist id="documentsList">
               <div v-for="(item, index) in documentsOptions" :key="index">
-                <option :value="item.name"></option>
+                <option :value="item"></option>
               </div>
             </datalist>
           </div>
@@ -25,7 +25,7 @@
             />
             <datalist id="concordant">
               <div v-for="(items, index) in concordantList" :key="index">
-                <option :value="items.name"></option>
+                <option :value="items"></option>
               </div>
             </datalist>
           </div>
@@ -36,19 +36,13 @@
           v-model="registrationNumber"
           type="text"
           label="Регистрационный номер"
-          list="regNum"
         />
-        <datalist id="regNum">
-          <div v-for="(items, index) in registrationNumberList" :key="index">
-            <option :value="items.id"></option>
-          </div>
-        </datalist>
       </div>
       <div class="col">
         <q-input v-model="region" type="text" label="Регион" list="region" />
         <datalist id="region">
           <div v-for="(items, index) in regionList" :key="index">
-            <option :value="items.name"></option>
+            <option :value="items"></option>
           </div>
         </datalist>
       </div>
@@ -107,24 +101,18 @@
         </div>
       </div>
       <div class="col">
-        <q-input v-model="iin" type="text" label="ИИН вызываемого" list="iin" />
-
-        <datalist id="iin">
-          <div v-for="(items, index) in iinList" :key="index">
-            <option :value="items.iin"></option>
-          </div>
-        </datalist>
+        <q-input v-model="iin" type="text" label="ИИН вызываемого" />
       </div>
       <div class="col">
         <q-input
           v-model="idNumber"
           type="text"
-          label="Номер удостоверения"
+          label="Номер УД"
           list="idNumberList"
         />
         <datalist id="idNumberList">
           <div v-for="(items, index) in idNumberList" :key="index">
-            <option :value="items.id"></option>
+            <option :value="items"></option>
           </div>
         </datalist>
       </div>
@@ -239,68 +227,23 @@ const closeAgreementWindow = () => {
 };
 
 const statusOfDocuments = ref("");
-const documentsOptions = ref([
-  {
-    name: "На рассмотрении",
-  },
-  {
-    name: "На согласовании",
-  },
-]);
+const documentsOptions = ref("");
 
 const registrationNumber = ref("");
-const registrationNumberList = ref([
-  {
-    id: 123456789000,
-  },
-  {
-    id: 789456123777,
-  },
-]);
 
 const region = ref("");
-const regionList = ref([
-  {
-    name: "Астана",
-  },
-  {
-    name: "Алматы",
-  },
-]);
+const regionList = ref("");
 
 const startDate = ref("2019/05/05");
 const endDate = ref("2024/03/03");
 const iin = ref("");
-const iinList = ref([
-  {
-    iin: 123456789000,
-  },
-  {
-    iin: 789111000777,
-  },
-]);
 
 const idNumber = ref("");
-const idNumberList = ref([
-  {
-    id: 789456,
-  },
-  {
-    id: 123456,
-  },
-]);
+const idNumberList = ref();
 
 const fcsConcordant = ref("");
 
-const concordantList = ref([
-  {
-    name: "Ашим Батыр",
-  },
-  {
-    name: "Хайруллин Алишер",
-  },
-]);
-
+const concordantList = ref("");
 const concordantListAPI = "http://localhost:5002/allNames";
 const getAllNames = async () => {
   try {
@@ -309,21 +252,67 @@ const getAllNames = async () => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      withCredentials: true, // Если сервер использует cookies для авторизации
+      withCredentials: true,
     });
 
-    console.log(
-      "Тип данных:",
-      Array.isArray(response.data) ? "Массив" : "Не массив"
-    );
-    console.log("Ответ от сервера:", response); // Полный вывод объекта ответа
-    console.log("Данные:", response.data); // Данные, которые приходят в ответе
+    concordantList.value = response.data;
   } catch (error) {
     console.error("Ошибка при запросе:", error);
   }
 };
 
+const documentOptionsAPI = "http://localhost:5002/allStatus";
+const getAllDocuments = async () => {
+  try {
+    const response = await axios.get(documentOptionsAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    documentsOptions.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const regionListAPI = "http://localhost:5002/allRegions";
+const getAllRegions = async () => {
+  try {
+    const response = await axios.get(regionListAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    regionList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const UDAPI = "http://localhost:5002/allUD";
+const getAllUD = async () => {
+  try {
+    const response = await axios.get(UDAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    idNumberList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+getAllDocuments();
+getAllRegions();
 getAllNames();
+getAllUD();
 </script>
 
 <style></style>
