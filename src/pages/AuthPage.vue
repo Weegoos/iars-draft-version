@@ -46,7 +46,6 @@ import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
-console.log(serverUrl);
 
 const email = ref("");
 const password = ref("");
@@ -57,8 +56,6 @@ const login = async () => {
       email: email.value,
       password: password.value,
     };
-
-    console.log(data);
 
     const jsonData = JSON.stringify(data);
 

@@ -230,7 +230,7 @@ import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
-console.log(serverUrl);
+const webUrl = proxy.webUrl;
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {
@@ -354,8 +354,6 @@ const getAllConclusionByIIN = async () => {
       withCredentials: true,
     });
 
-    console.log(response.data);
-
     const sortedConclusions = response.data.sort((a, b) => {
       // Сортировка по убыванию (новые сверху)
       return new Date(b.creationDate) - new Date(a.creationDate);
@@ -373,7 +371,7 @@ const router = useRouter();
 
 const redirectToKeycloakLogin = () => {
   router.push("/authorization");
-  window.location.href = "http://localhost:9000/#/authorization";
+  window.location.href = `${webUrl}authorization`;
 };
 onBeforeMount(() => {
   const accessToken = localStorage.getItem("accessToken");

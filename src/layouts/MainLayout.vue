@@ -87,7 +87,6 @@ import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
 const screenWidth = proxy.$screenWidth;
 const serverUrl = proxy.$serverUrl;
-console.log(serverUrl);
 
 const drawer = ref(false);
 const miniState = ref(true);
@@ -116,7 +115,6 @@ watch(
   () => defineRoute.fullPath,
   (newVal) => {
     currentPath.value = newVal;
-    console.log("Текущий маршрут:", newVal);
   }
 );
 const navigation = (route) => {
@@ -143,7 +141,6 @@ onBeforeMount(() => {
     // const token = getCookie("accessToken");
     // console.log("Access Token:", token);
 
-    console.log(accessToken);
     if (!accessToken) {
       redirectToKeycloakLogin();
     }

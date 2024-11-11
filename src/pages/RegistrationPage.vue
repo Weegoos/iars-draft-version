@@ -111,8 +111,6 @@ const registration = async () => {
       iin: iin.value,
     };
 
-    console.log(data);
-
     const jsonData = JSON.stringify(data);
 
     const response = await axios.post(`${serverUrl}register`, jsonData, {
