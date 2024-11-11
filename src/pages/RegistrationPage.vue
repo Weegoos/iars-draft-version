@@ -1,6 +1,9 @@
 <template>
   <div class="fixed-center">
     <q-card class="my-card" style="width: 50vw">
+      <q-card-section align="center">
+        <p class="text-h5">Регистрация</p>
+      </q-card-section>
       <q-card-section>
         <div class="row q-gutter-sm">
           <div class="col">
@@ -65,7 +68,12 @@
           label="Зарегистрироваться"
           @click="registration"
         />
-        <q-btn color="primary" no-caps label="Есть аккаунт?" @click="onClick" />
+        <q-btn
+          color="primary"
+          no-caps
+          label="Есть аккаунт?"
+          @click="pushToAuthorization"
+        />
       </q-card-actions>
     </q-card>
   </div>
@@ -75,6 +83,7 @@
 import axios from "axios";
 import { useQuasar } from "quasar";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const name = ref("");
 const secondName = ref("");
@@ -125,6 +134,11 @@ const registration = async () => {
       icon: "error",
     });
   }
+};
+
+const router = useRouter();
+const pushToAuthorization = () => {
+  router.push("/authorization");
 };
 </script>
 
