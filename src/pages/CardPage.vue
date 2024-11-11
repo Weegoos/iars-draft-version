@@ -131,7 +131,7 @@
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">№ (порядковый)</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">{{ index + 1 }}</p>
             <span class="infoHeadline">Регистрационный номер</span>
             <p class="infoStyle text-capitalize">
               {{ items.registrationNumber || "Не указано" }}
@@ -176,18 +176,24 @@
             <div class="row q-gutter-sm">
               <section class="col">
                 <span class="infoHeadline">Должность</span>
-                <p class="infoStyle text-capitalize"></p>
+                <p class="infoStyle text-capitalize">
+                  {{ items.calledPersonPosition || "не указано" }}
+                </p>
               </section>
               <section class="col">
                 <span class="infoHeadline">Относится ли к бизнесу</span>
-                <p class="infoStyle text-capitalize"></p>
+                <p class="infoStyle text-capitalize">
+                  {{ items.relatesToBusiness || "Не указано" }}
+                </p>
               </section>
             </div>
             <span class="infoHeadline">Регион</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">{{ items.region.name }}</p>
 
             <span class="infoHeadline">ФИО согласующего</span>
-            <p class="infoStyle text-capitalize"></p>
+            <p class="infoStyle text-capitalize">
+              {{ items.defenseAttorneyFullName || "Не указано" }}
+            </p>
           </q-card-section>
         </div>
       </section>
@@ -344,8 +350,15 @@ const getAllConclusionByIIN = async () => {
         withCredentials: true,
       }
     );
+
     console.log(response.data);
-    conclusions.value = response.data;
+
+    const sortedConclusions = response.data.sort((a, b) => {
+      // Сортировка по убыванию (новые сверху)
+      return new Date(b.creationDate) - new Date(a.creationDate);
+    });
+
+    conclusions.value = sortedConclusions;
   } catch (error) {
     console.error("Ошибка при запросе:", error);
   }

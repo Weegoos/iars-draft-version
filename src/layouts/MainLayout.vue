@@ -131,7 +131,6 @@ const redirectToKeycloakLogin = () => {
 
 onBeforeMount(() => {
   (async () => {
-    console.log("Cookies:", document.cookie); // Добавьте вывод cookies
     const token = getCookie("accessToken"); // Измените на accessToken
     console.log("Access Token:", token);
 
