@@ -72,10 +72,51 @@
 </template>
 
 <script setup>
+import axios from "axios";
+import { useQuasar } from "quasar";
 import { ref } from "vue";
 
 const name = ref("");
-const registration = async () => {};
+const secondName = ref("");
+const email = ref("");
+const password = ref("");
+const department = ref("");
+const iin = ref("");
+const region = ref("");
+const $q = useQuasar();
+
+const registration = async () => {
+  try {
+    const data = {
+      email: email.value,
+      name: name.value,
+      secondName: secondName.value,
+      password: password.value,
+      department: department.value,
+      region: region.value,
+      iin: iin.value,
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const response = await axios.post("http://localhost:5002/register", data, {
+      headers,
+    });
+    console.log("Registration successful:", response.data);
+    $q.notify({
+      message: `Registration successful`,
+      color: "positive",
+      icon: "check",
+    });
+  } catch (error) {
+    console.error("Error during registration:", error);
+    $q.notify({
+      message: `Error during registration: ${error}`,
+    });
+  }
+};
 </script>
 
 <style></style>
