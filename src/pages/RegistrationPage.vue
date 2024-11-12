@@ -119,16 +119,16 @@ const registration = async () => {
       },
       withCredentials: true,
     });
-    console.log("Registration successful:", response.data);
+    console.log("Пользователь успешно зарегистрирован", response.data);
     $q.notify({
-      message: `The user has been successfully registered`,
+      message: `Пользователь успешно зарегистрирован`,
       color: "positive",
       icon: "check",
     });
   } catch (error) {
-    console.error("Error during registration:", error);
+    console.error("Ошибка при регистрации:", error);
     $q.notify({
-      message: `Error during registration: ${error.response.data}`,
+      message: `Ошибка при регистрации: ${error.response.data}`,
       color: "negative",
       icon: "error",
     });
