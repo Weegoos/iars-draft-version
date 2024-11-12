@@ -27,6 +27,7 @@
         />
       </q-card-actions>
     </q-card>
+    <ChangePassword />
   </div>
 </template>
 
@@ -34,7 +35,7 @@
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { onMounted, ref } from "vue";
-
+import ChangePassword from "../components/Profile/ChangePassword.vue";
 const name = ref("");
 const department = ref("");
 const email = ref("");
