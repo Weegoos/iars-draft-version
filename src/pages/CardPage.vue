@@ -227,8 +227,9 @@ import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
-import { useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar } from "quasar";
 
+const $q = useQuasar();
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.webUrl;
@@ -365,6 +366,12 @@ getInfo();
 
 const getAllConclusionByIIN = async (iin) => {
   try {
+    $q.loading.show({
+      message: "Подождите данные загружаются...",
+      spinner: QSpinnerGears,
+      messageColor: "white",
+      backgroundColor: "black",
+    });
     const response = await axios.get(`${serverUrl}usersDocs?IIN=${iin}`, {
       headers: {
         "Content-Type": "application/json",
@@ -379,6 +386,7 @@ const getAllConclusionByIIN = async (iin) => {
     });
 
     conclusions.value = sortedConclusions;
+    $q.loading.hide();
   } catch (error) {
     console.error("Ошибка при запросе:", error);
   }

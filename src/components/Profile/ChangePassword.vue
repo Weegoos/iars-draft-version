@@ -109,7 +109,6 @@ const savePassword = async () => {
     email.value = "";
     oldPassword.value = "";
     newPassword.value = "";
-    changePasswordDialog.value = false;
   } catch (error) {
     console.error("Ошибка при изменении пароля", error);
     $q.notify({
