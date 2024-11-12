@@ -80,9 +80,10 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref, watch } from "vue";
+import { onBeforeMount, onErrorCaptured, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
+import { useQuasar } from "quasar";
 
 const { proxy } = getCurrentInstance();
 const screenWidth = proxy.$screenWidth;
@@ -160,6 +161,16 @@ const logout = () => {
   localStorage.clear();
   window.location.reload();
 };
+
+// onErrorCaptured
+const $q = useQuasar();
+onErrorCaptured((err, instance, info) => {
+  $q.notify({
+    message: `${err.message}, ${info}`,
+    color: "negative",
+    icon: "error",
+  });
+});
 </script>
 
 <style scoped>

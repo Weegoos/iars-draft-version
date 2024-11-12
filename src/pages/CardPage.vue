@@ -227,6 +227,7 @@ import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
+import { useQuasar } from "quasar";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
@@ -344,9 +345,27 @@ getAllUD();
 
 // Conclusion
 const conclusions = ref("");
-const getAllConclusionByIIN = async () => {
+const getInfo = async () => {
   try {
-    const response = await axios.get(`${serverUrl}long?IIN=020202131313`, {
+    const response = await axios.get(`${serverUrl}getInfo`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    getAllConclusionByIIN(response.data.iin);
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
+    throw error;
+  }
+};
+
+getInfo();
+
+const getAllConclusionByIIN = async (iin) => {
+  try {
+    const response = await axios.get(`${serverUrl}usersDocs?IIN=${iin}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -364,8 +383,6 @@ const getAllConclusionByIIN = async () => {
     console.error("Ошибка при запросе:", error);
   }
 };
-
-getAllConclusionByIIN();
 
 const router = useRouter();
 
