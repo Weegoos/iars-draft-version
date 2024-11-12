@@ -47,10 +47,10 @@
       <q-card-section>
         <div class="row q-gutter-sm">
           <div class="col">
-            <q-input
+            <q-select
               v-model="department"
-              type="text"
-              label="Напишите департамент"
+              :options="departmentList"
+              label="Введите департамент"
             />
           </div>
           <div class="col">
@@ -82,7 +82,7 @@
 <script setup>
 import axios from "axios";
 import { useQuasar } from "quasar";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const name = ref("");
@@ -93,6 +93,8 @@ const department = ref("");
 const iin = ref("");
 const region = ref("");
 const $q = useQuasar();
+
+const departmentList = ref();
 
 import { getCurrentInstance } from "vue";
 
@@ -139,6 +141,20 @@ const router = useRouter();
 const pushToAuthorization = () => {
   router.push("/authorization");
 };
+
+const getAllDepartments = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}allDepartments`);
+    console.log(response.data);
+    departmentList.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+onMounted(() => {
+  getAllDepartments();
+});
 </script>
 
 <style></style>
