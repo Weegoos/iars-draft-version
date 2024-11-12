@@ -17,6 +17,7 @@
           no-caps
           icon="password"
           label="Сменить пароль"
+          @click="openDialog"
         />
         <q-btn
           color="negative"
@@ -27,7 +28,10 @@
         />
       </q-card-actions>
     </q-card>
-    <ChangePassword />
+    <ChangePassword
+      :changePasswordStatus="changePasswordStatus"
+      @closeDialog="closeDialog"
+    />
   </div>
 </template>
 
@@ -90,6 +94,15 @@ onMounted(() => {
 const logout = () => {
   localStorage.clear();
   window.location.reload();
+};
+
+const changePasswordStatus = ref(false);
+const openDialog = () => {
+  changePasswordStatus.value = true;
+};
+
+const closeDialog = () => {
+  changePasswordStatus.value = false;
 };
 </script>
 

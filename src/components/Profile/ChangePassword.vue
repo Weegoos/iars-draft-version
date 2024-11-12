@@ -1,16 +1,36 @@
 <template>
   <div>
     <q-dialog v-model="changePasswordDialog" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-          <span class="q-ml-sm"
-            >You are currently not connected to any network.</span
-          >
+      <q-card style="width: 300px">
+        <q-card-section align="center">
+          <p class="text-h6">Смена пароля</p>
+        </q-card-section>
+        <q-card-section>
+          <q-input
+            v-model="email"
+            type="email"
+            label="Напишите электронную почту"
+          />
+          <q-input
+            v-model="oldPassword"
+            type="password"
+            label="Напишите старый пароль"
+          />
+          <q-input
+            v-model="newPassword"
+            type="password"
+            label="Напишите новый пароль"
+            hint="Не менее 6 символов"
+          />
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Turn on Wifi" color="primary" v-close-popup />
+          <q-btn color="positive" no-caps label="Сохранить" @click="onClick" />
+          <q-btn
+            label="Закрыть"
+            no-caps
+            color="negative"
+            @click="closeChangePasswordDialog"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -18,9 +38,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
-const changePasswordDialog = ref(false);
+const props = defineProps({
+  changePasswordStatus: {
+    type: Boolean,
+    required: true,
+  },
+});
+const changePasswordDialog = ref(props.changePasswordStatus);
+watch(
+  () => props.changePasswordStatus,
+  (newVal) => {
+    changePasswordDialog.value = newVal;
+  }
+);
+const emit = defineEmits(["closeDialog"]);
+const closeChangePasswordDialog = () => {
+  emit("closeDialog");
+};
 </script>
 
 <style></style>
