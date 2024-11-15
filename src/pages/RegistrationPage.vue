@@ -59,7 +59,11 @@
         </div>
       </q-card-section>
       <q-card-section>
-        <q-input v-model="region" type="text" label="Напишите регион" />
+        <q-select
+          v-model="region"
+          :options="regionList"
+          label="Введите регион"
+        />
       </q-card-section>
       <q-card-actions align="center">
         <q-btn
@@ -94,7 +98,8 @@ const iin = ref("");
 const region = ref("");
 const $q = useQuasar();
 
-const departmentList = ref();
+const departmentList = ref("");
+const regionList = ref("");
 
 import { getCurrentInstance } from "vue";
 
@@ -145,15 +150,24 @@ const pushToAuthorization = () => {
 const getAllDepartments = async () => {
   try {
     const response = await axios.get(`${serverUrl}allDepartments`);
-    console.log(response.data);
     departmentList.value = response.data;
   } catch (error) {
-    console.log(error);
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const getAllRegions = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}allRegions`);
+    regionList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
   }
 };
 
 onMounted(() => {
   getAllDepartments();
+  getAllRegions();
 });
 </script>
 

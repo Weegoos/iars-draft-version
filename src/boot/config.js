@@ -1,6 +1,5 @@
 export default ({ app }) => {
-  // Объявляем глобальные переменные
-  const screenWidth = 800; // Максимальная ширина экрана для компьютеров
+  const screenWidth = 800;
   const serverUrl = "http://localhost:5002/";
   const webUrl = "http://localhost:9000/#/";
 

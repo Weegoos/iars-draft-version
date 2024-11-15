@@ -6,8 +6,6 @@
         <div class="text-h5">{{ name }}</div>
       </q-card-section>
       <q-card-section align="center">
-        <p class="text-h6">Департамент: {{ department }}</p>
-        <p class="text-h6">Электронная почта: {{ email }}</p>
         <!-- <p class="text-h6">Департамент: {{ department }}</p> -->
       </q-card-section>
       <q-card-actions align="center">
@@ -40,11 +38,16 @@ import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { onMounted, ref } from "vue";
 import ChangePassword from "../components/Profile/ChangePassword.vue";
+import { getCurrentInstance } from "vue";
+
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
 const name = ref("");
 const department = ref("");
 const email = ref("");
 const $q = useQuasar();
 const isVisible = ref(false);
+
 const getInfo = async () => {
   try {
     $q.loading.show({
@@ -53,7 +56,7 @@ const getInfo = async () => {
       messageColor: "white",
       backgroundColor: "black",
     });
-    const response = await axios.get("http://localhost:5002/getInfo", {
+    const response = await axios.get(`${serverUrl}getInfo`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -65,18 +68,7 @@ const getInfo = async () => {
     name.value = `${response.data.name} ${response.data.secondName}`;
     const departmentString = response.data.department;
 
-    // Reformat the string to a valid JSON structure
-    const formattedString = departmentString
-      .replace(/=/g, ":")
-      .replace(/{/g, '{"')
-      .replace(/, /g, '", "')
-      .replace(/:/g, '": "')
-      .replace(/}/g, '"}');
-
-    // Parse the formatted string
-    const departmentParse = JSON.parse(formattedString);
-    console.log(departmentParse.name);
-    department.value = departmentParse.name;
+    department.value = departmentString;
 
     email.value = response.data.email;
     isVisible.value = true;
