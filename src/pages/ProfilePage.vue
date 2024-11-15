@@ -22,7 +22,13 @@
         </p>
       </q-card-section>
       <q-card-actions align="center">
-        <q-btn color="orange-13" icon="edit" no-caps label="Редактирование" />
+        <q-btn
+          color="orange-13"
+          icon="edit"
+          no-caps
+          label="Редактирование"
+          @click="openEditDialog"
+        />
         <q-btn
           color="deep-orange"
           no-caps
@@ -43,6 +49,7 @@
       :changePasswordStatus="changePasswordStatus"
       @closeDialog="closeDialog"
     />
+    <EditPage :editDialog="editDialog" @closeEditDialog="closeEditDialog" />
   </div>
 </template>
 
@@ -50,8 +57,10 @@
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { onMounted, ref } from "vue";
-import ChangePassword from "../components/Profile/ChangePassword.vue";
 import { getCurrentInstance } from "vue";
+
+import ChangePassword from "../components/Profile/ChangePassword.vue";
+import EditPage from "../components/Profile/EditPage.vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
@@ -112,6 +121,15 @@ const openDialog = () => {
 
 const closeDialog = () => {
   changePasswordStatus.value = false;
+};
+
+const editDialog = ref(false);
+const openEditDialog = () => {
+  editDialog.value = true;
+};
+
+const closeEditDialog = () => {
+  editDialog.value = false;
 };
 </script>
 
