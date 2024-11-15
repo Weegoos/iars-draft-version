@@ -32,13 +32,6 @@
               @click="navigation(items.link)"
             />
           </div>
-          <!-- <q-btn
-            v-if="accessToken != null"
-            color="negative"
-            icon="logout"
-            label="Выйти"
-            @click="logout"
-          /> -->
         </q-toolbar>
       </q-header>
       <q-drawer

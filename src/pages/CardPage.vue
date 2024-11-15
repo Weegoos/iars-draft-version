@@ -126,6 +126,12 @@
         @click="download"
       />
     </div>
+    <section
+      class="text-h6 text-bold text-center"
+      v-if="conclusions.length === 0"
+    >
+      Документы отсутствуют
+    </section>
     <q-card class="q-mb-xl" v-for="(items, index) in conclusions" :key="index">
       <section class="row" style="align-items: stretch">
         <div class="col">
@@ -372,7 +378,7 @@ const getAllConclusionByIIN = async (iin) => {
       messageColor: "white",
       backgroundColor: "black",
     });
-    const response = await axios.get(`${serverUrl}usersDocs?IIN=${iin}`, {
+    const response = await axios.get(`${serverUrl}temps?IIN=${iin}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -386,6 +392,8 @@ const getAllConclusionByIIN = async (iin) => {
     });
 
     conclusions.value = sortedConclusions;
+    console.log(response.data);
+
     $q.loading.hide();
   } catch (error) {
     console.error("Ошибка при запросе:", error);

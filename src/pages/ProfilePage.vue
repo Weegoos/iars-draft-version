@@ -3,10 +3,23 @@
     <q-card class="my-card" style="width: 550px">
       <q-card-section align="center">
         <q-icon name="person" size="100px" />
-        <div class="text-h5">{{ name }}</div>
+        <div class="text-h5">{{ name }} - {{ job.name }}</div>
       </q-card-section>
       <q-card-section align="center">
-        <!-- <p class="text-h6">Департамент: {{ department }}</p> -->
+        <p class="text-h6">
+          <span class="text-bold">Электронная почта:</span>
+          {{ email }}
+        </p>
+        <p class="text-h6">
+          <span class="text-bold">Дата регистрации:</span>
+          {{ registrationDate }}
+        </p>
+        <p class="text-h6">
+          <span class="text-bold">Департамент:</span> {{ department.name }}
+        </p>
+        <p class="text-h6">
+          <span class="text-bold">Регион:</span> {{ department.region }}
+        </p>
       </q-card-section>
       <q-card-actions align="center">
         <q-btn color="orange-13" icon="edit" no-caps label="Редактирование" />
@@ -45,6 +58,8 @@ const serverUrl = proxy.$serverUrl;
 const name = ref("");
 const department = ref("");
 const email = ref("");
+const job = ref("");
+const registrationDate = ref("");
 const $q = useQuasar();
 const isVisible = ref(false);
 
@@ -71,6 +86,8 @@ const getInfo = async () => {
     department.value = departmentString;
 
     email.value = response.data.email;
+    job.value = response.data.job;
+    registrationDate.value = response.data.registrationDate;
     isVisible.value = true;
     $q.loading.hide();
   } catch (error) {

@@ -107,6 +107,7 @@ watch(
   () => department.value,
   (newVal) => {
     if (newVal.length > 0) {
+      getAllRegions(newVal);
       isRegionVisible.value = true;
     }
   }
@@ -143,6 +144,7 @@ const registration = async () => {
       color: "positive",
       icon: "check",
     });
+    router.push("/authorization");
   } catch (error) {
     console.error("Ошибка при регистрации:", error);
     $q.notify({
@@ -167,9 +169,9 @@ const getAllDepartments = async () => {
   }
 };
 
-const getAllRegions = async () => {
+const getAllRegions = async (department) => {
   try {
-    const response = await axios.get(`${serverUrl}allRegions`);
+    const response = await axios.get(`${serverUrl}regInDep?dep=${department}`);
     regionList.value = response.data;
   } catch (error) {
     console.error("Ошибка при запросе:", error);
@@ -178,7 +180,6 @@ const getAllRegions = async () => {
 
 onMounted(() => {
   getAllDepartments();
-  getAllRegions();
 });
 </script>
 
