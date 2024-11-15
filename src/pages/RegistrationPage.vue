@@ -62,6 +62,7 @@
         <q-select
           v-model="region"
           :options="regionList"
+          v-show="isRegionVisible"
           label="Введите регион"
         />
       </q-card-section>
@@ -86,7 +87,7 @@
 <script setup>
 import axios from "axios";
 import { useQuasar } from "quasar";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const name = ref("");
@@ -100,6 +101,16 @@ const $q = useQuasar();
 
 const departmentList = ref("");
 const regionList = ref("");
+const isRegionVisible = ref(false);
+
+watch(
+  () => department.value,
+  (newVal) => {
+    if (newVal.length > 0) {
+      isRegionVisible.value = true;
+    }
+  }
+);
 
 import { getCurrentInstance } from "vue";
 
