@@ -2,11 +2,15 @@
   <div>
     <q-dialog v-model="openEditPage" persistent>
       <q-card style="width: 300px">
-        <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-          <span class="q-ml-sm"
-            >You are currently not connected to any network.</span
-          >
+        <q-card-section align="center">
+          <p class="text-h6">Редактирование</p>
+          <q-input v-model="name" type="text" label="Напишите имя" />
+          <q-input v-model="surname" type="text" label="Напишите фамилию" />
+          <q-input
+            v-model="email"
+            type="text"
+            label="Напишите электронную почту"
+          />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn no-caps label="Сохранить" color="positive" />
@@ -24,6 +28,10 @@
 
 <script setup>
 import { ref, watch } from "vue";
+
+const name = ref("");
+const surname = ref("");
+const email = ref("");
 
 const props = defineProps({
   editDialog: {
