@@ -82,8 +82,10 @@ const getInfo = async () => {
       withCredentials: true,
     });
 
-    if (response.data && response.data.email) {
-      await getProfile(response.data.email);
+    if (response.data && response.data.iin) {
+      console.log(response.data.iin);
+
+      await getProfile(response.data.iin);
     } else {
       console.error("Email не найден в данных пользователя.");
     }
@@ -96,7 +98,7 @@ const getInfo = async () => {
   }
 };
 
-const getProfile = async (email) => {
+const getProfile = async (iin) => {
   try {
     $q.loading.show({
       message: "Подождите, данные загружаются...",
@@ -105,7 +107,7 @@ const getProfile = async (email) => {
       backgroundColor: "black",
     });
 
-    const response = await axios.get(`${serverUrl}profile?email=${email}`, {
+    const response = await axios.get(`${serverUrl}profile?IIN=${iin}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

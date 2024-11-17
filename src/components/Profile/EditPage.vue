@@ -6,11 +6,6 @@
           <p class="text-h6">Редактирование</p>
           <q-input v-model="name" type="text" label="Напишите имя" />
           <q-input v-model="surname" type="text" label="Напишите фамилию" />
-          <q-input
-            v-model="email"
-            type="text"
-            label="Напишите электронную почту"
-          />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn no-caps label="Сохранить" color="positive" @click="save" />
@@ -35,7 +30,6 @@ import { getCurrentInstance } from "vue";
 
 const name = ref("");
 const surname = ref("");
-const email = ref("");
 const router = useRouter();
 const $q = useQuasar();
 
@@ -72,6 +66,7 @@ const getInfo = async () => {
     });
 
     if (response.data && response.data.iin) {
+      // Передаем IIN в editProfile
       await editProfile(response.data.iin);
     } else {
       console.error("ИИН не найден в данных пользователя.");
@@ -91,21 +86,25 @@ const editProfile = async (iin) => {
   }
 
   try {
-    const data = {
-      ...(name.value && { name: name.value }),
-      ...(surname.value && { surname: surname.value }),
-      ...(email.value && { email: email.value }),
-      iin,
-    };
+    // Формируем параметры URL
+    const params = new URLSearchParams();
+    if (name.value) params.append("name", name.value);
+    if (surname.value) params.append("surname", surname.value);
+    params.append("IIN", iin);
 
-    const response = await axios.put(`${serverUrl}editProfile`, data, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
+    // Отправляем PUT-запрос с параметрами в URL
+    const response = await axios.put(
+      `${serverUrl}editProfile?${params.toString()}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
 
     console.log("Профиль успешно обновлен:", response.data);
     $q.notify({
