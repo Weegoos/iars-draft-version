@@ -8,7 +8,7 @@
       <q-card-section align="center">
         <p class="text-h6">
           <span class="text-bold">Электронная почта:</span>
-          {{ email }}
+          {{ userEmail }}
         </p>
         <p class="text-h6">
           <span class="text-bold">Дата регистрации:</span>
@@ -66,7 +66,7 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const name = ref("");
 const department = ref("");
-const email = ref("");
+const userEmail = ref("");
 const job = ref("");
 const registrationDate = ref("");
 const $q = useQuasar();
@@ -74,12 +74,6 @@ const isVisible = ref(false);
 
 const getInfo = async () => {
   try {
-    $q.loading.show({
-      message: "Подождите данные загружаются...",
-      spinner: QSpinnerGears,
-      messageColor: "white",
-      backgroundColor: "black",
-    });
     const response = await axios.get(`${serverUrl}getInfo`, {
       headers: {
         "Content-Type": "application/json",
@@ -88,20 +82,57 @@ const getInfo = async () => {
       withCredentials: true,
     });
 
-    console.log(response.data);
-    name.value = `${response.data.name} ${response.data.secondName}`;
-    const departmentString = response.data.department;
-
-    department.value = departmentString;
-
-    email.value = response.data.email;
-    job.value = response.data.job;
-    registrationDate.value = response.data.registrationDate;
-    isVisible.value = true;
-    $q.loading.hide();
+    if (response.data && response.data.email) {
+      await getProfile(response.data.email);
+    } else {
+      console.error("Email не найден в данных пользователя.");
+    }
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
-    throw error;
+    $q.notify({
+      type: "negative",
+      message: "Ошибка при получении данных. Попробуйте снова.",
+    });
+  }
+};
+
+const getProfile = async (email) => {
+  try {
+    $q.loading.show({
+      message: "Подождите, данные загружаются...",
+      spinner: QSpinnerGears, // Убедитесь, что QSpinnerGears импортирован
+      messageColor: "white",
+      backgroundColor: "black",
+    });
+
+    const response = await axios.get(`${serverUrl}profile?email=${email}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+
+    if (response.data) {
+      console.log(response.data);
+      userEmail.value = response.data.email;
+      name.value = `${response.data.name} ${response.data.secondName}`;
+      department.value = response.data.department || "Не указано";
+      job.value = response.data.jobTitle || "Не указано";
+
+      registrationDate.value = response.data.registrationDate || "Не указано";
+      isVisible.value = true;
+    } else {
+      console.error("Профиль пуст.");
+    }
+  } catch (error) {
+    console.error("Ошибка при получении данных профиля:", error);
+    $q.notify({
+      type: "negative",
+      message: "Ошибка при загрузке профиля. Попробуйте снова.",
+    });
+  } finally {
+    $q.loading.hide();
   }
 };
 
