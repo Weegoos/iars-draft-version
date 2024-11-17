@@ -31,12 +31,16 @@ import { ref, watch } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
+import { getCurrentInstance } from "vue";
 
 const name = ref("");
 const surname = ref("");
 const email = ref("");
 const router = useRouter();
 const $q = useQuasar();
+
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
 
 const props = defineProps({
   editDialog: {
@@ -59,7 +63,7 @@ const closeEditDialog = () => {
 
 const getInfo = async () => {
   try {
-    const response = await axios.get(`http://localhost:5002/getInfo`, {
+    const response = await axios.get(`${serverUrl}getInfo`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -68,7 +72,6 @@ const getInfo = async () => {
     });
 
     if (response.data && response.data.iin) {
-      console.log("Получен ИИН:", response.data.iin);
       await editProfile(response.data.iin);
     } else {
       console.error("ИИН не найден в данных пользователя.");
@@ -81,7 +84,6 @@ const getInfo = async () => {
 
 const editProfile = async (iin) => {
   const accessToken = localStorage.getItem("accessToken");
-  console.log("Токен:", accessToken);
 
   if (!accessToken) {
     alert("Ошибка: Токен не найден");
@@ -96,18 +98,14 @@ const editProfile = async (iin) => {
       iin,
     };
 
-    const response = await axios.put(
-      "http://localhost:5002/editProfile",
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.put(`${serverUrl}editProfile`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
 
     console.log("Профиль успешно обновлен:", response.data);
     $q.notify({
@@ -115,7 +113,9 @@ const editProfile = async (iin) => {
       color: "positive",
       icon: "check",
     });
-    router.push("/profile");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   } catch (error) {
     if (error.response) {
       console.error("Ошибка ответа от сервера:", error.response.data);
