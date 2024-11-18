@@ -174,6 +174,10 @@
         />
       </q-card-actions>
     </q-card>
+    <DetailedInformation
+      :isOpenDetailedWindow="isOpenDetailedWindow"
+      @closeWindow="closeWindow"
+    />
   </div>
 </template>
 
@@ -183,6 +187,7 @@ import { QSpinnerGears, useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
+import DetailedInformation from "../components/AnalyticsPage/DetailedInformation.vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 
@@ -365,6 +370,15 @@ onBeforeMount(() => {
     window.location.reload();
   }
 });
+
+const isOpenDetailedWindow = ref(false);
+const viewDetailedInformation = () => {
+  isOpenDetailedWindow.value = true;
+};
+
+const closeWindow = () => {
+  isOpenDetailedWindow.value = false;
+};
 </script>
 
 <style></style>

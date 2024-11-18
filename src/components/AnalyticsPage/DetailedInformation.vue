@@ -1,16 +1,34 @@
 <template>
   <div>
     <q-dialog v-model="openDialogPage" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-          <span class="q-ml-sm"
-            >You are currently not connected to any network.</span
+      <q-card style="width: 1200px">
+        <div>
+          <q-tabs v-model="tab" class="text-teal">
+            <q-tab name="info" icon="info" label="Подробная информация" />
+            <q-tab name="history" icon="history" label="История" />
+          </q-tabs>
+
+          <q-tab-panels
+            v-model="tab"
+            animated
+            swipeable
+            vertical
+            transition-prev="jump-up"
+            transition-next="jump-up"
           >
-        </q-card-section>
+            <q-tab-panel name="info">
+              <!-- <div v-for="item in props.conclusions" :key="item.id">
+                {{ item }}
+              </div> -->
+            </q-tab-panel>
+
+            <q-tab-panel name="history">
+              <p>История будет храниться здесь</p>
+            </q-tab-panel>
+          </q-tab-panels>
+        </div>
         <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Turn on Wifi" color="primary" v-close-popup />
+          <q-btn color="negative" flat label="Закрыть" @click="closeWindow" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -18,9 +36,29 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
-const openDialogPage = ref("");
+const tab = ref("info");
+
+const props = defineProps({
+  isOpenDetailedWindow: {
+    type: Boolean,
+    required: true,
+  },
+});
+const openDialogPage = ref(props.isOpenDetailedWindow);
+
+watch(
+  () => props.isOpenDetailedWindow,
+  (newVal) => {
+    openDialogPage.value = newVal;
+  }
+);
+
+const emit = defineEmits(["closeWindow"]);
+const closeWindow = () => {
+  emit("closeWindow");
+};
 </script>
 
 <style></style>
