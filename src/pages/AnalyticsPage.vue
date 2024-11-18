@@ -164,7 +164,7 @@
           color="primary"
           no-caps
           label="Просмотреть"
-          @click="viewDetailedInformation"
+          @click="viewDetailedInformation(items)"
         />
         <q-btn
           color="positive"
@@ -177,6 +177,7 @@
     <DetailedInformation
       :isOpenDetailedWindow="isOpenDetailedWindow"
       @closeWindow="closeWindow"
+      :conclusionInfo="conclusionInfo"
     />
   </div>
 </template>
@@ -203,7 +204,6 @@ const getInfo = async () => {
       },
       withCredentials: true,
     });
-    console.log(response.data.iin);
     getUserDocs(response.data.iin);
     getAllConclusionByIIN(response.data.iin);
   } catch (error) {
@@ -223,7 +223,6 @@ const getUserDocs = async (userIIN) => {
       },
       withCredentials: true,
     });
-    console.log(response.data);
 
     analyticsDosc.value = response.data;
   } catch (error) {
@@ -349,7 +348,6 @@ const getAllConclusionByIIN = async (iin) => {
     });
 
     conclusions.value = sortedConclusions;
-    console.log(response.data);
 
     $q.loading.hide();
   } catch (error) {
@@ -372,8 +370,31 @@ onBeforeMount(() => {
 });
 
 const isOpenDetailedWindow = ref(false);
-const viewDetailedInformation = () => {
+
+const getConclusionAPI = "";
+const getFullConclusion = async (regNum) => {
+  try {
+    const response = await axios.get(
+      `${serverUrl}fullConclusion?regNumber=${regNum}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    idNumberList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const conclusionInfo = ref("");
+const viewDetailedInformation = (item) => {
   isOpenDetailedWindow.value = true;
+  console.log(item);
+  conclusionInfo.value = item;
 };
 
 const closeWindow = () => {

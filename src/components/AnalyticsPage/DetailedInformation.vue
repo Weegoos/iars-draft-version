@@ -17,9 +17,9 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="info">
-              <!-- <div v-for="item in props.conclusions" :key="item.id">
+              <div v-for="(item, index) in props.conclusionInfo" :key="index">
                 {{ item }}
-              </div> -->
+              </div>
             </q-tab-panel>
 
             <q-tab-panel name="history">
@@ -43,6 +43,10 @@ const tab = ref("info");
 const props = defineProps({
   isOpenDetailedWindow: {
     type: Boolean,
+    required: true,
+  },
+  conclusionInfo: {
+    type: Object,
     required: true,
   },
 });
