@@ -3,7 +3,9 @@
     <section v-if="role === 'Сотрудник СУ'">
       <CardPage />
     </section>
-    <section v-else-if="role === 'Аналитик СД'">Batyr</section>
+    <section v-else-if="role === 'Аналитик СД'">
+      <AnalyticsPage />
+    </section>
   </div>
 </template>
 
@@ -12,6 +14,7 @@ import axios from "axios";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import CardPage from "../pages/CardPage.vue";
+import AnalyticsPage from "../pages/AnalyticsPage.vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
