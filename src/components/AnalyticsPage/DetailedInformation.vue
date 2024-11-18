@@ -17,18 +17,25 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="info">
-              <span class="infoHeadline">Регистрационный номер</span>
-              <p class="infoStyle">
-                {{ props.conclusionInfo.registrationNumber }}
-              </p>
+              <div class="row q-gutter-sm">
+                <div class="col">
+                  <span class="infoHeadline">Регистрационный номер</span>
+                  <p class="infoStyle">
+                    {{ props.conclusionInfo.registrationNumber }}
+                  </p>
+                </div>
+                <div class="col">
+                  <span class="infoHeadline">Номер УД</span>
+                  <p class="infoStyle">
+                    {{ props.conclusionInfo.udNumber }}
+                  </p>
+                </div>
+              </div>
               <span class="infoHeadline">Дата создания документа</span>
               <p class="infoStyle">
                 {{ props.conclusionInfo.creationDate }}
               </p>
-              <span class="infoHeadline">Номер УД</span>
-              <p class="infoStyle">
-                {{ props.conclusionInfo.udNumber }}
-              </p>
+
               <span class="infoHeadline">Дата регистрации дела</span>
               <p class="infoStyle">
                 {{ props.conclusionInfo.registrationDate }}
@@ -39,11 +46,11 @@
               </p>
               <span class="infoHeadline">Решение по делу</span>
               <p class="infoStyle">
-                {{ props.conclusionInfo.result }}
+                {{ props.conclusionInfo.summary }}
               </p>
               <span class="infoHeadline">Краткая фабула</span>
               <p class="infoStyle">
-                {{ props.conclusionInfo.summary }}
+                <!-- {{ props.conclusionInfo.summary }} -->
               </p>
               <span class="infoHeadline">ИИН вызываемого</span>
               <p class="infoStyle">
@@ -107,9 +114,33 @@
               <p class="infoStyle">
                 {{ props.conclusionInfo.justification || "Не указан" }}
               </p>
-              <span class="infoHeadline">Место проведения</span>
+              <span class="infoHeadline">ИИН защитника </span>
               <p class="infoStyle">
-                {{ props.conclusionInfo.eventPlace || "Не указан" }}
+                {{ props.conclusionInfo.defenseAttorneyIIN || "Не указан" }}
+              </p>
+              <span class="infoHeadline">ИИН защитника </span>
+              <p class="infoStyle">
+                {{ props.conclusionInfo.defenseAttorneyIIN || "Не указан" }}
+              </p>
+              <span class="infoHeadline">ФИО защитника </span>
+              <p class="infoStyle">
+                {{
+                  props.conclusionInfo.defenseAttorneyFullName || "Не указан"
+                }}
+              </p>
+              <span class="infoHeadline"
+                >Обоснование и необходимость участия предпринимателя
+              </span>
+              <p class="infoStyle">
+                {{
+                  props.conclusionInfo.defenseAttorneyFullName || "Не указан"
+                }}
+              </p>
+              <span class="infoHeadline"
+                >Результат от планируемого следственного действия
+              </span>
+              <p class="infoStyle">
+                {{ props.conclusionInfo.result || "Не указан" }}
               </p>
             </q-tab-panel>
 
