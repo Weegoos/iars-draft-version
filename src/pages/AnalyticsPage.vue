@@ -117,15 +117,77 @@
         </datalist>
       </div>
     </div>
+    <q-card
+      class="q-mb-md"
+      v-for="(items, index) in analyticsDosc"
+      :key="index"
+    >
+      <section class="row" style="align-items: stretch">
+        <div class="col">
+          <q-card-section>
+            <span class="infoHeadline">№ (порядковый)</span>
+            <p class="infoStyle text-capitalize">{{ index + 1 }}</p>
+            <span class="infoHeadline">Дата создания документа</span>
+            <p class="infoStyle text-capitalize">
+              {{ items.creationDate || "Не указано" }}
+            </p>
+          </q-card-section>
+        </div>
+        <div class="col">
+          <q-card-section>
+            <span class="infoHeadline">Регистрационный номер</span>
+            <p class="infoStyle text-capitalize">
+              {{ items.registrationNumber || "Не указано" }}
+            </p>
+            <span class="infoHeadline">Номер УД</span>
+            <p class="infoStyle text-capitalize">
+              {{ items.udNumber || "Не указано" }}
+            </p>
+          </q-card-section>
+        </div>
+
+        <div class="col">
+          <q-card-section>
+            <span class="infoHeadline">ФИО вызываемого</span>
+            <p class="infoStyle text-capitalize">
+              {{ items.calledPersonFullName || "Не указано" }}
+            </p>
+            <span class="infoHeadline">ФИО согласующего</span>
+            <p class="infoStyle text-capitalize">
+              {{ items.defenseAttorneyFullName || "Не указано" }}
+            </p>
+          </q-card-section>
+        </div>
+      </section>
+      <q-card-actions align="center" class="row">
+        <q-btn
+          color="primary"
+          no-caps
+          label="Просмотреть"
+          @click="viewDetailedInformation"
+        />
+        <q-btn
+          color="positive"
+          no-caps
+          label="Согласовать"
+          @click="viewAgreementComponent"
+        />
+      </q-card-actions>
+    </q-card>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import { onMounted } from "vue";
+import { QSpinnerGears, useQuasar } from "quasar";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
+import { useRouter } from "vue-router";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+
+const analyticsDosc = ref("");
+const $q = useQuasar();
 
 const getInfo = async () => {
   try {
@@ -138,6 +200,7 @@ const getInfo = async () => {
     });
     console.log(response.data.iin);
     getUserDocs(response.data.iin);
+    getAllConclusionByIIN(response.data.iin);
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
     throw error;
@@ -147,7 +210,7 @@ const getInfo = async () => {
 const getUserDocs = async (userIIN) => {
   const accessToken = localStorage.getItem("accessToken");
   try {
-    const response = axios.get(`${serverUrl}usersDocs?IIN=${userIIN}`, {
+    const response = await axios.get(`${serverUrl}usersDocs?IIN=${userIIN}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
@@ -155,7 +218,9 @@ const getUserDocs = async (userIIN) => {
       },
       withCredentials: true,
     });
-    console.log((await response).data);
+    console.log(response.data);
+
+    analyticsDosc.value = response.data;
   } catch (error) {
     console.error("Ошибка при получении документов:", error);
     throw error;
@@ -164,6 +229,141 @@ const getUserDocs = async (userIIN) => {
 
 onMounted(() => {
   getInfo();
+});
+
+const statusOfDocuments = ref("");
+const documentsOptions = ref("");
+
+const registrationNumber = ref("");
+
+const region = ref("");
+const regionList = ref("");
+
+const startDate = ref("2019/05/05");
+const endDate = ref("2024/03/03");
+const iin = ref("");
+
+const idNumber = ref("");
+const idNumberList = ref();
+
+const fcsConcordant = ref("");
+
+const concordantList = ref("");
+const concordantListAPI = `${serverUrl}allNames`;
+const getAllNames = async () => {
+  try {
+    const response = await axios.get(concordantListAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+
+    concordantList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const documentOptionsAPI = `${serverUrl}allStatus`;
+const getAllDocuments = async () => {
+  try {
+    const response = await axios.get(documentOptionsAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    documentsOptions.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const regionListAPI = `${serverUrl}allRegions`;
+const getAllRegions = async () => {
+  try {
+    const response = await axios.get(regionListAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    regionList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const UDAPI = `${serverUrl}allUD`;
+const getAllUD = async () => {
+  try {
+    const response = await axios.get(UDAPI, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    idNumberList.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+getAllDocuments();
+getAllRegions();
+getAllNames();
+getAllUD();
+
+// Conclusion
+const conclusions = ref("");
+
+const getAllConclusionByIIN = async (iin) => {
+  try {
+    $q.loading.show({
+      message: "Подождите данные загружаются...",
+      spinner: QSpinnerGears,
+      messageColor: "white",
+      backgroundColor: "black",
+    });
+    const response = await axios.get(`${serverUrl}temps?IIN=${iin}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+
+    const sortedConclusions = response.data.sort((a, b) => {
+      // Сортировка по убыванию (новые сверху)
+      return new Date(b.creationDate) - new Date(a.creationDate);
+    });
+
+    conclusions.value = sortedConclusions;
+    console.log(response.data);
+
+    $q.loading.hide();
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const router = useRouter();
+
+const redirectToKeycloakLogin = () => {
+  router.push("/authorization");
+  window.location.href = `${webUrl}authorization`;
+};
+onBeforeMount(() => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    redirectToKeycloakLogin();
+    window.location.reload();
+  }
 });
 </script>
 
