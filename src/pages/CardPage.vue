@@ -138,64 +138,31 @@
           <q-card-section>
             <span class="infoHeadline">№ (порядковый)</span>
             <p class="infoStyle text-capitalize">{{ index + 1 }}</p>
-            <span class="infoHeadline">Регистрационный номер</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.registrationNumber || "Не указано" }}
-            </p>
             <span class="infoHeadline">Дата создания документа</span>
             <p class="infoStyle text-capitalize">
               {{ items.creationDate || "Не указано" }}
             </p>
-            <span class="infoHeadline">ИИН вызываемого</span>
+          </q-card-section>
+        </div>
+        <div class="col">
+          <q-card-section>
+            <span class="infoHeadline">Регистрационный номер</span>
             <p class="infoStyle text-capitalize">
-              {{ items.calledPersonIIN || "Не указано" }}
+              {{ items.registrationNumber || "Не указано" }}
+            </p>
+            <span class="infoHeadline">Номер УД</span>
+            <p class="infoStyle text-capitalize">
+              {{ items.udNumber || "Не указано" }}
             </p>
           </q-card-section>
         </div>
+
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">ФИО вызываемого</span>
             <p class="infoStyle text-capitalize">
               {{ items.calledPersonFullName || "Не указано" }}
             </p>
-            <span class="infoHeadline">Номер УД</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.udNumber || "Не указано" }}
-            </p>
-            <span class="infoHeadline">Статья УК</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.article || "Не указано" }}
-            </p>
-            <span class="infoHeadline">Время прихода</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.eventDateTime || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">Место работы</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.workPlace || "Не указано" }}
-            </p>
-            <div class="row q-gutter-sm">
-              <section class="col">
-                <span class="infoHeadline">Должность</span>
-                <p class="infoStyle text-capitalize">
-                  {{ items.calledPersonPosition || "не указано" }}
-                </p>
-              </section>
-              <section class="col">
-                <span class="infoHeadline">Относится ли к бизнесу</span>
-                <p class="infoStyle text-capitalize">
-                  {{ items.relatesToBusiness || "Не указано" }}
-                </p>
-              </section>
-            </div>
-            <span class="infoHeadline">Регион</span>
-            <p class="infoStyle text-capitalize">{{ items.region.name }}</p>
-
             <span class="infoHeadline">ФИО согласующего</span>
             <p class="infoStyle text-capitalize">
               {{ items.defenseAttorneyFullName || "Не указано" }}
@@ -218,7 +185,11 @@
         />
       </q-card-actions>
     </q-card>
-    <DetailedInformation :isOpen="isOpen" @closeWindow="closeWindow" />
+    <DetailedInformation
+      :isOpen="isOpen"
+      @closeWindow="closeWindow"
+      :conclusions="conclusions"
+    />
     <AgreementComponent
       :isOpenAgreementPage="isOpenAgreementPage"
       @closeAgreementWindow="closeAgreementWindow"

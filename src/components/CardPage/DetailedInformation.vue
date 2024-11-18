@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-dialog v-model="confirm" persistent>
-      <q-card>
+      <q-card style="width: 1200px">
         <div>
           <q-tabs v-model="tab" class="text-teal">
             <q-tab name="info" icon="info" label="Подробная информация" />
@@ -17,7 +17,9 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="info">
-              <p>Подробная информация будет здесь</p>
+              <div v-for="item in props.conclusions" :key="item.id">
+                {{ item }}
+              </div>
             </q-tab-panel>
 
             <q-tab-panel name="history">
@@ -41,6 +43,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  conclusions: {
+    type: Object,
+    required: true,
+  },
 });
 
 const confirm = ref(props.isOpen);
@@ -48,6 +54,13 @@ watch(
   () => props.isOpen,
   (newVal) => {
     confirm.value = newVal;
+  }
+);
+
+watch(
+  () => props.conclusions,
+  (newVal) => {
+    console.log(newVal);
   }
 );
 
