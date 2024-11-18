@@ -99,6 +99,9 @@ const getInfo = async () => {
 };
 
 const getProfile = async (iin) => {
+  const accessToken = localStorage.getItem("accessToken");
+  console.log(accessToken);
+
   try {
     $q.loading.show({
       message: "Подождите, данные загружаются...",
@@ -109,6 +112,7 @@ const getProfile = async (iin) => {
 
     const response = await axios.get(`${serverUrl}profile?IIN=${iin}`, {
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
