@@ -120,8 +120,51 @@
   </div>
 </template>
 
-<script>
-export default {};
+<script setup>
+import axios from "axios";
+import { onMounted } from "vue";
+import { getCurrentInstance } from "vue";
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+
+const getInfo = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}getInfo`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    console.log(response.data.iin);
+    getUserDocs(response.data.iin);
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
+    throw error;
+  }
+};
+
+const getUserDocs = async (userIIN) => {
+  const accessToken = localStorage.getItem("accessToken");
+  try {
+    const response = axios.get(`${serverUrl}usersDocs?IIN=${userIIN}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    console.log((await response).data);
+  } catch (error) {
+    console.error("Ошибка при получении документов:", error);
+    throw error;
+  }
+};
+
+onMounted(() => {
+  getInfo();
+});
 </script>
 
 <style></style>
