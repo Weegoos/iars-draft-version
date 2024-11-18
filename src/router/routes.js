@@ -1,7 +1,7 @@
 const routes = [
   {
     path: "/",
-    component: () => import("pages/CardPage.vue"),
+    component: () => import("layouts/MainCard.vue"),
   },
   {
     path: "/create",

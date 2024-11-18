@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row q-gutter-sm">
+    <!-- <div class="row q-gutter-sm">
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
@@ -116,7 +116,7 @@
           </div>
         </datalist>
       </div>
-    </div>
+    </div> -->
     <div class="col" align="right">
       <q-btn
         color="primary"
