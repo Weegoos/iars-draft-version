@@ -6,12 +6,13 @@
     <section v-else-if="role === 'Аналитик СД'">
       <AnalyticsPage />
     </section>
+    <section v-else-if="role === 'Модератор'">Модератор</section>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import CardPage from "../pages/CardPage.vue";
 import AnalyticsPage from "../pages/AnalyticsPage.vue";
