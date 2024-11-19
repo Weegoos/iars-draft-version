@@ -17,7 +17,7 @@
         color="primary"
         no-caps
         label="Скачать в формате excel"
-        @click="onClick"
+        @click="downloadExcel"
       />
     </section>
     <section>
@@ -56,31 +56,28 @@ const getInfo = async () => {
 
 const downloadPdf = async () => {
   try {
-    // Получение данных о пользователе
     const data = await getInfo();
-    const iin = data?.iin; // Извлечение IIN (проверьте точное название поля в данных)
+    const iin = data?.iin;
 
     if (!iin) {
       console.error("IIN не найден!");
       return;
     }
 
-    // Запрос на сервер для создания и загрузки PDF
     const response = await axios.get(
       `http://localhost:5002/pdf?IIN=${iin}`,
 
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Добавить токен
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           "Content-Type": "application/json",
           Accept: "application/pdf",
         },
-        responseType: "blob", // Получение файла в формате blob
+        responseType: "blob",
         withCredentials: true,
       }
     );
 
-    // Создание ссылки для загрузки файла
     const blob = new Blob([response.data], { type: "application/pdf" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
@@ -90,6 +87,41 @@ const downloadPdf = async () => {
     console.log("PDF успешно загружен.");
   } catch (error) {
     console.error("Ошибка при загрузке PDF:", error);
+  }
+};
+
+const downloadExcel = async () => {
+  try {
+    const data = await getInfo();
+    const iin = data?.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+
+    const response = await axios.get(`http://localhost:5002/excel?IIN=${iin}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
+      },
+      responseType: "blob",
+      withCredentials: true,
+    });
+
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.xlsx`;
+    link.click();
+
+    console.log("Excel успешно загружен.");
+  } catch (error) {
+    console.error("Ошибка при загрузке Excel:", error);
   }
 };
 </script>
