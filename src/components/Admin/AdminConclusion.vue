@@ -92,7 +92,6 @@ const getAllConclusion = async () => {
       },
       withCredentials: true,
     });
-
     allConclusion.value = response.data;
   } catch (error) {
     console.error("Ошибка при получении всех документов:", error);
