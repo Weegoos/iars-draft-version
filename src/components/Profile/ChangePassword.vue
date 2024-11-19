@@ -11,7 +11,11 @@
             type="email"
             label="Напишите электронную почту"
           />
-          <q-input v-model="oldPassword" :type="isPwd ? 'password' : 'text'">
+          <q-input
+            v-model="oldPassword"
+            label="Напишите старый пароль"
+            :type="isPwd ? 'password' : 'text'"
+          >
             <template v-slot:append>
               <q-icon
                 :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -22,6 +26,7 @@
           </q-input>
           <q-input
             v-model="newPassword"
+            label="Напишите новый пароль"
             :type="isPwdNewPassword ? 'password' : 'text'"
             hint="Не менее 6 символов"
           >
