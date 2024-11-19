@@ -6,7 +6,9 @@
     <section v-else-if="role === 'Аналитик СД'">
       <AnalyticsPage />
     </section>
-    <section v-else-if="role === 'Модератор'">Модератор</section>
+    <section v-else-if="role === 'Модератор'">
+      <AdminPage />
+    </section>
   </div>
 </template>
 
@@ -16,6 +18,7 @@ import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import CardPage from "../pages/CardPage.vue";
 import AnalyticsPage from "../pages/AnalyticsPage.vue";
+import AdminPage from "../pages/AdminPage.vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
