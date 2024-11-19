@@ -198,13 +198,19 @@
           @click="openRefusePage(items)"
         />
 
-        <q-btn color="primary" flat no-caps label="Отправить на доработку" />
+        <q-btn
+          color="primary"
+          flat
+          no-caps
+          label="Отправить на доработку"
+          @click="sendForRevision(items)"
+        />
         <q-btn
           color="primary"
           no-caps
           flat
           label="Оставить без рассмотрения"
-          @click="onClick"
+          @click="fff"
         />
       </q-card-actions>
     </q-card>
@@ -256,6 +262,13 @@ const viewAgreementComponent = (item) => {
   informationForRefusedComponent.value = item;
   docsStatus.value = "Согласовано";
   logAnswer.value = "Документ успешно согласован";
+};
+
+const sendForRevision = (item) => {
+  openRefusedDialogPage.value = true;
+  informationForRefusedComponent.value = item;
+  docsStatus.value = "Отправлено на доработку";
+  logAnswer.value = "Документ успешно отправлен на доработку";
 };
 
 const closeRefusedDialog = () => {
