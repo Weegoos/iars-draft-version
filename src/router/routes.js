@@ -19,6 +19,10 @@ const routes = [
     path: "/authorization",
     component: () => import("pages/AuthPage.vue"),
   },
+  {
+    path: "/admin-user",
+    component: () => import("../components/Admin/AdminUser.vue"),
+  },
 
   // Always leave this as last one,
   // but you can also remove it

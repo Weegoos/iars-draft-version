@@ -1,7 +1,13 @@
 <template>
-  <div>Admin</div>
+  <div>
+    <section>
+      <AdminConclusion />
+    </section>
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import AdminConclusion from "../components/Admin/AdminConclusion.vue";
+</script>
 
 <style></style>
