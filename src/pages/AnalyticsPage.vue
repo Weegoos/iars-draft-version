@@ -189,6 +189,16 @@
           label="Согласовать"
           @click="viewAgreementComponent"
         />
+        <q-btn color="negative" no-caps label="Отказать" />
+
+        <q-btn color="primary" flat no-caps label="Отправить на доработку" />
+        <q-btn
+          color="primary"
+          no-caps
+          flat
+          label="Оставить без рассмотрения"
+          @click="onClick"
+        />
       </q-card-actions>
     </q-card>
     <DetailedInformation
