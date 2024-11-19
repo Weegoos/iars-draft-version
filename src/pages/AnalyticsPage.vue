@@ -138,8 +138,10 @@
       class="q-mb-md"
       v-for="(items, index) in analyticsDosc"
       :key="index"
+      :class="items.status === 'На согласовании' ? 'activeDocs' : ''"
     >
       <section class="row" style="align-items: stretch">
+        <div class="unreadDocs"></div>
         <div class="col">
           <q-card-section>
             <span class="infoHeadline">№ (порядковый)</span>
@@ -506,4 +508,8 @@ const closeWindow = () => {
 };
 </script>
 
-<style></style>
+<style scoped>
+.activeDocs {
+  border: 1px solid green;
+}
+</style>
