@@ -189,7 +189,12 @@
           label="Согласовать"
           @click="viewAgreementComponent"
         />
-        <q-btn color="negative" no-caps label="Отказать" />
+        <q-btn
+          color="negative"
+          no-caps
+          label="Отказать"
+          @click="openRefusePage(items)"
+        />
 
         <q-btn color="primary" flat no-caps label="Отправить на доработку" />
         <q-btn
@@ -206,21 +211,40 @@
       @closeWindow="closeWindow"
       :conclusionInfo="conclusionInfo"
     />
+    <RefusedPage
+      :openRefusedDialogPage="openRefusedDialogPage"
+      @closeRefusedDialog="closeRefusedDialog"
+      :informationForRefusedComponent="informationForRefusedComponent"
+    />
   </div>
 </template>
 
 <script setup>
+import DetailedInformation from "../components/AnalyticsPage/DetailedInformation.vue";
+import RefusedPage from "../components/Status/RefusedPage.vue";
+
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
-import DetailedInformation from "../components/AnalyticsPage/DetailedInformation.vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 
 const analyticsDosc = ref("");
 const $q = useQuasar();
+
+const openRefusedDialogPage = ref(false);
+const informationForRefusedComponent = ref("");
+const openRefusePage = (item) => {
+  openRefusedDialogPage.value = true;
+  informationForRefusedComponent.value = item;
+  console.log(item);
+};
+
+const closeRefusedDialog = () => {
+  openRefusedDialogPage.value = false;
+};
 
 const getInfo = async () => {
   try {
@@ -469,25 +493,6 @@ onBeforeMount(() => {
 });
 
 const isOpenDetailedWindow = ref(false);
-
-const getConclusionAPI = "";
-const getFullConclusion = async (regNum) => {
-  try {
-    const response = await axios.get(
-      `${serverUrl}fullConclusion?regNumber=${regNum}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-    idNumberList.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
 
 const conclusionInfo = ref("");
 const viewDetailedInformation = (item) => {
