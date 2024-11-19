@@ -117,13 +117,20 @@
         </datalist>
       </div>
     </div> -->
-    <div class="col" align="right">
+    <div class="col q-gutter-md" align="right">
       <q-btn
         color="primary"
         class="q-mb-md"
         icon="download"
         label="Скачать в формате pdf"
         @click="downloadPdf"
+      />
+      <q-btn
+        color="primary"
+        class="q-mb-md"
+        icon="download"
+        label="Скачать в формате excel"
+        @click="downloadExcel"
       />
     </div>
     <section
@@ -374,6 +381,41 @@ const downloadPdf = async () => {
     console.log("PDF успешно загружен.");
   } catch (error) {
     console.error("Ошибка при загрузке PDF:", error);
+  }
+};
+
+const downloadExcel = async () => {
+  try {
+    const data = await getInfo();
+    const iin = data?.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+
+    const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
+      },
+      responseType: "blob",
+      withCredentials: true,
+    });
+
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.xlsx`;
+    link.click();
+
+    console.log("Excel успешно загружен.");
+  } catch (error) {
+    console.error("Ошибка при загрузке Excel:", error);
   }
 };
 
