@@ -189,7 +189,7 @@
           color="positive"
           no-caps
           label="Согласовать"
-          @click="viewAgreementComponent"
+          @click="viewAgreementComponent(items)"
         />
         <q-btn
           color="negative"
@@ -218,6 +218,7 @@
       @closeRefusedDialog="closeRefusedDialog"
       :informationForRefusedComponent="informationForRefusedComponent"
       :docsStatus="docsStatus"
+      :logAnswer="logAnswer"
     />
   </div>
 </template>
@@ -240,11 +241,21 @@ const $q = useQuasar();
 const openRefusedDialogPage = ref(false);
 const informationForRefusedComponent = ref("");
 const docsStatus = ref("");
+const logAnswer = ref("");
+
 const openRefusePage = (item) => {
   openRefusedDialogPage.value = true;
   informationForRefusedComponent.value = item;
   docsStatus.value = "Отказано";
+  logAnswer.value = "Документу успешно было отказано";
   console.log(item);
+};
+
+const viewAgreementComponent = (item) => {
+  openRefusedDialogPage.value = true;
+  informationForRefusedComponent.value = item;
+  docsStatus.value = "Согласовано";
+  logAnswer.value = "Документ успешно согласован";
 };
 
 const closeRefusedDialog = () => {

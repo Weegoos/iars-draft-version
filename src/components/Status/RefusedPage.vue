@@ -54,6 +54,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  logAnswer: {
+    type: String,
+    required: true,
+  },
 });
 
 const openRefusedDialog = ref(props.openRefusedDialogPage);
@@ -113,7 +117,7 @@ const refuseButton = async () => {
 
     console.log("Успешно создано:", response.data);
     $q.notify({
-      message: "Документу было отказано",
+      message: props.logAnswer,
       icon: "check",
       color: "positive",
     });
