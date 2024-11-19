@@ -15,9 +15,12 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import AdminConclusion from "../components/Admin/AdminConclusion.vue";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
+
 const pushToAdminUser = () => {
   router.push("/admin-user");
 };
