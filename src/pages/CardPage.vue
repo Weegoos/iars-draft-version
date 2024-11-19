@@ -117,7 +117,7 @@
         </datalist>
       </div>
     </div> -->
-    <div class="col q-gutter-md" align="right">
+    <!-- <div class="col q-gutter-md" align="right">
       <q-btn
         color="primary"
         class="q-mb-md"
@@ -132,7 +132,7 @@
         label="Скачать в формате excel"
         @click="downloadExcel"
       />
-    </div>
+    </div> -->
     <section
       class="text-h6 text-bold text-center"
       v-if="conclusions.length === 0"
