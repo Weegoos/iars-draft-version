@@ -122,8 +122,8 @@
         color="primary"
         class="q-mb-md"
         icon="download"
-        label="Скачать"
-        @click="download"
+        label="Скачать в формате pdf"
+        @click="downloadPdf"
       />
     </div>
     <section
@@ -179,6 +179,7 @@
         />
         <q-btn
           color="positive"
+          R
           no-caps
           label="Согласовать"
           @click="viewAgreementComponent"
@@ -218,10 +219,6 @@ const viewDetailedInformation = () => {
 
 const closeWindow = () => {
   isOpen.value = false;
-};
-
-const download = () => {
-  console.log("Download");
 };
 
 const isOpenAgreementPage = ref(false);
@@ -333,6 +330,9 @@ const getInfo = async () => {
       withCredentials: true,
     });
     getAllConclusionByIIN(response.data.iin);
+    console.log(response.data.iin);
+
+    return response.data;
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
     throw error;
@@ -340,6 +340,42 @@ const getInfo = async () => {
 };
 
 getInfo();
+
+const downloadPdf = async () => {
+  try {
+    const data = await getInfo();
+    const iin = data?.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+
+    const response = await axios.get(
+      `${serverUrl}pdf?IIN=${iin}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
+          Accept: "application/pdf",
+        },
+        responseType: "blob",
+        withCredentials: true,
+      }
+    );
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.pdf`;
+    link.click();
+
+    console.log("PDF успешно загружен.");
+  } catch (error) {
+    console.error("Ошибка при загрузке PDF:", error);
+  }
+};
 
 const getAllConclusionByIIN = async (iin) => {
   try {
