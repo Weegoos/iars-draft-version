@@ -53,15 +53,30 @@
         </q-card-actions>
       </q-card>
     </section>
+    <AdminDetailedInformation
+      :isOpenAdminDialogPage="isOpenAdminDialogPage"
+      @closeAdminDialogPage="closeAdminDialogPage"
+    />
   </div>
 </template>
 
 <script setup>
+import AdminDetailedInformation from "./DetailedInformation/AdminDetailedInformation.vue";
+
 import axios from "axios";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+
+const isOpenAdminDialogPage = ref(false);
+const viewDetailedInformation = () => {
+  isOpenAdminDialogPage.value = true;
+};
+
+const closeAdminDialogPage = () => {
+  isOpenAdminDialogPage.value = false;
+};
 
 const allConclusion = ref("");
 const getAllConclusion = async () => {
