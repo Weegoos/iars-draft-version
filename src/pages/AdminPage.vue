@@ -32,6 +32,10 @@ import AdminConclusion from "../components/Admin/AdminConclusion.vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 
+import { getCurrentInstance } from "vue";
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+
 const router = useRouter();
 
 const pushToAdminUser = () => {
@@ -40,7 +44,7 @@ const pushToAdminUser = () => {
 
 const getInfo = async () => {
   try {
-    const response = await axios.get("http://localhost:5002/getInfo", {
+    const response = await axios.get(`${serverUrl}getInfo`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -65,7 +69,7 @@ const downloadPdf = async () => {
     }
 
     const response = await axios.get(
-      `http://localhost:5002/pdf?IIN=${iin}`,
+      `${serverUrl}pdf?IIN=${iin}`,
 
       {
         headers: {
@@ -100,7 +104,7 @@ const downloadExcel = async () => {
       return;
     }
 
-    const response = await axios.get(`http://localhost:5002/excel?IIN=${iin}`, {
+    const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
