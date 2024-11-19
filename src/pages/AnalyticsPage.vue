@@ -100,6 +100,7 @@
           </div>
         </div>
       </div>
+
       <div class="col">
         <q-input v-model="iin" type="text" label="ИИН вызываемого" />
       </div>
@@ -116,6 +117,22 @@
           </div>
         </datalist>
       </div>
+    </div>
+    <div class="col q-gutter-md" align="right">
+      <q-btn
+        color="primary"
+        class="q-mb-md"
+        icon="download"
+        label="Скачать в формате pdf"
+        @click="downloadPdf"
+      />
+      <q-btn
+        color="primary"
+        class="q-mb-md"
+        icon="download"
+        label="Скачать в формате excel"
+        @click="downloadExcel"
+      />
     </div>
     <q-card
       class="q-mb-md"
@@ -206,9 +223,81 @@ const getInfo = async () => {
     });
     getUserDocs(response.data.iin);
     getAllConclusionByIIN(response.data.iin);
+    return response.data;
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
     throw error;
+  }
+};
+
+const downloadPdf = async () => {
+  try {
+    const data = await getInfo();
+    const iin = data?.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+
+    const response = await axios.get(
+      `${serverUrl}pdf?IIN=${iin}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
+          Accept: "application/pdf",
+        },
+        responseType: "blob",
+        withCredentials: true,
+      }
+    );
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.pdf`;
+    link.click();
+
+    console.log("PDF успешно загружен.");
+  } catch (error) {
+    console.error("Ошибка при загрузке PDF:", error);
+  }
+};
+
+const downloadExcel = async () => {
+  try {
+    const data = await getInfo();
+    const iin = data?.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+
+    const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
+      },
+      responseType: "blob",
+      withCredentials: true,
+    });
+
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.xlsx`;
+    link.click();
+
+    console.log("Excel успешно загружен.");
+  } catch (error) {
+    console.error("Ошибка при загрузке Excel:", error);
   }
 };
 
