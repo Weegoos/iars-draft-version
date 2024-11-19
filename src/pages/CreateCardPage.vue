@@ -7,7 +7,11 @@
             <q-input v-model="idNumber" type="text" label="Номер УД" />
           </div>
           <div class="col">
-            <q-input v-model="iin" type="text" label="ИИН вызываемого" />
+            <q-input
+              v-model="iinOfCalled"
+              type="text"
+              label="ИИН вызываемого"
+            />
           </div>
           <div class="col">
             <q-input v-model="binAndIin" type="text" label="БИН/ИИН" />
@@ -143,17 +147,28 @@
       </q-card-section>
       <q-card-actions align="center">
         <q-btn color="primary" no-caps label="Сохранить" />
-        <q-btn color="positive" no-caps label="На согласование" />
+        <q-btn
+          color="positive"
+          no-caps
+          label="На согласование"
+          @click="createEvent"
+        />
       </q-card-actions>
     </q-card>
   </div>
 </template>
 
 <script setup>
+import { useQuasar } from "quasar";
+import axios from "axios";
 import { ref } from "vue";
 
+import { getCurrentInstance } from "vue";
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+
 const idNumber = ref("");
-const iin = ref("");
+const iinOfCalled = ref("");
 const binAndIin = ref("");
 const positionTheCalledPerson = ref("");
 const region = ref("");
@@ -166,6 +181,73 @@ const isApplyToBusiness = ref("");
 const iinOfTheDefender = ref("");
 const entrepreneurParticipation = ref("");
 const results = ref("");
+
+const $q = useQuasar();
+
+const getInfo = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}getInfo`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
+    throw error;
+  }
+};
+
+getInfo();
+
+const createEvent = async () => {
+  try {
+    const userData = await getInfo();
+    const iinofInvestigator = userData?.iin;
+    console.log(iinofInvestigator);
+
+    const data = {
+      jobTitle: positionTheCalledPerson.value,
+      region: region.value,
+      plannedActions: plannedInvestigateActions.value,
+      eventDateTime: "2024-11-19T15:26:10.949Z",
+      eventPlace: locationOfTheEvent.value,
+      relation: relationshipOfTheCaller.value,
+      investigationType: "string",
+      relatesToBusiness: true,
+      justification: "string",
+      result: results.value,
+      ud: idNumber.value,
+      iindefender: iinOfTheDefender.value,
+      iinofCalled: iinOfCalled.value,
+      bin_IIN: binAndIin.value,
+      iinofInvestigator: iinofInvestigator,
+    };
+
+    const response = await axios.post("http://localhost:5002/create", data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Убедитесь, что токен есть
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    console.log("Успешно создано:", response.data);
+    $q.notify({
+      message: "Документ успешно создан",
+      icon: "check",
+      color: "positive",
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  } catch (error) {
+    console.error("Ошибка при создании события:", error.response || error);
+  }
+};
 </script>
 
 <style></style>
