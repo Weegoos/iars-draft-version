@@ -217,6 +217,7 @@
       :openRefusedDialogPage="openRefusedDialogPage"
       @closeRefusedDialog="closeRefusedDialog"
       :informationForRefusedComponent="informationForRefusedComponent"
+      :docsStatus="docsStatus"
     />
   </div>
 </template>
@@ -238,9 +239,11 @@ const $q = useQuasar();
 
 const openRefusedDialogPage = ref(false);
 const informationForRefusedComponent = ref("");
+const docsStatus = ref("");
 const openRefusePage = (item) => {
   openRefusedDialogPage.value = true;
   informationForRefusedComponent.value = item;
+  docsStatus.value = "Отказано";
   console.log(item);
 };
 

@@ -50,6 +50,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  docsStatus: {
+    type: String,
+    required: true,
+  },
 });
 
 const openRefusedDialog = ref(props.openRefusedDialogPage);
@@ -94,7 +98,7 @@ const refuseButton = async () => {
     const data = {
       registrationNumber:
         props.informationForRefusedComponent.registrationNumber,
-      status: "Отказано",
+      status: props.docsStatus,
       reason: reason.value,
       iin: iinofInvestigator,
     };
