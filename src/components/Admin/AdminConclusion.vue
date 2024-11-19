@@ -48,7 +48,7 @@
             color="primary"
             no-caps
             label="Просмотреть"
-            @click="viewDetailedInformation"
+            @click="viewDetailedInformation(items)"
           />
         </q-card-actions>
       </q-card>
@@ -56,6 +56,7 @@
     <AdminDetailedInformation
       :isOpenAdminDialogPage="isOpenAdminDialogPage"
       @closeAdminDialogPage="closeAdminDialogPage"
+      :conclusionDetailedInformation="conclusionDetailedInformation"
     />
   </div>
 </template>
@@ -70,8 +71,11 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 
 const isOpenAdminDialogPage = ref(false);
-const viewDetailedInformation = () => {
+const conclusionDetailedInformation = ref("");
+const viewDetailedInformation = (item) => {
   isOpenAdminDialogPage.value = true;
+  conclusionDetailedInformation.value = item;
+  console.log(item);
 };
 
 const closeAdminDialogPage = () => {
@@ -88,7 +92,7 @@ const getAllConclusion = async () => {
       },
       withCredentials: true,
     });
-    console.log(response.data);
+
     allConclusion.value = response.data;
   } catch (error) {
     console.error("Ошибка при получении всех документов:", error);
