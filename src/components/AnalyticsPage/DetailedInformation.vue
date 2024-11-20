@@ -145,7 +145,7 @@
             </q-tab-panel>
 
             <q-tab-panel name="history">
-              <p>История будет храниться здесь</p>
+              <HistoryPage />
             </q-tab-panel>
           </q-tab-panels>
         </div>
@@ -158,6 +158,7 @@
 </template>
 
 <script setup>
+import HistoryPage from "../../pages/HistoryPage.vue";
 import { ref, watch } from "vue";
 
 const tab = ref("info");
