@@ -226,6 +226,7 @@
       :docsStatus="docsStatus"
       :logAnswer="logAnswer"
       :buttonLabel="buttonLabel"
+      :buttonColor="buttonColor"
     />
   </div>
 </template>
@@ -250,6 +251,7 @@ const informationForRefusedComponent = ref("");
 const docsStatus = ref("");
 const logAnswer = ref("");
 const buttonLabel = ref("");
+const buttonColor = ref("");
 
 const openRefusePage = (item) => {
   openRefusedDialogPage.value = true;
@@ -258,6 +260,7 @@ const openRefusePage = (item) => {
   logAnswer.value = "Документу успешно было отказано";
   console.log(item);
   buttonLabel.value = "Отказать";
+  buttonColor.value = "negative";
 };
 
 const viewAgreementComponent = (item) => {
@@ -266,6 +269,7 @@ const viewAgreementComponent = (item) => {
   docsStatus.value = "Согласовано";
   logAnswer.value = "Документ успешно согласован";
   buttonLabel.value = "Согласовать";
+  buttonColor.value = "positive";
 };
 
 const sendForRevision = (item) => {
@@ -274,6 +278,7 @@ const sendForRevision = (item) => {
   docsStatus.value = "Отправлено на доработку";
   logAnswer.value = "Документ успешно отправлен на доработку";
   buttonLabel.value = "Отправить на доработку";
+  buttonColor.value = "primary";
 };
 
 const leaveWithoutConsideration = (item) => {
@@ -282,6 +287,7 @@ const leaveWithoutConsideration = (item) => {
   docsStatus.value = "Оставлено без рассмотрения";
   logAnswer.value = "Документ успешно оставлен без рассмотрения";
   buttonLabel.value = "Оставить без рассмотрения";
+  buttonColor.value = "primary";
 };
 
 const closeRefusedDialog = () => {

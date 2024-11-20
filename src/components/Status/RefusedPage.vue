@@ -12,7 +12,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
-            color="negative"
+            :color="props.buttonColor"
             no-caps
             :label="props.buttonLabel"
             @click="refuseButton"
@@ -59,6 +59,10 @@ const props = defineProps({
     required: true,
   },
   buttonLabel: {
+    type: String,
+    required: true,
+  },
+  buttonColor: {
     type: String,
     required: true,
   },
