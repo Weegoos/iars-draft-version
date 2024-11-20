@@ -210,7 +210,7 @@
           no-caps
           flat
           label="Оставить без рассмотрения"
-          @click="fff"
+          @click="leaveWithoutConsideration(items)"
         />
       </q-card-actions>
     </q-card>
@@ -273,6 +273,15 @@ const sendForRevision = (item) => {
   informationForRefusedComponent.value = item;
   docsStatus.value = "Отправлено на доработку";
   logAnswer.value = "Документ успешно отправлен на доработку";
+  buttonLabel.value = "Отправить на доработку";
+};
+
+const leaveWithoutConsideration = (item) => {
+  openRefusedDialogPage.value = true;
+  informationForRefusedComponent.value = item;
+  docsStatus.value = "Оставлено без рассмотрения";
+  logAnswer.value = "Документ успешно оставлен без рассмотрения";
+  buttonLabel.value = "Оставить без рассмотрения";
 };
 
 const closeRefusedDialog = () => {
