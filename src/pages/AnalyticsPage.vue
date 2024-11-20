@@ -225,6 +225,7 @@
       :informationForRefusedComponent="informationForRefusedComponent"
       :docsStatus="docsStatus"
       :logAnswer="logAnswer"
+      :buttonLabel="buttonLabel"
     />
   </div>
 </template>
@@ -248,6 +249,7 @@ const openRefusedDialogPage = ref(false);
 const informationForRefusedComponent = ref("");
 const docsStatus = ref("");
 const logAnswer = ref("");
+const buttonLabel = ref("");
 
 const openRefusePage = (item) => {
   openRefusedDialogPage.value = true;
@@ -255,6 +257,7 @@ const openRefusePage = (item) => {
   docsStatus.value = "Отказано";
   logAnswer.value = "Документу успешно было отказано";
   console.log(item);
+  buttonLabel.value = "Отказать";
 };
 
 const viewAgreementComponent = (item) => {
@@ -262,6 +265,7 @@ const viewAgreementComponent = (item) => {
   informationForRefusedComponent.value = item;
   docsStatus.value = "Согласовано";
   logAnswer.value = "Документ успешно согласован";
+  buttonLabel.value = "Согласовать";
 };
 
 const sendForRevision = (item) => {

@@ -14,7 +14,7 @@
           <q-btn
             color="negative"
             no-caps
-            label="Отказать"
+            :label="props.buttonLabel"
             @click="refuseButton"
           />
           <q-btn
@@ -55,6 +55,10 @@ const props = defineProps({
     required: true,
   },
   logAnswer: {
+    type: String,
+    required: true,
+  },
+  buttonLabel: {
     type: String,
     required: true,
   },
