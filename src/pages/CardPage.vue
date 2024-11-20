@@ -427,7 +427,7 @@ const getAllConclusionByIIN = async (iin) => {
       messageColor: "white",
       backgroundColor: "black",
     });
-    const response = await axios.get(`${serverUrl}temps?IIN=${iin}`, {
+    const response = await axios.get(`${serverUrl}usersDocs?IIN=${iin}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

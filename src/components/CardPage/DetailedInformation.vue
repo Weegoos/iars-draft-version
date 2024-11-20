@@ -17,9 +17,131 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="info">
-              <div v-for="item in props.conclusions" :key="item.id">
-                {{ item }}
+              <div class="row q-gutter-sm">
+                <div class="col">
+                  <span class="infoHeadline">Регистрационный номер</span>
+                  <p class="infoStyle">
+                    {{ props.conclusions[0].registrationNumber }}
+                  </p>
+                </div>
+                <div class="col">
+                  <span class="infoHeadline">Номер УД</span>
+                  <p class="infoStyle">
+                    {{ props.conclusions[0].udNumber }}
+                  </p>
+                </div>
               </div>
+              <span class="infoHeadline">Дата создания документа</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].creationDate }}
+              </p>
+
+              <span class="infoHeadline">Дата регистрации дела</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].registrationDate }}
+              </p>
+              <span class="infoHeadline">Статья УК</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].article }}
+              </p>
+              <span class="infoHeadline">Решение по делу</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].summary }}
+              </p>
+              <span class="infoHeadline">Краткая фабула</span>
+              <p class="infoStyle">
+                <!-- {{ props.conclusionInfo.summary }} -->
+              </p>
+              <span class="infoHeadline">ИИН вызываемого</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].calledPersonIIN || "Не указан" }}
+              </p>
+              <span class="infoHeadline">ФИО вызываемого</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].calledPersonFullName || "Не указан" }}
+              </p>
+              <span class="infoHeadline">Должность вызываемого</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].calledPersonPosition || "Не указан" }}
+              </p>
+              <span class="infoHeadline">БИН/ИИН</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].calledPersonBIN || "Не указан" }}
+              </p>
+              <span class="infoHeadline">Место работы</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].workPlace || "Не указан" }}
+              </p>
+              <span class="infoHeadline">Регион</span>
+              <p class="infoStyle">
+                <!-- {{ props.conclusions.region.name || "Не указан" }} -->
+              </p>
+              <span class="infoHeadline"
+                >Планируемые следственные действия</span
+              >
+              <p class="infoStyle">
+                {{
+                  props.conclusions[0].plannedInvestigativeActions ||
+                  "Не указан"
+                }}
+              </p>
+              <span class="infoHeadline">Дата и время проведения</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].eventDateTime || "Не указан" }}
+              </p>
+              <span class="infoHeadline">Место проведения</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].eventPlace || "Не указан" }}
+              </p>
+              <span class="infoHeadline">Следователь</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].investigator.name || "Не указан" }}
+                {{
+                  props.conclusions[0].investigator.secondName || "Не указан"
+                }}
+              </p>
+              <span class="infoHeadline">Статус по делу вызываемого</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].status || "Не указан" }}
+              </p>
+              <span class="infoHeadline"
+                >Отношение вызывающего к событию и субъекту</span
+              >
+              <p class="infoStyle">
+                {{ props.conclusions[0].relationToEvent || "Не указан" }}
+              </p>
+              <span class="infoHeadline">Виды планируемого следствия</span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].justification || "Не указан" }}
+              </p>
+              <span class="infoHeadline">ИИН защитника </span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].defenseAttorneyIIN || "Не указан" }}
+              </p>
+              <span class="infoHeadline">ИИН защитника </span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].defenseAttorneyIIN || "Не указан" }}
+              </p>
+              <span class="infoHeadline">ФИО защитника </span>
+              <p class="infoStyle">
+                {{
+                  props.conclusions[0].defenseAttorneyFullName || "Не указан"
+                }}
+              </p>
+              <span class="infoHeadline"
+                >Обоснование и необходимость участия предпринимателя
+              </span>
+              <p class="infoStyle">
+                {{
+                  props.conclusions[0].defenseAttorneyFullName || "Не указан"
+                }}
+              </p>
+              <span class="infoHeadline"
+                >Результат от планируемого следственного действия
+              </span>
+              <p class="infoStyle">
+                {{ props.conclusions[0].result || "Не указан" }}
+              </p>
             </q-tab-panel>
 
             <q-tab-panel name="history">
