@@ -146,11 +146,7 @@
     >
       Документы отсутствуют
     </section>
-    <q-card
-      class="q-mb-xl"
-      v-for="(items, index) in filteredConclusion"
-      :key="index"
-    >
+    <q-card class="q-mb-xl" v-for="(items, index) in conclusions" :key="index">
       <section class="row" style="align-items: stretch">
         <div class="col">
           <q-card-section>
@@ -331,7 +327,7 @@ const filter = async () => {
     const sortedConclusions = response.data.sort((a, b) => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
-    filteredConclusion.value = sortedConclusions;
+    conclusions.value = sortedConclusions;
     console.log(conclusions.value);
   } catch (error) {
     console.log("Error during filter request:", error);
@@ -505,12 +501,7 @@ const getAllConclusionByIIN = async (iin) => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
 
-    if (filteredConclusion.value.length > 0) {
-      conclusions.value = filteredConclusion.value;
-    } else {
-      conclusions.value = sortedConclusions;
-    }
-
+    conclusions.value = sortedConclusions;
     console.log(response.data);
 
     $q.loading.hide();
