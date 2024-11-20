@@ -4,7 +4,17 @@
       <q-card-section>
         <div class="row q-gutter-sm">
           <div class="col">
-            <q-input v-model="idNumber" type="text" label="Номер УД" />
+            <q-input
+              v-model="idNumber"
+              type="text"
+              label="Номер УД"
+              list="allUd"
+            />
+            <datalist id="allUd">
+              <section v-for="(items, index) in udOptions" :key="index">
+                <option :value="items"></option>
+              </section>
+            </datalist>
           </div>
           <div class="col">
             <q-input
@@ -248,6 +258,24 @@ const createEvent = async () => {
     console.error("Ошибка при создании события:", error.response || error);
   }
 };
+
+const udOptions = ref("");
+const getAllUd = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}allUD`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    udOptions.value = response.data;
+  } catch (error) {
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+getAllUd();
 </script>
 
 <style></style>

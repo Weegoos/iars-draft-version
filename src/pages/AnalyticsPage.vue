@@ -134,6 +134,9 @@
         @click="downloadExcel"
       />
     </div>
+    <section v-if="analyticsDosc.length === 0">
+      <p class="text-center text-h5 text-bold">Документы отсутствуют</p>
+    </section>
     <q-card
       class="q-mb-md"
       v-for="(items, index) in analyticsDosc"
