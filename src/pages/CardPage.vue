@@ -120,6 +120,13 @@
     <div class="col q-gutter-md" align="right">
       <q-btn
         color="primary"
+        no-caps
+        label="Фильтровать"
+        class="q-mb-md"
+        @click="filter"
+      />
+      <q-btn
+        color="primary"
         class="q-mb-md"
         icon="download"
         label="Скачать в формате pdf"
@@ -139,7 +146,11 @@
     >
       Документы отсутствуют
     </section>
-    <q-card class="q-mb-xl" v-for="(items, index) in conclusions" :key="index">
+    <q-card
+      class="q-mb-xl"
+      v-for="(items, index) in filteredConclusion"
+      :key="index"
+    >
       <section class="row" style="align-items: stretch">
         <div class="col">
           <q-card-section>
@@ -255,6 +266,78 @@ const idNumberList = ref();
 const fcsConcordant = ref("");
 
 const concordantList = ref("");
+
+const getInfo = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}getInfo`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+    getAllConclusionByIIN(response.data.iin);
+    console.log(response.data.iin);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
+    throw error;
+  }
+};
+
+const filteredConclusion = ref("");
+const filter = async () => {
+  console.log("Filter");
+
+  try {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.error("Access token is missing");
+      return;
+    }
+
+    console.log("Access Token:", accessToken);
+
+    const params = new URLSearchParams();
+    const data = await getInfo();
+    const iin = data?.iin;
+
+    if (registrationNumber.value) {
+      params.append("registrationNumber", registrationNumber.value);
+    }
+
+    if (idNumber.value) {
+      params.append("idNumber", idNumber.value); // Используем уникальный параметр
+    }
+
+    if (statusOfDocuments.value) {
+      params.append("status", statusOfDocuments.value);
+    }
+
+    params.append("iin", iin);
+
+    const response = await axios.get(
+      `${serverUrl}filter?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    const sortedConclusions = response.data.sort((a, b) => {
+      return new Date(b.creationDate) - new Date(a.creationDate);
+    });
+    filteredConclusion.value = sortedConclusions;
+    console.log(conclusions.value);
+  } catch (error) {
+    console.log("Error during filter request:", error);
+  }
+};
+
 const concordantListAPI = `${serverUrl}allNames`;
 const getAllNames = async () => {
   try {
@@ -327,24 +410,6 @@ getAllUD();
 
 // Conclusion
 const conclusions = ref("");
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    getAllConclusionByIIN(response.data.iin);
-    console.log(response.data.iin);
-
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-    throw error;
-  }
-};
 
 getInfo();
 
@@ -440,7 +505,12 @@ const getAllConclusionByIIN = async (iin) => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
 
-    conclusions.value = sortedConclusions;
+    if (filteredConclusion.value.length > 0) {
+      conclusions.value = filteredConclusion.value;
+    } else {
+      conclusions.value = sortedConclusions;
+    }
+
     console.log(response.data);
 
     $q.loading.hide();
