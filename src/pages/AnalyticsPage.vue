@@ -245,6 +245,7 @@ import { getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
 
 const analyticsDosc = ref("");
 const $q = useQuasar();
