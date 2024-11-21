@@ -224,7 +224,7 @@ import { QSpinnerGears, useQuasar } from "quasar";
 const $q = useQuasar();
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
-const webUrl = proxy.webUrl;
+const webUrl = proxy.$webUrl;
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {

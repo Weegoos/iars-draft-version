@@ -5,4 +5,5 @@ export default ({ app }) => {
 
   app.config.globalProperties.$screenWidth = screenWidth;
   app.config.globalProperties.$serverUrl = serverUrl;
+  app.config.globalProperties.$webUrl = webUrl;
 };
