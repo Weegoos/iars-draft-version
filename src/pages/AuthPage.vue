@@ -25,10 +25,17 @@
 
           <q-input
             v-model="password"
-            type="password"
-            label="Напишите пароль"
-            hint="Не менее 6 символов"
-          />
+            :type="isPwd ? 'password' : 'text'"
+            label="Введите пароль"
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              />
+            </template>
+          </q-input>
         </q-card-section>
         <q-card-actions vertical class="q-px-xl">
           <q-btn color="positive" no-caps label="Войти" @click="login" />
@@ -55,13 +62,15 @@ import { useNotifyStore } from "src/stores/notify-store";
 
 // global variable
 const { proxy } = getCurrentInstance();
+const $q = useQuasar();
 const serverUrl = proxy.$serverUrl;
 const router = useRouter();
 const notifyStore = useNotifyStore();
+
 // login
 const email = ref("");
 const password = ref("");
-const $q = useQuasar();
+const isPwd = ref(true);
 
 const login = async () => {
   try {
@@ -71,7 +80,6 @@ const login = async () => {
     };
 
     const jsonData = JSON.stringify(data);
-
     const response = await axios.post(`${serverUrl}login`, jsonData, {
       headers: {
         "Content-Type": "application/json",
