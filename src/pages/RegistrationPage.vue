@@ -12,7 +12,7 @@
       ></video>
 
       <!-- Надпись -->
-      <div style="position: absolute; color: red; top: 45px">
+      <div class="carouselClass">
         <q-carousel
           v-model="slide"
           transition-prev="scale"
@@ -158,6 +158,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const slide = ref("style");
+const lorem = ref("Batyr");
 
 const name = ref("");
 const secondName = ref("");
@@ -252,4 +253,14 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.carouselClass {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+}
+</style>
