@@ -24,30 +24,37 @@
           padding
           arrows
           height="300px"
-          class="bg-primary text-white shadow-1 rounded-borders"
+          class="transparent-carousel text-white shadow-1 rounded-borders"
         >
           <q-carousel-slide name="style" class="column no-wrap flex-center">
-            <q-icon name="style" size="56px" />
+            <p class="text-h5 text-bold">Пароль</p>
             <div class="q-mt-md text-center">
-              {{ lorem }}
+              Пароль должен состоять из 6 символов с специальными символами
             </div>
           </q-carousel-slide>
           <q-carousel-slide name="tv" class="column no-wrap flex-center">
-            <q-icon name="live_tv" size="56px" />
+            <p class="text-h5 text-bold">Почта</p>
             <div class="q-mt-md text-center">
-              {{ lorem }}
+              В почте обязательно должен присутствовать специальный символ "@".
+              Убедитесь, что вы ввели правильный и рабочий адрес электронной
+              почты
             </div>
           </q-carousel-slide>
           <q-carousel-slide name="layers" class="column no-wrap flex-center">
-            <q-icon name="layers" size="56px" />
+            <p class="text-h5 text-bold">
+              Индивидуальный идентификационный номер (ИИН)
+            </p>
             <div class="q-mt-md text-center">
-              {{ lorem }}
+              Убедитесь, что вы ввели правильный индивидуальный
+              идентификационный номер (ИИН). После ввода изменить ИИН будет
+              невозможно
             </div>
           </q-carousel-slide>
           <q-carousel-slide name="map" class="column no-wrap flex-center">
-            <q-icon name="terrain" size="56px" />
+            <p class="text-h5 text-bold">Департамент и регион</p>
             <div class="q-mt-md text-center">
-              {{ lorem }}
+              Убедитесь, что вы ввели правильный департамент и также выбрали
+              правильный регион
             </div>
           </q-carousel-slide>
         </q-carousel>
@@ -167,7 +174,7 @@ onMounted(() => {
   interval = setInterval(() => {
     slideIndex = (slideIndex + 1) % slides.length;
     slide.value = slides[slideIndex];
-  }, 3000);
+  }, 7500);
 });
 
 onBeforeMount(() => {
@@ -276,5 +283,10 @@ onMounted(() => {
   width: 80%;
   justify-content: center;
   align-items: center;
+}
+
+.transparent-carousel {
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 </style>
