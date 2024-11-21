@@ -152,6 +152,8 @@
             label="Есть аккаунт?"
             @click="pushToAuthorization"
           />
+          <q-btn color="primary" icon="check" label="OK" @click="onClick" />
+          <div>Count: {{ count }}</div>
         </q-card-actions>
       </q-card>
     </div>
@@ -167,7 +169,6 @@ import { useRouter } from "vue-router";
 const slide = ref("style");
 const slides = ["style", "tv", "layers", "map"];
 let slideIndex = 0;
-const lorem = ref("Batyr");
 let interval = null;
 
 onMounted(() => {
@@ -180,6 +181,15 @@ onMounted(() => {
 onBeforeMount(() => {
   clearInterval(interval);
 });
+
+import { useCounterStore } from "../stores/example-store";
+import { storeToRefs } from "pinia";
+
+const counter = useCounterStore();
+const { count } = storeToRefs(counter);
+const onClick = () => {
+  counter.increment();
+};
 
 const name = ref("");
 const secondName = ref("");
