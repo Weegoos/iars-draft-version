@@ -516,6 +516,7 @@ const redirectToKeycloakLogin = () => {
   router.push("/authorization");
   window.location.href = `${webUrl}authorization`;
 };
+
 onBeforeMount(() => {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {

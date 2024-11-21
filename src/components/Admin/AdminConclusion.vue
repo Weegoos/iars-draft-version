@@ -1,58 +1,14 @@
 <template>
   <div>
-    <section>
-      <q-card
-        class="q-my-md"
-        v-for="(items, index) in allConclusion"
-        :key="index"
-      >
-        <section class="row" style="align-items: stretch">
-          <div class="col">
-            <q-card-section>
-              <span class="infoHeadline">№ (порядковый)</span>
-              <p class="infoStyle text-capitalize">{{ index + 1 }}</p>
-              <span class="infoHeadline">Дата создания документа</span>
-              <p class="infoStyle text-capitalize">
-                {{ items.creationDate || "Не указано" }}
-              </p>
-            </q-card-section>
-          </div>
-          <div class="col">
-            <q-card-section>
-              <span class="infoHeadline">Регистрационный номер</span>
-              <p class="infoStyle text-capitalize">
-                {{ items.registrationNumber || "Не указано" }}
-              </p>
-              <span class="infoHeadline">Номер УД</span>
-              <p class="infoStyle text-capitalize">
-                {{ items.udNumber || "Не указано" }}
-              </p>
-            </q-card-section>
-          </div>
+    <q-table
+      flat
+      bordered
+      :rows="rows"
+      :columns="columns"
+      row-key="id"
+      @row-click="viewDetailedInformation"
+    />
 
-          <div class="col">
-            <q-card-section>
-              <span class="infoHeadline">ФИО вызываемого</span>
-              <p class="infoStyle text-capitalize">
-                {{ items.calledPersonFullName || "Не указано" }}
-              </p>
-              <span class="infoHeadline">ФИО согласующего</span>
-              <p class="infoStyle text-capitalize">
-                {{ items.defenseAttorneyFullName || "Не указано" }}
-              </p>
-            </q-card-section>
-          </div>
-        </section>
-        <q-card-actions align="center" class="row">
-          <q-btn
-            color="primary"
-            no-caps
-            label="Просмотреть"
-            @click="viewDetailedInformation(items)"
-          />
-        </q-card-actions>
-      </q-card>
-    </section>
     <AdminDetailedInformation
       :isOpenAdminDialogPage="isOpenAdminDialogPage"
       @closeAdminDialogPage="closeAdminDialogPage"
@@ -67,22 +23,79 @@ import AdminDetailedInformation from "./DetailedInformation/AdminDetailedInforma
 import axios from "axios";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const allConclusion = ref([]); // Изменено на массив
 
+// Определение столбцов для таблицы
+const columns = [
+  {
+    name: "id",
+    required: true,
+    label: "Порядковый номер",
+    align: "left",
+    field: (row) => row,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: "creationDate",
+    align: "center",
+    label: "Дата создания документа",
+    field: "creationDate",
+    sortable: true,
+  },
+  {
+    name: "registrationNumber",
+    align: "center",
+    label: "Регистрационный номер",
+    field: "registrationNumber",
+    sortable: true,
+  },
+  {
+    name: "udNumber",
+    align: "center",
+    label: "Номер УД",
+    field: "udNumber",
+    sortable: true,
+  },
+  {
+    name: "calledPersonFullName",
+    align: "center",
+    label: "ФИО вызываемого",
+    field: "calledPersonFullName",
+    sortable: true,
+  },
+  {
+    name: "defenseAttorneyFullName",
+    align: "center",
+    label: "ФИО согласующего",
+    field: "defenseAttorneyFullName",
+    sortable: true,
+  },
+];
+
+// Строки для таблицы, которые будут заполняться динамически
+const rows = ref([]);
+
+// Стейты для модального окна
 const isOpenAdminDialogPage = ref(false);
 const conclusionDetailedInformation = ref("");
-const viewDetailedInformation = (item) => {
+
+// Функция для открытия модального окна с деталями
+const viewDetailedInformation = (evt, row, index) => {
   isOpenAdminDialogPage.value = true;
-  conclusionDetailedInformation.value = item;
-  console.log(item);
+  conclusionDetailedInformation.value = row;
+  console.log(row);
 };
 
+// Функция для закрытия модального окна
 const closeAdminDialogPage = () => {
   isOpenAdminDialogPage.value = false;
 };
 
-const allConclusion = ref("");
+// Получение данных с сервера
 const getAllConclusion = async () => {
   try {
     const response = await axios.get(`${serverUrl}admin/allConclusions`, {
@@ -92,16 +105,20 @@ const getAllConclusion = async () => {
       },
       withCredentials: true,
     });
-    allConclusion.value = response.data;
+    // Преобразуем данные в нужный формат для таблицы
+    rows.value = response.data;
   } catch (error) {
     console.error("Ошибка при получении всех документов:", error);
     throw error;
   }
 };
 
+// Загрузка данных при монтировании компонента
 onMounted(() => {
   getAllConclusion();
 });
 </script>
 
-<style></style>
+<style>
+/* Добавьте необходимые стили для таблицы или других компонентов */
+</style>
