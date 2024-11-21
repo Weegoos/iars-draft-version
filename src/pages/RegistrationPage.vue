@@ -83,7 +83,7 @@
               <q-input
                 v-model="name"
                 type="text"
-                label="Напишите имя"
+                label="Введите имя"
                 hint="Например: Айсултан"
               />
             </div>
@@ -91,7 +91,7 @@
               <q-input
                 v-model="secondName"
                 type="text"
-                label="Напишите фамилию"
+                label="Введите фамилию"
                 hint="Например: Хаббасов"
               />
             </div>
@@ -103,17 +103,25 @@
               <q-input
                 v-model="email"
                 type="email"
-                label="Напишите почту"
+                label="Введите почту"
                 hint="Например: example@gmail.com"
               />
             </div>
             <div class="col">
               <q-input
                 v-model="password"
-                type="password"
-                label="Напишите пароль"
-                hint="Не менее 6 символов"
-              />
+                :type="isPwd ? 'password' : 'text'"
+                hint="Password with toggle"
+                label="Введите пароль"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
             </div>
           </div>
         </q-card-section>
@@ -132,7 +140,7 @@
                 type="text"
                 label="Введите ИИН"
                 mask="############"
-                hint="Маска: ############"
+                hint="Маска : ############"
               />
             </div>
           </div>
@@ -145,7 +153,7 @@
             label="Введите регион"
           />
         </q-card-section>
-        <q-card-actions align="center">
+        <q-card-actions vertical>
           <q-btn
             color="positive"
             no-caps
@@ -155,7 +163,8 @@
           <q-btn
             color="primary"
             no-caps
-            label="Есть аккаунт?"
+            flat
+            label="Есть аккаунт? Войти"
             @click="pushToAuthorization"
           />
         </q-card-actions>
@@ -169,9 +178,13 @@ import axios from "axios";
 import { useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-
 import { useNotifyStore } from "../stores/notify-store";
+import { getCurrentInstance } from "vue";
 
+// global variable
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
+const router = useRouter();
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
 
@@ -192,6 +205,7 @@ onBeforeMount(() => {
   clearInterval(interval);
 });
 
+// registration part
 const name = ref("");
 const secondName = ref("");
 const email = ref("");
@@ -199,10 +213,10 @@ const password = ref("");
 const department = ref("");
 const iin = ref(null);
 const region = ref("");
-
 const departmentList = ref("");
 const regionList = ref("");
 const isRegionVisible = ref(false);
+const isPwd = ref(true);
 
 watch(
   () => department.value,
@@ -213,11 +227,6 @@ watch(
     }
   }
 );
-
-import { getCurrentInstance } from "vue";
-
-const { proxy } = getCurrentInstance();
-const serverUrl = proxy.$serverUrl;
 
 const registration = async () => {
   try {
@@ -232,7 +241,6 @@ const registration = async () => {
     };
 
     const jsonData = JSON.stringify(data);
-
     const response = await axios.post(`${serverUrl}register`, jsonData, {
       headers: {
         "Content-Type": "application/json",
@@ -252,7 +260,6 @@ const registration = async () => {
   }
 };
 
-const router = useRouter();
 const pushToAuthorization = () => {
   router.push("/authorization");
 };
