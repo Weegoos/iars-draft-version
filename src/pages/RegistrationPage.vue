@@ -127,7 +127,13 @@
               />
             </div>
             <div class="col">
-              <q-input v-model="iin" type="number" label="Напишите ИИН" />
+              <q-input
+                v-model="iin"
+                type="text"
+                label="Введите ИИН"
+                mask="############"
+                hint="Маска: ############"
+              />
             </div>
           </div>
         </q-card-section>
@@ -152,7 +158,6 @@
             label="Есть аккаунт?"
             @click="pushToAuthorization"
           />
-          <q-btn color="primary" icon="check" label="OK" @click="onClick" />
         </q-card-actions>
       </q-card>
     </div>
@@ -165,7 +170,12 @@ import { useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
+import { useNotifyStore } from "../stores/notify-store";
+
 const $q = useQuasar();
+const notifyStore = useNotifyStore();
+
+// slide
 const slide = ref("style");
 const slides = ["style", "tv", "layers", "map"];
 let slideIndex = 0;
@@ -182,19 +192,12 @@ onBeforeMount(() => {
   clearInterval(interval);
 });
 
-import { useNotifyStore } from "../stores/notify-store";
-const notifyStore = useNotifyStore();
-
-const onClick = () => {
-  notifyStore.nofifySuccess($q, "Операция выполнена успешно");
-};
-
 const name = ref("");
 const secondName = ref("");
 const email = ref("");
 const password = ref("");
 const department = ref("");
-const iin = ref("");
+const iin = ref(null);
 const region = ref("");
 
 const departmentList = ref("");
@@ -237,19 +240,15 @@ const registration = async () => {
       withCredentials: true,
     });
     console.log("Пользователь успешно зарегистрирован", response.data);
-    $q.notify({
-      message: `Пользователь успешно зарегистрирован`,
-      color: "positive",
-      icon: "check",
-    });
+
+    notifyStore.nofifySuccess($q, "Пользователь успешно зарегистрирован");
     router.push("/authorization");
   } catch (error) {
     console.error("Ошибка при регистрации:", error);
-    $q.notify({
-      message: `Ошибка при регистрации: ${error.response.data}`,
-      color: "negative",
-      icon: "error",
-    });
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при регистрации: ${error.response.data}`
+    );
   }
 };
 
