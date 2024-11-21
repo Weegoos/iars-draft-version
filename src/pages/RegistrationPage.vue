@@ -153,7 +153,6 @@
             @click="pushToAuthorization"
           />
           <q-btn color="primary" icon="check" label="OK" @click="onClick" />
-          <div>Count: {{ count }}</div>
         </q-card-actions>
       </q-card>
     </div>
@@ -166,6 +165,7 @@ import { useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
+const $q = useQuasar();
 const slide = ref("style");
 const slides = ["style", "tv", "layers", "map"];
 let slideIndex = 0;
@@ -182,13 +182,11 @@ onBeforeMount(() => {
   clearInterval(interval);
 });
 
-import { useCounterStore } from "../stores/example-store";
-import { storeToRefs } from "pinia";
+import { useNotifyStore } from "../stores/notify-store";
+const notifyStore = useNotifyStore();
 
-const counter = useCounterStore();
-const { count } = storeToRefs(counter);
 const onClick = () => {
-  counter.increment();
+  notifyStore.nofifySuccess($q, "Операция выполнена успешно");
 };
 
 const name = ref("");
@@ -198,7 +196,6 @@ const password = ref("");
 const department = ref("");
 const iin = ref("");
 const region = ref("");
-const $q = useQuasar();
 
 const departmentList = ref("");
 const regionList = ref("");
