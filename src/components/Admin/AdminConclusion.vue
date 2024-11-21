@@ -21,12 +21,15 @@
 import AdminDetailedInformation from "./DetailedInformation/AdminDetailedInformation.vue";
 
 import axios from "axios";
+import { QSpinnerGears, useQuasar } from "quasar";
+import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
-const allConclusion = ref([]); // Изменено на массив
+const $q = useQuasar();
+const notifyStore = useNotifyStore();
 
 // Определение столбцов для таблицы
 const columns = [
@@ -35,7 +38,7 @@ const columns = [
     required: true,
     label: "Порядковый номер",
     align: "left",
-    field: (row) => row,
+    field: "id", // Используем новое поле "id" в каждой строке
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -76,27 +79,23 @@ const columns = [
   },
 ];
 
-// Строки для таблицы, которые будут заполняться динамически
 const rows = ref([]);
 
-// Стейты для модального окна
 const isOpenAdminDialogPage = ref(false);
 const conclusionDetailedInformation = ref("");
 
-// Функция для открытия модального окна с деталями
 const viewDetailedInformation = (evt, row, index) => {
   isOpenAdminDialogPage.value = true;
   conclusionDetailedInformation.value = row;
   console.log(row);
 };
 
-// Функция для закрытия модального окна
 const closeAdminDialogPage = () => {
   isOpenAdminDialogPage.value = false;
 };
-
-// Получение данных с сервера
+const id = ref([]);
 const getAllConclusion = async () => {
+  notifyStore.loading($q, "Подождите документы загружаются...", QSpinnerGears);
   try {
     const response = await axios.get(`${serverUrl}admin/allConclusions`, {
       headers: {
@@ -105,15 +104,17 @@ const getAllConclusion = async () => {
       },
       withCredentials: true,
     });
-    // Преобразуем данные в нужный формат для таблицы
-    rows.value = response.data;
+    rows.value = response.data.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
+    $q.loading.hide();
   } catch (error) {
     console.error("Ошибка при получении всех документов:", error);
     throw error;
   }
 };
 
-// Загрузка данных при монтировании компонента
 onMounted(() => {
   getAllConclusion();
 });

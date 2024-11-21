@@ -18,5 +18,13 @@ export const useNotifyStore = defineStore("notify", {
         message: message,
       });
     },
+    loading($q, message, spinner) {
+      $q.loading.show({
+        spinner: spinner,
+        message: message,
+        messageColor: "white",
+        backgroundColor: "black",
+      });
+    },
   },
 });
