@@ -154,11 +154,25 @@
 <script setup>
 import axios from "axios";
 import { useQuasar } from "quasar";
-import { onMounted, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const slide = ref("style");
+const slides = ["style", "tv", "layers", "map"];
+let slideIndex = 0;
 const lorem = ref("Batyr");
+let interval = null;
+
+onMounted(() => {
+  interval = setInterval(() => {
+    slideIndex = (slideIndex + 1) % slides.length;
+    slide.value = slides[slideIndex];
+  }, 3000);
+});
+
+onBeforeMount(() => {
+  clearInterval(interval);
+});
 
 const name = ref("");
 const secondName = ref("");
