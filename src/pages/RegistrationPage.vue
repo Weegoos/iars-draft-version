@@ -10,7 +10,6 @@
         playsinline
         style="width: 100%; height: 100%; object-fit: cover"
       ></video>
-
       <!-- Надпись -->
       <div class="carouselClass">
         <q-carousel
@@ -62,17 +61,7 @@
     </div>
 
     <!-- Правая половина с текстом -->
-    <div
-      style="
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.8);
-      "
-    >
+    <div class="content">
       <q-card class="my-card" style="width: 90%">
         <q-card-section align="center">
           <p class="text-h5">Регистрация</p>
@@ -111,7 +100,7 @@
               <q-input
                 v-model="password"
                 :type="isPwd ? 'password' : 'text'"
-                hint="Password with toggle"
+                hint="Не менее 6 символов"
                 label="Введите пароль"
               >
                 <template v-slot:append>
@@ -301,5 +290,15 @@ onMounted(() => {
 .transparent-carousel {
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: none;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 </style>
