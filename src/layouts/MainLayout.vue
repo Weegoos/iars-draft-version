@@ -47,9 +47,8 @@
 
 <script setup>
 import { useUserStore } from "src/stores/getApi-store";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, computed, onBeforeMount } from "vue";
 import { getCurrentInstance } from "vue";
-import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const { proxy } = getCurrentInstance();
@@ -65,31 +64,42 @@ const isAuthPage = computed(() => {
   return route.path === "/authorization" || route.path === "/registration";
 });
 
-onMounted(() => {
-  if (!accessToken) {
-    window.location.href = `${webUrl}authorization`;
-  }
-});
-
-let role = ref("");
-onMounted(async () => {
-  await userStore.getUserInfo();
-  role.value = userStore.role;
-});
-
+let role = ref(""); // Инициализация переменной роли
+let navigation = ref([]);
 const adminNavigation = [
   { name: "Панель администратора", icon: "dashboard", link: "/" },
   { name: "Управление пользователями", icon: "people", link: "/admin-user" },
 ];
 
 const employeeNavigation = [
-  { name: "Журнал заключении", icon: "description" },
-  { name: "Создание заключение", icon: "add" },
+  { name: "Журнал заключений", icon: "description", link: "/journal" },
+  { name: "Создание заключений", icon: "add", link: "/create-conclusion" },
 ];
 
-// Определение массива для отображения на основе роли
-const navigation = computed(() => {
-  return role.value === "Модератор" ? adminNavigation : employeeNavigation;
+// Функция для обновления навигации в зависимости от роли
+const defineRole = () => {
+  if (role.value === "Модератор") {
+    navigation.value = adminNavigation;
+  } else {
+    navigation.value = employeeNavigation;
+  }
+};
+
+onBeforeMount(async () => {
+  // Проверяем наличие токена
+  if (!accessToken) {
+    window.location.href = `${webUrl}authorization`;
+  }
+
+  // Получаем данные пользователя
+  await userStore.getUserInfo();
+  role.value = userStore.role; // Присваиваем роль
+  defineRole(); // Сразу обновляем навигацию после получения роли
+});
+
+// Реактивное наблюдение за изменением роли
+watch(role, () => {
+  defineRole(); // Обновляем навигацию при изменении роли
 });
 
 const nav = (route) => {
