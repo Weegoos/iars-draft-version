@@ -100,7 +100,7 @@ const columns = [
     name: "conclusions",
     label: "Количество документов",
     align: "center",
-    field: "conclusions.length",
+    field: (user) => user.conclusions.length,
     sortable: true,
   },
   {
