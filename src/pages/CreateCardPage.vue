@@ -21,6 +21,8 @@
               v-model="iinOfCalled"
               type="text"
               label="ИИН вызываемого"
+              mask="############"
+              hint="Маска : ############"
             />
           </div>
           <div class="col">
@@ -133,6 +135,8 @@
               v-model="iinOfTheDefender"
               type="text"
               label="ИИН защитника"
+              mask="############"
+              hint="Маска : ############"
             />
           </div>
         </div>
@@ -178,7 +182,7 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 
 const idNumber = ref("");
-const iinOfCalled = ref("");
+const iinOfCalled = ref(null);
 const binAndIin = ref("");
 const positionTheCalledPerson = ref("");
 const region = ref("");
@@ -188,7 +192,7 @@ const locationOfTheEvent = ref("");
 const relationshipOfTheCaller = ref("");
 const typesOfPlannedInvestigation = ref("");
 const isApplyToBusiness = ref("");
-const iinOfTheDefender = ref("");
+const iinOfTheDefender = ref(null);
 const entrepreneurParticipation = ref("");
 const results = ref("");
 
