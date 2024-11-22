@@ -4,7 +4,7 @@ const routes = [
     component: () => import("layouts/MainCard.vue"),
   },
   {
-    path: "/create",
+    path: "/create-conclusion",
     component: () => import("pages/CreateCardPage.vue"),
   },
   {

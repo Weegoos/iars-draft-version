@@ -74,6 +74,7 @@ const adminNavigation = [
 const employeeNavigation = [
   { name: "Журнал заключений", icon: "description", link: "/journal" },
   { name: "Создание заключений", icon: "add", link: "/create-conclusion" },
+  { name: "Профиль", icon: "person", link: "/profile" },
 ];
 
 const defineRole = () => {
