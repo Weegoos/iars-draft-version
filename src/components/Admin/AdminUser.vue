@@ -9,7 +9,7 @@
       @row-click="viewDetailedInformation"
     />
 
-    <AdminDetailedInformation
+    <UserDetailedInformation
       :isOpenAdminDialogPage="isOpenAdminDialogPage"
       @closeAdminDialogPage="closeAdminDialogPage"
       :conclusionDetailedInformation="conclusionDetailedInformation"
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import AdminDetailedInformation from "./DetailedInformation/AdminDetailedInformation.vue";
+import UserDetailedInformation from "./DetailedInformation/UserDetailedInformation.vue";
 
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
@@ -68,10 +68,10 @@ const columns = [
     sortable: true,
   },
   {
-    name: "registrationDate",
-    label: "Дата регистрации",
+    name: "jobTitle",
+    label: "Должность",
     align: "left",
-    field: "registrationDate",
+    field: (user) => user.jobTitle.name,
     sortable: true,
   },
   {
@@ -89,10 +89,10 @@ const columns = [
     sortable: true,
   },
   {
-    name: "jobTitle",
-    label: "Должность",
+    name: "registrationDate",
+    label: "Дата регистрации",
     align: "left",
-    field: (user) => user.jobTitle.name,
+    field: "registrationDate",
     sortable: true,
   },
   {
@@ -133,38 +133,9 @@ onMounted(() => {
   getAllUsers();
 });
 
-const promoteUser = async (item) => {
-  const accessToken = localStorage.getItem("accessToken");
-  try {
-    const response = await axios.patch(
-      `${serverUrl}admin/promote?IIN=${item.iin}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-    console.log("IIN:", item.iin);
-    console.log("Ответ сервера:", response.data);
-
-    $q.notify({
-      message: `Пользователь ${item.name} ${item.secondName} успешно повышен в должности`,
-      icon: "check",
-      color: "positive",
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
-  } catch (error) {
-    console.error("Ошибка при повышении:", error.response || error);
-  }
-};
-
 const viewDetailedInformation = (evt, row, index) => {
+  isOpenAdminDialogPage.value = true;
+  conclusionDetailedInformation.value = row;
   console.log(row);
 };
 
