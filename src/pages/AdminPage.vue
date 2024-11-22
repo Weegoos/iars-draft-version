@@ -2,19 +2,35 @@
   <div>
     <q-layout view="hHr LpR lFf" container style="height: 100vh">
       <q-drawer
-        side="left"
         v-model="drawer"
+        :dark="true"
+        :width="250"
+        side="left"
         bordered
-        :width="200"
         :breakpoint="500"
         content-class="bg-grey-3"
       >
-        <q-list bordered>
-          <q-item clickable v-ripple>
+        <div class="q-pa-md q-my-xl">
+          <q-img
+            src="../assets/img/aitu-logo.png"
+            :ratio="16 / 9"
+            spinner-color="primary"
+            spinner-size="82px"
+            class="drawer-logo"
+          />
+        </div>
+        <q-list bordered class="drawer-list">
+          <q-item
+            clickable
+            v-ripple
+            v-for="(items, index) in adminNavigation"
+            :key="index"
+            class="drawer-item"
+          >
             <q-item-section avatar>
-              <q-icon color="primary" name="bluetooth" />
+              <q-icon :name="items.icon" class="drawer-icon" />
             </q-item-section>
-            <q-item-section>Icon as avatar</q-item-section>
+            <q-item-section>{{ items.name }}</q-item-section>
           </q-item>
         </q-list>
       </q-drawer>
@@ -61,6 +77,19 @@ const serverUrl = proxy.$serverUrl;
 
 const router = useRouter();
 const drawer = ref(true);
+
+const adminNavigation = ref([
+  {
+    name: "Все заключении",
+    link: "/",
+    icon: "description",
+  },
+  {
+    name: "Все пользователи",
+    link: "/admin-user",
+    icon: "group",
+  },
+]);
 
 const pushToAdminUser = () => {
   router.push("/admin-user");
@@ -154,4 +183,36 @@ const downloadExcel = async () => {
 };
 </script>
 
-<style></style>
+<style scoped>
+.drawer-list {
+  background-color: #f5f5f5;
+}
+
+/* Фон для каждого элемента списка */
+.drawer-item {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.drawer-item:hover {
+  background-color: #eeeeee;
+}
+
+/* Цвет иконок */
+.drawer-icon {
+  color: #3f51b5;
+}
+
+/* Логотип */
+.drawer-logo {
+  filter: brightness(0) invert(1);
+}
+
+.drawer-item q-item-section {
+  color: #333333;
+}
+
+.drawer-item:hover q-item-section {
+  color: #3f51b5;
+}
+</style>
