@@ -2,6 +2,7 @@
   <div>
     <q-layout view="hHr LpR lFf" container style="height: 100vh">
       <q-drawer
+        v-if="!isAuthPage"
         v-model="drawer"
         :dark="true"
         :width="250"
@@ -26,7 +27,7 @@
             v-for="(items, index) in navigation"
             :key="index"
             class="drawer-item"
-            @click="navigation(items.link)"
+            @click="nav(items.link)"
           >
             <q-item-section avatar>
               <q-icon :name="items.icon" class="drawer-icon" />
@@ -45,36 +46,55 @@
 </template>
 
 <script setup>
+import { useUserStore } from "src/stores/getApi-store";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
+import { computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
 const { proxy } = getCurrentInstance();
 const webUrl = proxy.$webUrl;
 const accessToken = localStorage.getItem("accessToken");
 const drawer = ref(true);
+const userStore = useUserStore();
+
+const route = useRoute();
+const router = useRouter();
+const isAuthPage = computed(() => {
+  // Проверка на страницы authorization и registration
+  return route.path === "/authorization" || route.path === "/registration";
+});
+
 onMounted(() => {
   if (!accessToken) {
     window.location.href = `${webUrl}authorization`;
   }
 });
 
-import { computed } from "vue";
+let role = ref("");
+onMounted(async () => {
+  await userStore.getUserInfo();
+  role.value = userStore.role;
+});
 
 const adminNavigation = [
-  { name: "Панель администратора", icon: "dashboard" },
-  { name: "Управление пользователями", icon: "people" },
+  { name: "Панель администратора", icon: "dashboard", link: "/" },
+  { name: "Управление пользователями", icon: "people", link: "/admin-user" },
 ];
 
 const employeeNavigation = [
-  { name: "Моя панель", icon: "dashboard" },
-  { name: "Задачи", icon: "assignment" },
+  { name: "Журнал заключении", icon: "description" },
+  { name: "Создание заключение", icon: "add" },
 ];
-
-const role = "admin";
 
 // Определение массива для отображения на основе роли
 const navigation = computed(() => {
-  return role === "admin" ? adminNavigation : employeeNavigation;
+  return role.value === "Модератор" ? adminNavigation : employeeNavigation;
 });
+
+const nav = (route) => {
+  router.push(route);
+};
 </script>
 
 <style scoped>
