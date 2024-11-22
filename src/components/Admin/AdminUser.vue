@@ -31,7 +31,6 @@ const serverUrl = proxy.$serverUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
 
-// Определение столбцов для таблицы
 const columns = [
   {
     name: "id",
@@ -109,7 +108,6 @@ const rows = ref([]);
 const isOpenAdminDialogPage = ref(false);
 const conclusionDetailedInformation = ref("");
 
-// Функция для получения всех пользователей
 const getAllUsers = async () => {
   notifyStore.loading($q, "Данные загружаются...", QSpinnerGears);
   try {
@@ -122,7 +120,7 @@ const getAllUsers = async () => {
     });
     rows.value = response.data.map((user, index) => ({
       ...user,
-      id: index + 1, // Добавляем уникальный ID для каждой строки
+      id: index + 1,
     }));
     $q.loading.hide();
   } catch (error) {
@@ -131,12 +129,10 @@ const getAllUsers = async () => {
   }
 };
 
-// Загружаем пользователей при монтировании компонента
 onMounted(() => {
   getAllUsers();
 });
 
-// Функция для повышения пользователя
 const promoteUser = async (item) => {
   const accessToken = localStorage.getItem("accessToken");
   try {
@@ -168,19 +164,13 @@ const promoteUser = async (item) => {
   }
 };
 
-// Функция для просмотра подробной информации о пользователе
 const viewDetailedInformation = (evt, row, index) => {
-  isOpenAdminDialogPage.value = true;
-  conclusionDetailedInformation.value = row;
   console.log(row);
 };
 
-// Закрыть страницу подробной информации
 const closeAdminDialogPage = () => {
   isOpenAdminDialogPage.value = false;
 };
 </script>
 
-<style scoped>
-/* Ваши стили для таблицы или других компонентов */
-</style>
+<style scoped></style>
