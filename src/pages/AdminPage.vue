@@ -1,28 +1,51 @@
 <template>
   <div>
-    <section class="text-center q-gutter-md">
-      <q-btn
-        color="primary"
-        no-caps
-        label="Все пользователи"
-        @click="pushToAdminUser"
-      />
-      <q-btn
-        color="primary"
-        no-caps
-        label="Скачать в формате pdf"
-        @click="downloadPdf"
-      />
-      <q-btn
-        color="primary"
-        no-caps
-        label="Скачать в формате excel"
-        @click="downloadExcel"
-      />
-    </section>
-    <section>
-      <AdminConclusion />
-    </section>
+    <q-layout view="hHr LpR lFf" container style="height: 100vh">
+      <q-drawer
+        side="left"
+        v-model="drawer"
+        bordered
+        :width="200"
+        :breakpoint="500"
+        content-class="bg-grey-3"
+      >
+        <q-list bordered>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon color="primary" name="bluetooth" />
+            </q-item-section>
+            <q-item-section>Icon as avatar</q-item-section>
+          </q-item>
+        </q-list>
+      </q-drawer>
+      <q-page-container>
+        <q-page padding>
+          <section class="text-center q-gutter-md">
+            <q-btn
+              color="primary"
+              no-caps
+              label="Все пользователи"
+              @click="pushToAdminUser"
+            />
+            <q-btn
+              color="primary"
+              no-caps
+              label="Скачать в формате pdf"
+              @click="downloadPdf"
+            />
+            <q-btn
+              color="primary"
+              no-caps
+              label="Скачать в формате excel"
+              @click="downloadExcel"
+            />
+          </section>
+          <section>
+            <AdminConclusion />
+          </section>
+        </q-page>
+      </q-page-container>
+    </q-layout>
   </div>
 </template>
 
@@ -37,6 +60,7 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 
 const router = useRouter();
+const drawer = ref(true);
 
 const pushToAdminUser = () => {
   router.push("/admin-user");
