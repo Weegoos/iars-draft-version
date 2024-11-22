@@ -1,5 +1,6 @@
 <template>
   <div class="q-px-xl q-py-md">
+    <p class="text-h5 text-center">Страница для создание заключений</p>
     <q-card class="my-card">
       <q-card-section>
         <div class="row q-gutter-sm">
