@@ -103,19 +103,6 @@ const columns = [
     field: (user) => user.conclusions.length,
     sortable: true,
   },
-  {
-    name: "receivedConclusionDtos",
-    label: "Полученные документы",
-    align: "center",
-    field: "receivedConclusionDtos.length",
-    sortable: true,
-  },
-  {
-    name: "actions",
-    label: "Действия",
-    align: "center",
-    field: "actions",
-  },
 ];
 
 const rows = ref([]);
