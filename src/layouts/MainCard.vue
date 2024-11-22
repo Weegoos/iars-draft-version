@@ -22,6 +22,7 @@ import AdminPage from "../pages/AdminPage.vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
 
 const role = ref("");
 
@@ -42,8 +43,13 @@ const getInfo = async () => {
   }
 };
 
+const accessToken = localStorage.getItem("accessToken");
 onMounted(() => {
-  getInfo();
+  if (!accessToken) {
+    window.location.href = `${webUrl}authorization`;
+  } else {
+    getInfo();
+  }
 });
 </script>
 

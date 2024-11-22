@@ -10,9 +10,6 @@
 
 const { configure } = require("quasar/wrappers");
 const path = require("path");
-import { defineConfig } from "quasar";
-import vueJsx from "@vitejs/plugin-vue-jsx";
-
 module.exports = configure(function (/* ctx */) {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -67,7 +64,6 @@ module.exports = configure(function (/* ctx */) {
       // viteVuePluginOptions: {},
 
       vitePlugins: [
-        vueJsx(),
         [
           "@intlify/vite-plugin-vue-i18n",
           {
@@ -118,7 +114,6 @@ module.exports = configure(function (/* ctx */) {
       plugins: [
         "Notify",
         "Loading", // Your other plugins...
-        vueJsx(), // Ensure vueJsx is added here as well
       ],
     },
 
