@@ -3,7 +3,7 @@
     <q-dialog v-model="openUserDetailedInformation" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <!-- {{ props.conclusionDetailedInformation }} -->
+          {{ props.conclusionDetailedInformation }}
         </q-card-section>
         <q-card-actions align="center">
           <q-btn

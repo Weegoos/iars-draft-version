@@ -28,8 +28,24 @@ import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
+
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
+
+const accessToken = localStorage.getItem("accessToken");
+
+const defineToken = () => {
+  if (!accessToken) {
+    window.location.href = `${webUrl}authorization`;
+  } else {
+    getAllUsers();
+  }
+};
+
+onMounted(() => {
+  defineToken();
+});
 
 const columns = [
   {
@@ -128,11 +144,6 @@ const getAllUsers = async () => {
     throw error;
   }
 };
-
-onMounted(() => {
-  getAllUsers();
-});
-
 const viewDetailedInformation = (evt, row, index) => {
   isOpenAdminDialogPage.value = true;
   conclusionDetailedInformation.value = row;

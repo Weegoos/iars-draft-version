@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AdminConclusion from "../components/Admin/AdminConclusion.vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -29,6 +29,19 @@ import axios from "axios";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
+
+const accessToken = localStorage.getItem("accessToken");
+
+const defineToken = () => {
+  if (!accessToken) {
+    window.location.href = `${webUrl}authorization`;
+  }
+};
+
+onMounted(() => {
+  defineToken();
+});
 
 const getInfo = async () => {
   try {
