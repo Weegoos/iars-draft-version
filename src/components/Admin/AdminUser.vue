@@ -1,87 +1,130 @@
 <template>
   <div>
-    <section v-for="(items, index) in allusers" :key="index" class="q-mt-md">
-      <q-card class="my-card">
-        <q-card-section>
-          <div class="row q-gutter-sm">
-            <div class="col">
-              <span class="infoHeadline">ФИО</span>
-              <p class="infoStyle">{{ items.name }} {{ items.secondName }}</p>
-            </div>
-            <div class="col">
-              <span class="infoHeadline">Почта</span>
-              <p class="infoStyle">{{ items.email }}</p>
-            </div>
-            <div class="col">
-              <span class="infoHeadline">ИИН</span>
-              <p class="infoStyle">{{ items.iin }}</p>
-            </div>
-          </div>
-          <div class="row q-gutter-sm">
-            <div class="col">
-              <span class="infoHeadline">Дата регистрации</span>
-              <p class="infoStyle">{{ items.registrationDate }}</p>
-            </div>
-            <div class="col">
-              <span class="infoHeadline">Департамент</span>
-              <p class="infoStyle">{{ items.department.name }}</p>
-            </div>
-            <div class="col">
-              <span class="infoHeadline">Регион</span>
-              <p class="infoStyle">{{ items.department.region }}</p>
-            </div>
-          </div>
-          <div class="row q-gutter-sm">
-            <div class="col">
-              <span class="infoHeadline">Должность</span>
-              <p class="infoStyle">{{ items.jobTitle.name }}</p>
-            </div>
-            <div class="col">
-              <span class="infoHeadline">Количество документов</span>
-              <p class="infoStyle">{{ items.conclusions.length }}</p>
-            </div>
-            <div class="col">
-              <span class="infoHeadline">Полученные документы</span>
-              <p class="infoStyle">{{ items.receivedConclusionDtos.length }}</p>
-            </div>
-          </div>
-        </q-card-section>
-        <q-card-actions align="center">
-          <q-btn
-            color="blue-13"
-            no-caps
-            label="Повышение"
-            @click="promoteUser(items)"
-          />
-          <q-btn
-            color="negative"
-            no-caps
-            label="Удалить пользователя"
-            @click="onClick"
-          />
-        </q-card-actions>
-      </q-card>
-    </section>
+    <q-table
+      flat
+      bordered
+      :rows="rows"
+      :columns="columns"
+      row-key="id"
+      @row-click="viewDetailedInformation"
+    />
+
+    <AdminDetailedInformation
+      :isOpenAdminDialogPage="isOpenAdminDialogPage"
+      @closeAdminDialogPage="closeAdminDialogPage"
+      :conclusionDetailedInformation="conclusionDetailedInformation"
+    />
   </div>
 </template>
 
 <script setup>
+import AdminDetailedInformation from "./DetailedInformation/AdminDetailedInformation.vue";
+
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
+import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref } from "vue";
-
 import { getCurrentInstance } from "vue";
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const $q = useQuasar();
+const notifyStore = useNotifyStore();
 
-const allusers = ref("");
+// Определение столбцов для таблицы
+const columns = [
+  {
+    name: "id",
+    label: "№",
+    align: "left",
+    field: "id",
+    sortable: true,
+  },
+  {
+    name: "name",
+    label: "Имя",
+    align: "left",
+    field: "name",
+    sortable: true,
+  },
+  {
+    name: "surname",
+    label: "Фамилия",
+    align: "left",
+    field: "secondName",
+    sortable: true,
+  },
+  {
+    name: "email",
+    label: "Почта",
+    align: "left",
+    field: "email",
+    sortable: true,
+  },
+  {
+    name: "iin",
+    label: "ИИН",
+    align: "left",
+    field: "iin",
+    sortable: true,
+  },
+  {
+    name: "registrationDate",
+    label: "Дата регистрации",
+    align: "left",
+    field: "registrationDate",
+    sortable: true,
+  },
+  {
+    name: "department",
+    label: "Департамент",
+    align: "left",
+    field: (user) => user.department.name,
+    sortable: true,
+  },
+  {
+    name: "region",
+    label: "Регион",
+    align: "left",
+    field: (user) => user.department.region,
+    sortable: true,
+  },
+  {
+    name: "jobTitle",
+    label: "Должность",
+    align: "left",
+    field: (user) => user.jobTitle.name,
+    sortable: true,
+  },
+  {
+    name: "conclusions",
+    label: "Количество документов",
+    align: "center",
+    field: "conclusions.length",
+    sortable: true,
+  },
+  {
+    name: "receivedConclusionDtos",
+    label: "Полученные документы",
+    align: "center",
+    field: "receivedConclusionDtos.length",
+    sortable: true,
+  },
+  {
+    name: "actions",
+    label: "Действия",
+    align: "center",
+    field: "actions",
+  },
+];
+
+const rows = ref([]);
+const isOpenAdminDialogPage = ref(false);
+const conclusionDetailedInformation = ref("");
+
+// Функция для получения всех пользователей
 const getAllUsers = async () => {
-  $q.loading.show({
-    message: "Данные загружаются...",
-    backgroundColor: "black",
-    spinner: QSpinnerGears,
-  });
+  notifyStore.loading($q, "Данные загружаются...", QSpinnerGears);
   try {
     const response = await axios.get(`${serverUrl}allUsers`, {
       headers: {
@@ -90,19 +133,23 @@ const getAllUsers = async () => {
       },
       withCredentials: true,
     });
-    console.log(response.data);
-    allusers.value = response.data;
+    rows.value = response.data.map((user, index) => ({
+      ...user,
+      id: index + 1, // Добавляем уникальный ID для каждой строки
+    }));
     $q.loading.hide();
   } catch (error) {
-    console.error("Ошибка при получении всех документов:", error);
+    console.error("Ошибка при получении всех пользователей:", error);
     throw error;
   }
 };
 
+// Загружаем пользователей при монтировании компонента
 onMounted(() => {
   getAllUsers();
 });
 
+// Функция для повышения пользователя
 const promoteUser = async (item) => {
   const accessToken = localStorage.getItem("accessToken");
   try {
@@ -133,6 +180,20 @@ const promoteUser = async (item) => {
     console.error("Ошибка при повышении:", error.response || error);
   }
 };
+
+// Функция для просмотра подробной информации о пользователе
+const viewDetailedInformation = (evt, row, index) => {
+  isOpenAdminDialogPage.value = true;
+  conclusionDetailedInformation.value = row;
+  console.log(row);
+};
+
+// Закрыть страницу подробной информации
+const closeAdminDialogPage = () => {
+  isOpenAdminDialogPage.value = false;
+};
 </script>
 
-<style></style>
+<style scoped>
+/* Ваши стили для таблицы или других компонентов */
+</style>

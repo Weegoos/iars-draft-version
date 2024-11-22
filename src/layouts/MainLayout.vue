@@ -76,7 +76,6 @@ const employeeNavigation = [
   { name: "Создание заключений", icon: "add", link: "/create-conclusion" },
 ];
 
-// Функция для обновления навигации в зависимости от роли
 const defineRole = () => {
   if (role.value === "Модератор") {
     navigation.value = adminNavigation;

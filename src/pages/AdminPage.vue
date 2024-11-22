@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="text-center q-gutter-md">
+    <section class="q-gutter-md" align="right">
       <q-btn
         color="primary"
         no-caps
@@ -14,7 +14,7 @@
         @click="downloadExcel"
       />
     </section>
-    <section>
+    <section class="q-mt-md">
       <AdminConclusion />
     </section>
   </div>
@@ -29,26 +29,6 @@ import axios from "axios";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
-
-const router = useRouter();
-const drawer = ref(true);
-
-const adminNavigation = ref([
-  {
-    name: "Все заключении",
-    link: "/",
-    icon: "description",
-  },
-  {
-    name: "Все пользователи",
-    link: "/admin-user",
-    icon: "group",
-  },
-]);
-
-const navigation = (route) => {
-  router.push(route);
-};
 
 const getInfo = async () => {
   try {
