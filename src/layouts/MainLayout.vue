@@ -67,10 +67,10 @@ const isAuthPage = computed(() => {
   return route.path === "/authorization" || route.path === "/registration";
 });
 
-const isAdmin = ref(false);
 const adminNavigation = [
   { name: "Панель администратора", icon: "dashboard", link: "/" },
   { name: "Управление пользователями", icon: "people", link: "/admin-user" },
+  { name: "Профиль", icon: "person", link: "/profile" },
 ];
 
 const employeeNavigation = [

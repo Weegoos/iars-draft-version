@@ -61,63 +61,46 @@ import { getCurrentInstance } from "vue";
 
 import ChangePassword from "../components/Profile/ChangePassword.vue";
 import EditPage from "../components/Profile/EditPage.vue";
+import { useUserStore } from "src/stores/getApi-store";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
+const $q = useQuasar();
+const userStore = useUserStore();
+const accessToken = localStorage.getItem("accessToken");
+
 const name = ref("");
 const department = ref("");
 const userEmail = ref("");
 const job = ref("");
 const registrationDate = ref("");
-const $q = useQuasar();
 const isVisible = ref(false);
 
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    if (response.data && response.data.iin) {
-      console.log(response.data.iin);
-
-      await getProfile(response.data.iin);
-    } else {
-      console.error("Email не найден в данных пользователя.");
-    }
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-    $q.notify({
-      type: "negative",
-      message: "Ошибка при получении данных. Попробуйте снова.",
-    });
-  }
-};
-
-const getProfile = async (iin) => {
-  const accessToken = localStorage.getItem("accessToken");
+const getProfile = async () => {
   console.log(accessToken);
-
   try {
     $q.loading.show({
       message: "Подождите, данные загружаются...",
-      spinner: QSpinnerGears, // Убедитесь, что QSpinnerGears импортирован
+      spinner: QSpinnerGears,
       messageColor: "white",
       backgroundColor: "black",
     });
 
-    const response = await axios.get(`${serverUrl}profile?IIN=${iin}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
+    await userStore.getUserInfo();
+    const userInfo = userStore.userInfo;
+
+    const response = await axios.get(
+      `${serverUrl}profile?IIN=${userInfo.iin}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
 
     if (response.data) {
       console.log(response.data);
@@ -143,7 +126,10 @@ const getProfile = async (iin) => {
 };
 
 onMounted(() => {
-  getInfo();
+  getProfile();
+  if (!accessToken) {
+    window.location.href = `${webUrl}authorization`;
+  }
 });
 
 const logout = () => {
