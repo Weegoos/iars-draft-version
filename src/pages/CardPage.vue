@@ -146,7 +146,11 @@
     >
       Документы отсутствуют
     </section>
-    <q-card class="q-mb-xl" v-for="(items, index) in conclusions" :key="index">
+    <q-card
+      class="q-mb-xl"
+      v-for="(items, index) in filteredConclusion"
+      :key="index"
+    >
       <section class="row" style="align-items: stretch">
         <div class="col">
           <q-card-section>
@@ -213,18 +217,22 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
 import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
 import { QSpinnerGears, useQuasar } from "quasar";
+import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
 
 const $q = useQuasar();
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
+const userStore = useUserStore();
+const notifyStore = useNotifyStore();
 
 const isOpen = ref(false);
 const viewDetailedInformation = () => {
@@ -262,41 +270,56 @@ const idNumberList = ref();
 const fcsConcordant = ref("");
 
 const concordantList = ref("");
+const conclusions = ref("");
 
-const getInfo = async () => {
+const getAllConclusionByIIN = async () => {
   try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    notifyStore.loading($q, "Подождите данные загружаются...", QSpinnerGears);
+    const response = await axios.get(`${serverUrl}usersDocs?IIN=${data.iin}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       withCredentials: true,
     });
-    getAllConclusionByIIN(response.data.iin);
-    console.log(response.data.iin);
-    return response.data;
+
+    const sortedConclusions = response.data.sort((a, b) => {
+      // Сортировка по убыванию (новые сверху)
+      return new Date(b.creationDate) - new Date(a.creationDate);
+    });
+
+    conclusions.value = sortedConclusions;
+    console.log(response.data);
+
+    $q.loading.hide();
   } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-    throw error;
+    console.error("Ошибка при запросе:", error);
   }
 };
 
-const filteredConclusion = ref("");
-const filter = async () => {
-  console.log("Filter");
+getAllConclusionByIIN();
 
+const filteredConclusion = ref(conclusions.value);
+watch(
+  () => conclusions.value,
+  (newVal) => {
+    filteredConclusion.value = newVal;
+  }
+);
+
+const filter = async () => {
   try {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       console.error("Access token is missing");
       return;
     }
-
-    console.log("Access Token:", accessToken);
-
     const params = new URLSearchParams();
-    const data = await getInfo();
-    const iin = data?.iin;
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
 
     if (registrationNumber.value) {
       params.append("registrationNumber", registrationNumber.value);
@@ -327,8 +350,8 @@ const filter = async () => {
     const sortedConclusions = response.data.sort((a, b) => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
-    conclusions.value = sortedConclusions;
-    console.log(conclusions.value);
+
+    filteredConclusion.value = sortedConclusions;
   } catch (error) {
     console.log("Error during filter request:", error);
   }
@@ -405,9 +428,6 @@ getAllNames();
 getAllUD();
 
 // Conclusion
-const conclusions = ref("");
-
-getInfo();
 
 const downloadPdf = async () => {
   try {
@@ -477,36 +497,6 @@ const downloadExcel = async () => {
     console.log("Excel успешно загружен.");
   } catch (error) {
     console.error("Ошибка при загрузке Excel:", error);
-  }
-};
-
-const getAllConclusionByIIN = async (iin) => {
-  try {
-    $q.loading.show({
-      message: "Подождите данные загружаются...",
-      spinner: QSpinnerGears,
-      messageColor: "white",
-      backgroundColor: "black",
-    });
-    const response = await axios.get(`${serverUrl}usersDocs?IIN=${iin}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    const sortedConclusions = response.data.sort((a, b) => {
-      // Сортировка по убыванию (новые сверху)
-      return new Date(b.creationDate) - new Date(a.creationDate);
-    });
-
-    conclusions.value = sortedConclusions;
-    console.log(response.data);
-
-    $q.loading.hide();
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
   }
 };
 
