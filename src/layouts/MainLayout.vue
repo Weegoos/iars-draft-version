@@ -20,11 +20,11 @@
             class="drawer-logo"
           />
         </div>
-        <q-list bordered class="drawer-list">
+        <q-list bordered class="drawer-list" v-show="isAdmin">
           <q-item
             clickable
             v-ripple
-            v-for="(items, index) in navigation"
+            v-for="(items, index) in adminNavigation"
             :key="index"
             class="drawer-item"
             @click="nav(items.link)"
@@ -46,6 +46,7 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { useUserStore } from "src/stores/getApi-store";
 import { onMounted, ref, watch, computed, onBeforeMount } from "vue";
 import { getCurrentInstance } from "vue";
@@ -53,53 +54,52 @@ import { useRoute, useRouter } from "vue-router";
 
 const { proxy } = getCurrentInstance();
 const webUrl = proxy.$webUrl;
+const serverUrl = proxy.$serverUrl;
+
 const accessToken = localStorage.getItem("accessToken");
 const drawer = ref(true);
 const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
+
 const isAuthPage = computed(() => {
-  // Проверка на страницы authorization и registration
   return route.path === "/authorization" || route.path === "/registration";
 });
 
-let role = ref(""); // Инициализация переменной роли
-let navigation = ref([]);
+const isAdmin = ref(false);
 const adminNavigation = [
   { name: "Панель администратора", icon: "dashboard", link: "/" },
   { name: "Управление пользователями", icon: "people", link: "/admin-user" },
 ];
 
 const employeeNavigation = [
-  { name: "Журнал заключений", icon: "description", link: "/journal" },
+  { name: "Журнал заключений", icon: "description", link: "/" },
   { name: "Создание заключений", icon: "add", link: "/create-conclusion" },
   { name: "Профиль", icon: "person", link: "/profile" },
 ];
 
-const defineRole = () => {
-  if (role.value === "Модератор") {
-    navigation.value = adminNavigation;
-  } else {
-    navigation.value = employeeNavigation;
+const getInfo = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}getInfo`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    });
+
+    console.log(response.data.job.name);
+    if (response.data.job.name === "Модератор") {
+      isAdmin.value = true;
+    }
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
   }
 };
 
-onBeforeMount(async () => {
-  // Проверяем наличие токена
-  if (!accessToken) {
-    window.location.href = `${webUrl}authorization`;
-  }
-
-  // Получаем данные пользователя
-  await userStore.getUserInfo();
-  role.value = userStore.role; // Присваиваем роль
-  defineRole(); // Сразу обновляем навигацию после получения роли
-});
-
-// Реактивное наблюдение за изменением роли
-watch(role, () => {
-  defineRole(); // Обновляем навигацию при изменении роли
+onBeforeMount(() => {
+  getInfo();
 });
 
 const nav = (route) => {
@@ -107,36 +107,4 @@ const nav = (route) => {
 };
 </script>
 
-<style scoped>
-.drawer-list {
-  background-color: #f5f5f5;
-}
-
-/* Фон для каждого элемента списка */
-.drawer-item {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.drawer-item:hover {
-  background-color: #eeeeee;
-}
-
-/* Цвет иконок */
-.drawer-icon {
-  color: #3f51b5;
-}
-
-/* Логотип */
-.drawer-logo {
-  filter: brightness(0) invert(1);
-}
-
-.drawer-item q-item-section {
-  color: #333333;
-}
-
-.drawer-item:hover q-item-section {
-  color: #3f51b5;
-}
-</style>
+<style scoped></style>

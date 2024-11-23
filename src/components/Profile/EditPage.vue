@@ -73,7 +73,6 @@ const getInfo = async () => {
     }
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
-    alert("Ошибка при получении данных. Попробуйте снова.");
   }
 };
 
@@ -81,7 +80,7 @@ const editProfile = async (iin) => {
   const accessToken = localStorage.getItem("accessToken");
 
   if (!accessToken) {
-    alert("Ошибка: Токен не найден");
+    console.log("Ошибка: Токен не найден");
     return;
   }
 

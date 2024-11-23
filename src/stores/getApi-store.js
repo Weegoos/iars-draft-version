@@ -23,7 +23,6 @@ export const useUserStore = defineStore("user", {
         this.role = response.data.job.name;
       } catch (error) {
         console.error("Ошибка при получении данных пользователя:", error);
-        alert("Ошибка при получении данных. Попробуйте снова.");
       }
     },
   },
