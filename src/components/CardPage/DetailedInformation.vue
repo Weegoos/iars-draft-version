@@ -21,111 +21,134 @@
                 <div class="col">
                   <span class="infoHeadline">Регистрационный номер</span>
                   <p class="infoStyle">
-                    {{ props.conclusions[0].registrationNumber }}
+                    {{
+                      props.detialedInformation.registrationNumber ||
+                      "Не указан"
+                    }}
                   </p>
                 </div>
                 <div class="col">
                   <span class="infoHeadline">Номер УД</span>
                   <p class="infoStyle">
-                    {{ props.conclusions[0].udNumber }}
+                    {{ props.detialedInformation.udNumber || "Не указан" }}
                   </p>
                 </div>
               </div>
               <span class="infoHeadline">Дата создания документа</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].creationDate }}
+                {{ props.detialedInformation.creationDate || "Не указан" }}
               </p>
 
               <span class="infoHeadline">Дата регистрации дела</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].registrationDate }}
+                {{
+                  props.detialedInformation[0].registrationDate || "Не указан"
+                }}
               </p>
               <span class="infoHeadline">Статья УК</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].article }}
+                {{ props.detialedInformation[0].article || "Не указан" }}
               </p>
               <span class="infoHeadline">Решение по делу</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].summary }}
+                {{ props.detialedInformation[0].summary || "Не указан" }}
               </p>
               <span class="infoHeadline">Краткая фабула</span>
-              <p class="infoStyle">
-                <!-- {{ props.conclusionInfo.summary }} -->
-              </p>
+              <p class="infoStyle"></p>
               <span class="infoHeadline">ИИН вызываемого</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].calledPersonIIN || "Не указан" }}
+                {{
+                  props.detialedInformation[0].calledPersonIIN || "Не указан"
+                }}
               </p>
               <span class="infoHeadline">ФИО вызываемого</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].calledPersonFullName || "Не указан" }}
+                {{
+                  props.detialedInformation[0].calledPersonFullName ||
+                  "Не указан"
+                }}
               </p>
               <span class="infoHeadline">Должность вызываемого</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].calledPersonPosition || "Не указан" }}
+                {{
+                  props.detialedInformation[0].calledPersonPosition ||
+                  "Не указан"
+                }}
               </p>
               <span class="infoHeadline">БИН/ИИН</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].calledPersonBIN || "Не указан" }}
+                {{
+                  props.detialedInformation[0].calledPersonBIN || "Не указан"
+                }}
               </p>
               <span class="infoHeadline">Место работы</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].workPlace || "Не указан" }}
+                {{ props.detialedInformation[0].workPlace || "Не указан" }}
               </p>
               <span class="infoHeadline">Регион</span>
               <p class="infoStyle">
-                <!-- {{ props.conclusions.region.name || "Не указан" }} -->
+                {{ props.conclusions.region.name || "Не указан" }}
               </p>
               <span class="infoHeadline"
                 >Планируемые следственные действия</span
               >
               <p class="infoStyle">
                 {{
-                  props.conclusions[0].plannedInvestigativeActions ||
+                  props.detialedInformation[0].plannedInvestigativeActions ||
                   "Не указан"
                 }}
               </p>
               <span class="infoHeadline">Дата и время проведения</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].eventDateTime || "Не указан" }}
+                {{ props.detialedInformation[0].eventDateTime || "Не указан" }}
               </p>
               <span class="infoHeadline">Место проведения</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].eventPlace || "Не указан" }}
+                {{ props.detialedInformation[0].eventPlace || "Не указан" }}
               </p>
               <span class="infoHeadline">Следователь</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].investigator.name || "Не указан" }}
                 {{
-                  props.conclusions[0].investigator.secondName || "Не указан"
+                  props.detialedInformation[0].investigator.name || "Не указан"
+                }}
+                {{
+                  props.detialedInformation[0].investigator.secondName ||
+                  "Не указан"
                 }}
               </p>
               <span class="infoHeadline">Статус по делу вызываемого</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].status || "Не указан" }}
+                {{ props.detialedInformation[0].status || "Не указан" }}
               </p>
               <span class="infoHeadline"
                 >Отношение вызывающего к событию и субъекту</span
               >
               <p class="infoStyle">
-                {{ props.conclusions[0].relationToEvent || "Не указан" }}
+                {{
+                  props.detialedInformation[0].relationToEvent || "Не указан"
+                }}
               </p>
               <span class="infoHeadline">Виды планируемого следствия</span>
               <p class="infoStyle">
-                {{ props.conclusions[0].justification || "Не указан" }}
+                {{ props.detialedInformation[0].justification || "Не указан" }}
               </p>
               <span class="infoHeadline">ИИН защитника </span>
               <p class="infoStyle">
-                {{ props.conclusions[0].defenseAttorneyIIN || "Не указан" }}
+                {{
+                  props.detialedInformation[0].defenseAttorneyIIN || "Не указан"
+                }}
               </p>
               <span class="infoHeadline">ИИН защитника </span>
               <p class="infoStyle">
-                {{ props.conclusions[0].defenseAttorneyIIN || "Не указан" }}
+                {{
+                  props.detialedInformation[0].defenseAttorneyIIN || "Не указан"
+                }}
               </p>
               <span class="infoHeadline">ФИО защитника </span>
               <p class="infoStyle">
                 {{
-                  props.conclusions[0].defenseAttorneyFullName || "Не указан"
+                  props.detialedInformation[0].defenseAttorneyFullName ||
+                  "Не указан"
                 }}
               </p>
               <span class="infoHeadline"
@@ -133,14 +156,15 @@
               </span>
               <p class="infoStyle">
                 {{
-                  props.conclusions[0].defenseAttorneyFullName || "Не указан"
+                  props.detialedInformation[0].defenseAttorneyFullName ||
+                  "Не указан"
                 }}
               </p>
               <span class="infoHeadline"
                 >Результат от планируемого следственного действия
               </span>
               <p class="infoStyle">
-                {{ props.conclusions[0].result || "Не указан" }}
+                {{ props.detialedInformation[0].result || "Не указан" }}
               </p>
             </q-tab-panel>
 
@@ -165,7 +189,7 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  conclusions: {
+  detialedInformation: {
     type: Object,
     required: true,
   },

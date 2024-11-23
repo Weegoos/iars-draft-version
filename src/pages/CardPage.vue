@@ -193,7 +193,7 @@
           color="primary"
           no-caps
           label="Просмотреть"
-          @click="viewDetailedInformation"
+          @click="viewDetailedInformation(items)"
         />
         <q-btn
           color="positive"
@@ -207,7 +207,7 @@
     <DetailedInformation
       :isOpen="isOpen"
       @closeWindow="closeWindow"
-      :conclusions="conclusions"
+      :detialedInformation="detialedInformation"
     />
     <AgreementComponent
       :isOpenAgreementPage="isOpenAgreementPage"
@@ -235,8 +235,10 @@ const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 
 const isOpen = ref(false);
-const viewDetailedInformation = () => {
+const detialedInformation = ref("");
+const viewDetailedInformation = (item) => {
   isOpen.value = true;
+  detialedInformation.value = item;
 };
 
 const closeWindow = () => {
