@@ -286,14 +286,12 @@ const getAllConclusionByIIN = async () => {
     });
 
     const sortedConclusions = response.data.sort((a, b) => {
-      // Сортировка по убыванию (новые сверху)
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
 
     conclusions.value = sortedConclusions;
-    console.log(response.data);
-
     $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Документы успешно загружены");
   } catch (error) {
     console.error("Ошибка при запросе:", error);
   }
@@ -311,9 +309,11 @@ watch(
 
 const filter = async () => {
   try {
+    notifyStore.loading($q, "Подождите, фильтрация в обработке", QSpinnerGears);
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       console.error("Access token is missing");
+      notifyStore.notifyError($q, "Access token is missing");
       return;
     }
     const params = new URLSearchParams();
@@ -352,6 +352,8 @@ const filter = async () => {
     });
 
     filteredConclusion.value = sortedConclusions;
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Документы загружены с помощью фильтрации");
   } catch (error) {
     console.log("Error during filter request:", error);
   }
@@ -431,44 +433,41 @@ getAllUD();
 
 const downloadPdf = async () => {
   try {
-    const data = await getInfo();
-    const iin = data?.iin;
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
 
     if (!iin) {
       console.error("IIN не найден!");
       return;
     }
-
-    const response = await axios.get(
-      `${serverUrl}pdf?IIN=${iin}`,
-
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
-          Accept: "application/pdf",
-        },
-        responseType: "blob",
-        withCredentials: true,
-      }
-    );
+    const response = await axios.get(`${serverUrl}pdf?IIN=${iin}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+        Accept: "application/pdf",
+      },
+      responseType: "blob",
+      withCredentials: true,
+    });
 
     const blob = new Blob([response.data], { type: "application/pdf" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
     link.download = `User_${iin}.pdf`;
     link.click();
-
-    console.log("PDF успешно загружен.");
+    notifyStore.nofifySuccess($q, `PDF успешно загружен.`);
   } catch (error) {
     console.error("Ошибка при загрузке PDF:", error);
+    notifyStore.notifyError($q, `Ошибка при загрузке PDF:", ${error}`);
   }
 };
 
 const downloadExcel = async () => {
   try {
-    const data = await getInfo();
-    const iin = data?.iin;
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
 
     if (!iin) {
       console.error("IIN не найден!");
@@ -494,9 +493,10 @@ const downloadExcel = async () => {
     link.download = `User_${iin}.xlsx`;
     link.click();
 
-    console.log("Excel успешно загружен.");
+    notifyStore.nofifySuccess($q, `Excel успешно загружен.`);
   } catch (error) {
     console.error("Ошибка при загрузке Excel:", error);
+    notifyStore.notifyError($q, `Ошибка при загрузке Excel:", ${error}`);
   }
 };
 
