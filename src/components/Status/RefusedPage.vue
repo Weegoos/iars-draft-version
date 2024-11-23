@@ -115,9 +115,9 @@ const refuseButton = async () => {
       iin: iinofInvestigator,
     };
 
-    const response = await axios.post("http://localhost:5002/decision", data, {
+    const response = await axios.post(`${serverUrl}decision`, data, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Убедитесь, что токен есть
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       withCredentials: true,

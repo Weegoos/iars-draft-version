@@ -242,7 +242,7 @@ const createEvent = async () => {
       iinofInvestigator: iinofInvestigator,
     };
 
-    const response = await axios.post("http://localhost:5002/create", data, {
+    const response = await axios.post(`${serverUrl}create`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Убедитесь, что токен есть
         "Content-Type": "application/json",

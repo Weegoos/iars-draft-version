@@ -27,42 +27,25 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 
 import { getCurrentInstance } from "vue";
+import { useUserStore } from "src/stores/getApi-store";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
+const userStore = useUserStore();
 
 const accessToken = localStorage.getItem("accessToken");
 
-const defineToken = () => {
+onMounted(() => {
   if (!accessToken) {
     window.location.href = `${webUrl}authorization`;
   }
-};
-
-onMounted(() => {
-  defineToken();
 });
-
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при получении данных о пользователе:", error);
-    throw error;
-  }
-};
 
 const downloadPdf = async () => {
   try {
-    const data = await getInfo();
-    const iin = data?.iin;
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
 
     if (!iin) {
       console.error("IIN не найден!");
@@ -97,9 +80,9 @@ const downloadPdf = async () => {
 
 const downloadExcel = async () => {
   try {
-    const data = await getInfo();
-    const iin = data?.iin;
-
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
     if (!iin) {
       console.error("IIN не найден!");
       return;
@@ -110,7 +93,7 @@ const downloadExcel = async () => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
         Accept:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
       responseType: "blob",
       withCredentials: true,

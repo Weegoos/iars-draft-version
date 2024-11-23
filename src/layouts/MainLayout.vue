@@ -89,32 +89,8 @@ const defineRole = () => {
     navigation.value = employeeNavigation;
   }
 };
-// const getInfo = async () => {
-//   try {
-//     const response = await axios.get(`${serverUrl}getInfo`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Accept: "application/json",
-//       },
-//       withCredentials: true,
-//     });
-
-//     console.log(response.data.job.name);
-//     role.value = response.data.job.name;
-//     console.log(role.value.length);
-
-//     if (response.data.job.name === "Модератор") {
-//       navigation.value = adminNavigation;
-//     } else {
-//       navigation.value = employeeNavigation;
-//     }
-//   } catch (error) {
-//     console.error("Ошибка при получении данных пользователя:", error);
-//   }
-// };
 
 onBeforeMount(() => {
-  // getInfo();
   defineRole();
 });
 
