@@ -37,6 +37,7 @@ const getInfo = async () => {
     });
     console.log(response.data.job.name);
     role.value = response.data.job.name;
+    localStorage.setItem("role", response.data.job.name);
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
     throw error;

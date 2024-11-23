@@ -20,11 +20,11 @@
             class="drawer-logo"
           />
         </div>
-        <q-list bordered class="drawer-list" v-show="isAdmin">
+        <q-list bordered class="drawer-list">
           <q-item
             clickable
             v-ripple
-            v-for="(items, index) in adminNavigation"
+            v-for="(items, index) in navigation"
             :key="index"
             class="drawer-item"
             @click="nav(items.link)"
@@ -79,27 +79,43 @@ const employeeNavigation = [
   { name: "Профиль", icon: "person", link: "/profile" },
 ];
 
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
+const role = localStorage.getItem("role");
+const navigation = ref("");
 
-    console.log(response.data.job.name);
-    if (response.data.job.name === "Модератор") {
-      isAdmin.value = true;
-    }
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
+const defineRole = () => {
+  if (role === "Модератор") {
+    navigation.value = adminNavigation;
+  } else {
+    navigation.value = employeeNavigation;
   }
 };
+// const getInfo = async () => {
+//   try {
+//     const response = await axios.get(`${serverUrl}getInfo`, {
+//       headers: {
+//         "Content-Type": "application/json",
+//         Accept: "application/json",
+//       },
+//       withCredentials: true,
+//     });
+
+//     console.log(response.data.job.name);
+//     role.value = response.data.job.name;
+//     console.log(role.value.length);
+
+//     if (response.data.job.name === "Модератор") {
+//       navigation.value = adminNavigation;
+//     } else {
+//       navigation.value = employeeNavigation;
+//     }
+//   } catch (error) {
+//     console.error("Ошибка при получении данных пользователя:", error);
+//   }
+// };
 
 onBeforeMount(() => {
-  getInfo();
+  // getInfo();
+  defineRole();
 });
 
 const nav = (route) => {
