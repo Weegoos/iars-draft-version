@@ -79,7 +79,7 @@
               </p>
               <span class="infoHeadline">Регион</span>
               <p class="infoStyle">
-                {{ props.conclusions.region.name || "Не указан" }}
+                {{ props.detialedInformation.region.name || "Не указан" }}
               </p>
               <span class="infoHeadline"
                 >Планируемые следственные действия</span

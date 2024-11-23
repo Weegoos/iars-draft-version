@@ -142,9 +142,9 @@
     </div>
     <section
       class="text-h6 text-bold text-center"
-      v-if="conclusions.length === 0"
+      v-if="filteredConclusion.length === 0"
     >
-      Документы отсутствуют
+      Документов нету
     </section>
     <q-card
       class="q-mb-xl"
@@ -254,26 +254,6 @@ const closeAgreementWindow = () => {
   isOpenAgreementPage.value = false;
 };
 
-const statusOfDocuments = ref("");
-const documentsOptions = ref("");
-
-const registrationNumber = ref("");
-
-const region = ref("");
-const regionList = ref("");
-
-const startDate = ref("2019/05/05");
-const endDate = ref("2024/03/03");
-const iin = ref("");
-
-const idNumber = ref("");
-const idNumberList = ref();
-
-const fcsConcordant = ref("");
-
-const concordantList = ref("");
-const conclusions = ref("");
-
 const getAllConclusionByIIN = async () => {
   try {
     await userStore.getUserInfo();
@@ -301,6 +281,20 @@ const getAllConclusionByIIN = async () => {
 
 getAllConclusionByIIN();
 
+const statusOfDocuments = ref("");
+const documentsOptions = ref("");
+const registrationNumber = ref("");
+const region = ref("");
+const regionList = ref("");
+const startDate = ref("2019/05/05");
+const endDate = ref("2024/03/03");
+const iin = ref("");
+const idNumber = ref("");
+const idNumberList = ref();
+const fcsConcordant = ref("");
+const concordantList = ref("");
+const conclusions = ref("");
+
 const filteredConclusion = ref(conclusions.value);
 watch(
   () => conclusions.value,
@@ -326,17 +320,20 @@ const filter = async () => {
     if (registrationNumber.value) {
       params.append("registrationNumber", registrationNumber.value);
     }
-
     if (idNumber.value) {
-      params.append("idNumber", idNumber.value);
+      params.append("ud", idNumber.value);
     }
-
     if (statusOfDocuments.value) {
       params.append("status", statusOfDocuments.value);
     }
+    if (region.value) {
+      params.append("region", region.value);
+    }
+    if (fcsConcordant.value) {
+      params.append("fullName", fcsConcordant.value);
+    }
 
     params.append("iin", iin);
-
     const response = await axios.get(
       `${serverUrl}filter?${params.toString()}`,
       {
@@ -348,7 +345,6 @@ const filter = async () => {
         withCredentials: true,
       }
     );
-
     const sortedConclusions = response.data.sort((a, b) => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
