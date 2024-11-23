@@ -19,15 +19,24 @@ import { getCurrentInstance } from "vue";
 import CardPage from "../pages/CardPage.vue";
 import AnalyticsPage from "../pages/AnalyticsPage.vue";
 import AdminPage from "../pages/AdminPage.vue";
+import { useNotifyStore } from "src/stores/notify-store";
+import { QSpinnerGears, useQuasar } from "quasar";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
+const notifyStore = useNotifyStore();
+const $q = useQuasar();
 
 const role = ref("");
 
 const getInfo = async () => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите данные о пользователе загружаются...",
+      QSpinnerGears
+    );
     const response = await axios.get(`${serverUrl}getInfo`, {
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +46,7 @@ const getInfo = async () => {
     });
     console.log(response.data.job.name);
     role.value = response.data.job.name;
-    localStorage.setItem("role", response.data.job.name);
+    $q.loading.hide();
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
     throw error;

@@ -326,7 +326,7 @@ const filter = async () => {
     }
 
     if (idNumber.value) {
-      params.append("idNumber", idNumber.value); // Используем уникальный параметр
+      params.append("idNumber", idNumber.value);
     }
 
     if (statusOfDocuments.value) {
