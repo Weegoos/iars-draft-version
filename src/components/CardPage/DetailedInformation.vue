@@ -41,49 +41,41 @@
 
               <span class="infoHeadline">Дата регистрации дела</span>
               <p class="infoStyle">
-                {{
-                  props.detialedInformation[0].registrationDate || "Не указан"
-                }}
+                {{ props.detialedInformation.registrationDate || "Не указан" }}
               </p>
               <span class="infoHeadline">Статья УК</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].article || "Не указан" }}
+                {{ props.detialedInformation.article || "Не указан" }}
               </p>
               <span class="infoHeadline">Решение по делу</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].summary || "Не указан" }}
+                {{ props.detialedInformation.summary || "Не указан" }}
               </p>
               <span class="infoHeadline">Краткая фабула</span>
               <p class="infoStyle"></p>
               <span class="infoHeadline">ИИН вызываемого</span>
               <p class="infoStyle">
-                {{
-                  props.detialedInformation[0].calledPersonIIN || "Не указан"
-                }}
+                {{ props.detialedInformation.calledPersonIIN || "Не указан" }}
               </p>
               <span class="infoHeadline">ФИО вызываемого</span>
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].calledPersonFullName ||
-                  "Не указан"
+                  props.detialedInformation.calledPersonFullName || "Не указан"
                 }}
               </p>
               <span class="infoHeadline">Должность вызываемого</span>
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].calledPersonPosition ||
-                  "Не указан"
+                  props.detialedInformation.calledPersonPosition || "Не указан"
                 }}
               </p>
               <span class="infoHeadline">БИН/ИИН</span>
               <p class="infoStyle">
-                {{
-                  props.detialedInformation[0].calledPersonBIN || "Не указан"
-                }}
+                {{ props.detialedInformation.calledPersonBIN || "Не указан" }}
               </p>
               <span class="infoHeadline">Место работы</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].workPlace || "Не указан" }}
+                {{ props.detialedInformation.workPlace || "Не указан" }}
               </p>
               <span class="infoHeadline">Регион</span>
               <p class="infoStyle">
@@ -94,60 +86,56 @@
               >
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].plannedInvestigativeActions ||
+                  props.detialedInformation.plannedInvestigativeActions ||
                   "Не указан"
                 }}
               </p>
               <span class="infoHeadline">Дата и время проведения</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].eventDateTime || "Не указан" }}
+                {{ props.detialedInformation.eventDateTime || "Не указан" }}
               </p>
               <span class="infoHeadline">Место проведения</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].eventPlace || "Не указан" }}
+                {{ props.detialedInformation.eventPlace || "Не указан" }}
               </p>
               <span class="infoHeadline">Следователь</span>
               <p class="infoStyle">
+                {{ props.detialedInformation.investigator.name || "Не указан" }}
                 {{
-                  props.detialedInformation[0].investigator.name || "Не указан"
-                }}
-                {{
-                  props.detialedInformation[0].investigator.secondName ||
+                  props.detialedInformation.investigator.secondName ||
                   "Не указан"
                 }}
               </p>
               <span class="infoHeadline">Статус по делу вызываемого</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].status || "Не указан" }}
+                {{ props.detialedInformation.status || "Не указан" }}
               </p>
               <span class="infoHeadline"
                 >Отношение вызывающего к событию и субъекту</span
               >
               <p class="infoStyle">
-                {{
-                  props.detialedInformation[0].relationToEvent || "Не указан"
-                }}
+                {{ props.detialedInformation.relationToEvent || "Не указан" }}
               </p>
               <span class="infoHeadline">Виды планируемого следствия</span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].justification || "Не указан" }}
+                {{ props.detialedInformation.justification || "Не указан" }}
               </p>
               <span class="infoHeadline">ИИН защитника </span>
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].defenseAttorneyIIN || "Не указан"
+                  props.detialedInformation.defenseAttorneyIIN || "Не указан"
                 }}
               </p>
               <span class="infoHeadline">ИИН защитника </span>
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].defenseAttorneyIIN || "Не указан"
+                  props.detialedInformation.defenseAttorneyIIN || "Не указан"
                 }}
               </p>
               <span class="infoHeadline">ФИО защитника </span>
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].defenseAttorneyFullName ||
+                  props.detialedInformation.defenseAttorneyFullName ||
                   "Не указан"
                 }}
               </p>
@@ -156,7 +144,7 @@
               </span>
               <p class="infoStyle">
                 {{
-                  props.detialedInformation[0].defenseAttorneyFullName ||
+                  props.detialedInformation.defenseAttorneyFullName ||
                   "Не указан"
                 }}
               </p>
@@ -164,7 +152,7 @@
                 >Результат от планируемого следственного действия
               </span>
               <p class="infoStyle">
-                {{ props.detialedInformation[0].result || "Не указан" }}
+                {{ props.detialedInformation.result || "Не указан" }}
               </p>
             </q-tab-panel>
 
