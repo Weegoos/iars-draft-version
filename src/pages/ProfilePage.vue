@@ -62,12 +62,14 @@ import { getCurrentInstance } from "vue";
 import ChangePassword from "../components/Profile/ChangePassword.vue";
 import EditPage from "../components/Profile/EditPage.vue";
 import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
 const $q = useQuasar();
 const userStore = useUserStore();
+const notifyStore = useNotifyStore();
 const accessToken = localStorage.getItem("accessToken");
 
 const name = ref("");
@@ -78,14 +80,8 @@ const registrationDate = ref("");
 const isVisible = ref(false);
 
 const getProfile = async () => {
-  console.log(accessToken);
   try {
-    $q.loading.show({
-      message: "Подождите, данные загружаются...",
-      spinner: QSpinnerGears,
-      messageColor: "white",
-      backgroundColor: "black",
-    });
+    notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
 
     await userStore.getUserInfo();
     const userInfo = userStore.userInfo;
@@ -103,23 +99,22 @@ const getProfile = async () => {
     );
 
     if (response.data) {
-      console.log(response.data);
       userEmail.value = response.data.email;
       name.value = `${response.data.name} ${response.data.secondName}`;
       department.value = response.data.department || "Не указано";
       job.value = response.data.jobTitle || "Не указано";
-
       registrationDate.value = response.data.registrationDate || "Не указано";
       isVisible.value = true;
+      notifyStore.nofifySuccess($q, "Данные успешно загружены");
     } else {
       console.error("Профиль пуст.");
     }
   } catch (error) {
     console.error("Ошибка при получении данных профиля:", error);
-    $q.notify({
-      type: "negative",
-      message: "Ошибка при загрузке профиля. Попробуйте снова.",
-    });
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при загрузке профиля. Попробуйте снова. ${error}`
+    );
   } finally {
     $q.loading.hide();
   }
