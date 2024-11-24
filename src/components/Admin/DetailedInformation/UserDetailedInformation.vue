@@ -4,12 +4,7 @@
       <q-card>
         <q-card-section class="row items-center">
           <q-list>
-            <q-expansion-item
-              popup
-              icon="person"
-              default-opened
-              label="Персональные данные"
-            >
+            <q-expansion-item popup icon="person" label="Персональные данные">
               <q-separator />
               <q-card>
                 <q-card-section>
@@ -33,30 +28,41 @@
                 </q-card-section>
               </q-card>
             </q-expansion-item>
-            <q-expansion-item popup icon="send" label="Outbox" caption="Empty">
-              <q-separator />
-              <q-card>
-                <q-card-section>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quidem, eius reprehenderit eos corrupti commodi magni quaerat
-                  ex numquam, dolorum officiis modi facere maiores architecto
-                  suscipit iste eveniet doloribus ullam aliquid.
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
             <q-expansion-item
               popup
-              icon="drafts"
-              label="Draft"
-              caption="Draft a new email"
+              icon="work"
+              label="Работа"
+              caption="Информация о месте работы"
             >
               <q-separator />
               <q-card>
                 <q-card-section>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quidem, eius reprehenderit eos corrupti commodi magni quaerat
-                  ex numquam, dolorum officiis modi facere maiores architecto
-                  suscipit iste eveniet doloribus ullam aliquid.
+                  <span class="infoHeadline">Департамент</span>
+                  <p class="infoStyle">
+                    {{ props.conclusionDetailedInformation.department.name }}
+                  </p>
+                  <span class="infoHeadline">Регион</span>
+                  <p class="infoStyle">
+                    {{ props.conclusionDetailedInformation.department.region }}
+                  </p>
+                  <span class="infoHeadline">Должность</span>
+                  <p class="infoStyle">
+                    {{ props.conclusionDetailedInformation.jobTitle.name }}
+                  </p>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+            <q-expansion-item popup icon="drafts" label="Заключении">
+              <q-separator />
+              <q-card>
+                <q-card-section>
+                  <span class="infoHeadline">Заключении</span>
+                  <p class="infoStyle">
+                    {{
+                      props.conclusionDetailedInformation.conclusions ||
+                      "Не указано"
+                    }}
+                  </p>
                 </q-card-section>
               </q-card>
             </q-expansion-item>
