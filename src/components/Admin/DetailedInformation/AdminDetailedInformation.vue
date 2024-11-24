@@ -123,25 +123,76 @@
                 </q-expansion-item>
                 <q-expansion-item
                   popup
-                  default-opened
                   icon="filter_4"
-                  label="Данные защитника"
+                  label="Остальные данные"
+                  caption="Статус по делу вызываемого, дата и время проведения, место проведения, отношение вызывающего к событию и субъекту и другие данные"
                 >
                   <q-separator />
                   <q-card>
                     <q-card-section>
-                      <span class="infoHeadline">ИИН защитника</span>
-                      <p class="infoStyle">
-                        {{
-                          props.conclusionDetailedInformation.defenseAttorneyIIN
-                        }}
-                      </p>
-                      <span class="infoHeadline">ФИО защитника</span>
+                      <span class="infoHeadline"
+                        >Планируемые следственные действия</span
+                      >
                       <p class="infoStyle">
                         {{
                           props.conclusionDetailedInformation
-                            .defenseAttorneyFullName
+                            .plannedInvestigativeActions
                         }}
+                      </p>
+                      <span class="infoHeadline">Дата и время проведения</span>
+                      <p class="infoStyle">
+                        {{ formattedEventDateTime }}
+                      </p>
+                      <span class="infoHeadline">Место проведения</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.eventPlace }}
+                      </p>
+                      <span class="infoHeadline">Следователь</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.investigatorIIN
+                        }}
+                      </p>
+                      <span class="infoHeadline"
+                        >Статус по делу вызываемого</span
+                      >
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.status }}
+                      </p>
+                      <span class="infoHeadline"
+                        >Отношение вызывающего к событию и субъекту</span
+                      >
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.relationToEvent
+                        }}
+                      </p>
+                      <span class="infoHeadline"
+                        >Виды планируемого следствия</span
+                      >
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.investigationTypes
+                        }}
+                      </p>
+                      <span class="infoHeadline">Относится ли к бизнесу</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.relatesToBusiness
+                        }}
+                      </p>
+                      <span class="infoHeadline"
+                        >Обоснование и необходимость участия
+                        предпринимателя</span
+                      >
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.justification }}
+                      </p>
+                      <span class="infoHeadline"
+                        >Результат от планируемого следственного действия</span
+                      >
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.result }}
                       </p>
                     </q-card-section>
                   </q-card>
@@ -206,6 +257,10 @@ const formattedRegistrationDate = computed(() =>
   javascriptStore.formatDate(
     props.conclusionDetailedInformation.registrationDate
   )
+);
+
+const formattedEventDateTime = computed(() =>
+  javascriptStore.formatDate(props.conclusionDetailedInformation.eventDateTime)
 );
 </script>
 
