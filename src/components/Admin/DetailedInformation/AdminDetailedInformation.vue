@@ -17,170 +17,77 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="info">
-              <div class="row q-gutter-sm">
-                <div class="col">
-                  <span class="infoHeadline">Регистрационный номер</span>
-                  <p class="infoStyle">
-                    {{ props.conclusionDetailedInformation.registrationNumber }}
-                  </p>
-                </div>
-                <div class="col">
-                  <span class="infoHeadline">Номер УД</span>
-                  <p class="infoStyle">
-                    {{ props.conclusionDetailedInformation.udNumber }}
-                  </p>
-                </div>
-              </div>
-              <span class="infoHeadline">Дата создания документа</span>
-              <p class="infoStyle">
-                {{ props.conclusionDetailedInformation.creationDate }}
-              </p>
-
-              <span class="infoHeadline">Дата регистрации дела</span>
-              <p class="infoStyle">
-                {{ props.conclusionDetailedInformation.registrationDate }}
-              </p>
-              <span class="infoHeadline">Статья УК</span>
-              <p class="infoStyle">
-                {{ props.conclusionDetailedInformation.article }}
-              </p>
-              <span class="infoHeadline">Решение по делу</span>
-              <p class="infoStyle">
-                {{ props.conclusionDetailedInformation.summary }}
-              </p>
-              <span class="infoHeadline">Краткая фабула</span>
-              <p class="infoStyle">
-                <!-- {{ props.conclusionInfo.summary }} -->
-              </p>
-              <span class="infoHeadline">ИИН вызываемого</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.calledPersonIIN ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">ФИО вызываемого</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.calledPersonFullName ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">Должность вызываемого</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.calledPersonPosition ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">БИН/ИИН</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.calledPersonBIN ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">Место работы</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.workPlace || "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">Регион</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.region.name || "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline"
-                >Планируемые следственные действия</span
-              >
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation
-                    .plannedInvestigativeActions || "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">Дата и время проведения</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.eventDateTime ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">Место проведения</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.eventPlace || "Не указан"
-                }}
-              </p>
-              <!-- <span class="infoHeadline">Следователь</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.investigator.name ||
-                  "Не указан"
-                }}
-                {{
-                  props.conclusionDetailedInformation.investigator.secondName ||
-                  "Не указан"
-                }}
-              </p> -->
-              <span class="infoHeadline">Статус по делу вызываемого</span>
-              <p class="infoStyle">
-                {{ props.conclusionDetailedInformation.status || "Не указан" }}
-              </p>
-              <span class="infoHeadline"
-                >Отношение вызывающего к событию и субъекту</span
-              >
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.relationToEvent ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">Виды планируемого следствия</span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.justification ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">ИИН защитника </span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.defenseAttorneyIIN ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">ИИН защитника </span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.defenseAttorneyIIN ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline">ФИО защитника </span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.defenseAttorneyFullName ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline"
-                >Обоснование и необходимость участия предпринимателя
-              </span>
-              <p class="infoStyle">
-                {{
-                  props.conclusionDetailedInformation.defenseAttorneyFullName ||
-                  "Не указан"
-                }}
-              </p>
-              <span class="infoHeadline"
-                >Результат от планируемого следственного действия
-              </span>
-              <p class="infoStyle">
-                {{ props.conclusionDetailedInformation.result || "Не указан" }}
-              </p>
+              <q-list>
+                <q-expansion-item
+                  popup
+                  default-opened
+                  icon="filter_1"
+                  label="Данные о документе"
+                  caption="Регистрационный номер, номер УД, дата регистрации и другие связанные данные"
+                >
+                  <q-separator />
+                  <q-card>
+                    <q-card-section>
+                      <span class="infoHeadline">Регистрационный номер</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.registrationNumber
+                        }}
+                      </p>
+                      <span class="infoHeadline">Дата создания документа</span>
+                      <p class="infoStyle">
+                        {{ formattedDate }}
+                      </p>
+                      <span class="infoHeadline">Номер УД</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.udNumber }}
+                      </p>
+                      <span class="infoHeadline">Дата регистрации дела</span>
+                      <p class="infoStyle">{{ formattedRegistrationDate }}</p>
+                      <span class="infoHeadline">Статья УК</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.article }}
+                      </p>
+                      <span class="infoHeadline">Решение по делу</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.decision }}
+                      </p>
+                    </q-card-section>
+                  </q-card>
+                </q-expansion-item>
+                <q-expansion-item
+                  popup
+                  icon="send"
+                  label="Outbox"
+                  caption="Empty"
+                >
+                  <q-separator />
+                  <q-card>
+                    <q-card-section>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Quidem, eius reprehenderit eos corrupti commodi magni
+                      quaerat ex numquam, dolorum officiis modi facere maiores
+                      architecto suscipit iste eveniet doloribus ullam aliquid.
+                    </q-card-section>
+                  </q-card>
+                </q-expansion-item>
+                <q-expansion-item
+                  popup
+                  icon="drafts"
+                  label="Draft"
+                  caption="Draft a new email"
+                >
+                  <q-separator />
+                  <q-card>
+                    <q-card-section>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Quidem, eius reprehenderit eos corrupti commodi magni
+                      quaerat ex numquam, dolorum officiis modi facere maiores
+                      architecto suscipit iste eveniet doloribus ullam aliquid.
+                    </q-card-section>
+                  </q-card>
+                </q-expansion-item>
+              </q-list>
             </q-tab-panel>
 
             <q-tab-panel name="history">
@@ -188,10 +95,11 @@
             </q-tab-panel>
           </q-tab-panels>
         </div>
-        <q-card-actions align="right">
+        <q-card-actions align="center">
           <q-btn
-            color="negative"
+            color="red-4"
             flat
+            no-caps
             label="Закрыть"
             @click="closeAdminDialogPage"
           />
@@ -202,9 +110,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
+import { computed, ref, watch } from "vue";
 
 const tab = ref("info");
+const javascriptStore = useJavaScriptFunction();
 const props = defineProps({
   isOpenAdminDialogPage: {
     type: Boolean,
@@ -228,6 +138,16 @@ const emit = defineEmits(["closeAdminDialogPage"]);
 const closeAdminDialogPage = () => {
   emit("closeAdminDialogPage");
 };
+
+const formattedDate = computed(() =>
+  javascriptStore.formatDate(props.conclusionDetailedInformation.creationDate)
+);
+
+const formattedRegistrationDate = computed(() =>
+  javascriptStore.formatDate(
+    props.conclusionDetailedInformation.registrationDate
+  )
+);
 </script>
 
 <style></style>
