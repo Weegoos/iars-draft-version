@@ -31,14 +31,13 @@ const serverUrl = proxy.$serverUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
 
-// Определение столбцов для таблицы
 const columns = [
   {
     name: "id",
     required: true,
     label: "Порядковый номер",
     align: "left",
-    field: "id", // Используем новое поле "id" в каждой строке
+    field: "id",
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -80,7 +79,6 @@ const columns = [
 ];
 
 const rows = ref([]);
-
 const isOpenAdminDialogPage = ref(false);
 const conclusionDetailedInformation = ref("");
 
@@ -93,7 +91,7 @@ const viewDetailedInformation = (evt, row, index) => {
 const closeAdminDialogPage = () => {
   isOpenAdminDialogPage.value = false;
 };
-const id = ref([]);
+
 const getAllConclusion = async () => {
   notifyStore.loading($q, "Подождите документы загружаются...", QSpinnerGears);
   try {
@@ -108,6 +106,7 @@ const getAllConclusion = async () => {
       ...item,
       id: index + 1,
     }));
+    notifyStore.nofifySuccess($q, "Все заключении успешно загружены");
     $q.loading.hide();
   } catch (error) {
     console.error("Ошибка при получении всех документов:", error);
@@ -120,6 +119,4 @@ onMounted(() => {
 });
 </script>
 
-<style>
-/* Добавьте необходимые стили для таблицы или других компонентов */
-</style>
+<style></style>

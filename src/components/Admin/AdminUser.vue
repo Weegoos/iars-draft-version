@@ -138,6 +138,7 @@ const getAllUsers = async () => {
       ...user,
       id: index + 1,
     }));
+    notifyStore.nofifySuccess($q, "Все пользователи успешно загружены");
     $q.loading.hide();
   } catch (error) {
     console.error("Ошибка при получении всех пользователей:", error);
