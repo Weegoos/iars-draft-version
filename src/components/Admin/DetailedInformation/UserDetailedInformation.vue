@@ -90,13 +90,18 @@
 
 <script setup>
 import axios from "axios";
-import { useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar } from "quasar";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
+import { useNotifyStore } from "src/stores/notify-store";
 import { computed, ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
-
 const $q = useQuasar();
+const javascriptStore = useJavaScriptFunction();
+const notifyStore = useNotifyStore();
+
 const props = defineProps({
   isOpenAdminDialogPage: {
     type: Boolean,
@@ -107,7 +112,9 @@ const props = defineProps({
     requied: true,
   },
 });
+
 const openUserDetailedInformation = ref(props.isOpenAdminDialogPage);
+
 watch(
   () => props.isOpenAdminDialogPage,
   (newVal) => {
@@ -122,8 +129,12 @@ const closeAdminDialogPage = () => {
 
 const promoteUser = async (item) => {
   const accessToken = localStorage.getItem("accessToken");
-
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите повышение в обработке...",
+      QSpinnerGears
+    );
     const response = await axios.patch(
       `${serverUrl}admin/promote?IIN=${item.iin}`,
       {},
@@ -136,33 +147,27 @@ const promoteUser = async (item) => {
         withCredentials: true,
       }
     );
-    console.log("Ответ сервера:", response.data);
-
-    $q.notify({
-      message: `Пользователь ${item.name} ${item.secondName} успешно повышен в должности`,
-      icon: "check",
-      color: "positive",
-    });
+    notifyStore.nofifySuccess(
+      $q,
+      `Пользователь ${item.name} ${item.secondName} успешно повышен в должности`
+    );
     setTimeout(() => {
       window.location.reload();
     }, 1500);
+    $q.loading.hide();
   } catch (error) {
-    console.error("Ошибка при повышении:", error.response || error);
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при повышении: ${error.response || error}`
+    );
+    $q.loading.hide();
   }
 };
 
-function formatDate(inputDate) {
-  if (!inputDate) return "Не указано";
-  const date = new Date(inputDate);
-  const yy = String(date.getFullYear()).slice(0);
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `Дата: ${yy}-${mm}-${dd} Время: ${hours}:${minutes}`;
-}
 const formattedRegistrationDate = computed(() =>
-  formatDate(props.conclusionDetailedInformation.registrationDate)
+  javascriptStore.formatDate(
+    props.conclusionDetailedInformation.registrationDate
+  )
 );
 </script>
 
