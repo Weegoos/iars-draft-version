@@ -46,9 +46,17 @@ const getInfo = async () => {
     });
     console.log(response.data.job.name);
     role.value = response.data.job.name;
+    localStorage.setItem("role", role.value);
     $q.loading.hide();
   } catch (error) {
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при получении данных пользователя: ${error}`
+    );
+    $q.loading.hide();
     console.error("Ошибка при получении данных пользователя:", error);
+    localStorage.clear();
+    window.location.reload();
     throw error;
   }
 };

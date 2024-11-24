@@ -91,6 +91,7 @@ const login = async () => {
       response.data.accessToken
     );
     localStorage.setItem("accessToken", response.data.accessToken);
+
     notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
     setTimeout(() => {
       router.push("/");
