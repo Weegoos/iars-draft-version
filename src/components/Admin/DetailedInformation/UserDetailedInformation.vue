@@ -4,7 +4,7 @@
       <q-card>
         <q-card-section class="row items-center">
           <q-list>
-            <q-expansion-item popup icon="person" label="Персональные данные">
+            <q-expansion-item popup icon="filter_1" label="Персональные данные">
               <q-separator />
               <q-card>
                 <q-card-section>
@@ -30,7 +30,7 @@
             </q-expansion-item>
             <q-expansion-item
               popup
-              icon="work"
+              icon="filter_2"
               label="Работа"
               caption="Информация о месте работы"
             >
@@ -52,7 +52,7 @@
                 </q-card-section>
               </q-card>
             </q-expansion-item>
-            <q-expansion-item popup icon="drafts" label="Заключении">
+            <q-expansion-item popup icon="filter_3" label="Заключении">
               <q-separator />
               <q-card>
                 <q-card-section>
