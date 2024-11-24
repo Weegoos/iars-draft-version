@@ -164,7 +164,7 @@
 
 <script setup>
 import axios from "axios";
-import { useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useNotifyStore } from "../stores/notify-store";
@@ -219,6 +219,7 @@ watch(
 
 const registration = async () => {
   try {
+    notifyStore.loading($q, "Подождите...", QSpinnerGears);
     const data = {
       email: email.value,
       name: name.value,
@@ -242,6 +243,7 @@ const registration = async () => {
     router.push("/authorization");
   } catch (error) {
     console.error("Ошибка при регистрации:", error);
+    $q.loading.hide();
     notifyStore.notifyError(
       $q,
       `Ошибка при регистрации: ${error.response.data}`
@@ -255,18 +257,32 @@ const pushToAuthorization = () => {
 
 const getAllDepartments = async () => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите данные о департаменте загружаются...",
+      QSpinnerGears
+    );
     const response = await axios.get(`${serverUrl}allDepartments`);
     departmentList.value = response.data;
+    $q.loading.hide();
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при запросе:", error);
   }
 };
 
 const getAllRegions = async (department) => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите данные о регионе загружаются...",
+      QSpinnerGears
+    );
     const response = await axios.get(`${serverUrl}regInDep?dep=${department}`);
     regionList.value = response.data;
+    $q.loading.hide();
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при запросе:", error);
   }
 };
