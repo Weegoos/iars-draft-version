@@ -114,7 +114,7 @@
                   props.conclusionDetailedInformation.eventPlace || "Не указан"
                 }}
               </p>
-              <span class="infoHeadline">Следователь</span>
+              <!-- <span class="infoHeadline">Следователь</span>
               <p class="infoStyle">
                 {{
                   props.conclusionDetailedInformation.investigator.name ||
@@ -124,7 +124,7 @@
                   props.conclusionDetailedInformation.investigator.secondName ||
                   "Не указан"
                 }}
-              </p>
+              </p> -->
               <span class="infoHeadline">Статус по делу вызываемого</span>
               <p class="infoStyle">
                 {{ props.conclusionDetailedInformation.status || "Не указан" }}

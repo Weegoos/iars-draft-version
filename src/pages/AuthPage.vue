@@ -54,7 +54,7 @@
 
 <script setup>
 import axios from "axios";
-import { useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar } from "quasar";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
@@ -91,8 +91,10 @@ const login = async () => {
       response.data.accessToken
     );
     localStorage.setItem("accessToken", response.data.accessToken);
-
+    notifyStore.loading($q, "Подождите...", QSpinnerGears);
     notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
+    $q.loading.hide();
+
     setTimeout(() => {
       router.push("/");
     }, 2500);
@@ -102,6 +104,7 @@ const login = async () => {
       $q,
       `Ошибка при авторизации: ${error.response.data.error}`
     );
+    $q.loading.hide();
   }
 };
 
