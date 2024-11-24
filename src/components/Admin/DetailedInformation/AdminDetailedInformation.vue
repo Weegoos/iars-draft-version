@@ -73,6 +73,12 @@
                             .calledPersonFullName
                         }}
                       </p>
+                      <span class="infoHeadline">ИИН вызываемого</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.calledPersonIIN
+                        }}
+                      </p>
                       <span class="infoHeadline">Должность вызываемого</span>
                       <p class="infoStyle">
                         {{
