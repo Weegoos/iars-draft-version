@@ -20,7 +20,6 @@
               <q-list>
                 <q-expansion-item
                   popup
-                  default-opened
                   icon="filter_1"
                   label="Данные о документе"
                   caption="Регистрационный номер, номер УД, дата регистрации и другие связанные данные"
@@ -52,38 +51,98 @@
                       <p class="infoStyle">
                         {{ props.conclusionDetailedInformation.decision }}
                       </p>
+                      <span class="infoHeadline">Краткая фабула</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.summary }}
+                      </p>
                     </q-card-section>
                   </q-card>
                 </q-expansion-item>
                 <q-expansion-item
                   popup
-                  icon="send"
-                  label="Outbox"
-                  caption="Empty"
+                  icon="filter_2"
+                  label="Данные вызываемого"
                 >
                   <q-separator />
                   <q-card>
                     <q-card-section>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Quidem, eius reprehenderit eos corrupti commodi magni
-                      quaerat ex numquam, dolorum officiis modi facere maiores
-                      architecto suscipit iste eveniet doloribus ullam aliquid.
+                      <span class="infoHeadline">ФИО вызываемого</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation
+                            .calledPersonFullName
+                        }}
+                      </p>
+                      <span class="infoHeadline">Должность вызываемого</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation
+                            .calledPersonPosition
+                        }}
+                      </p>
+                      <span class="infoHeadline">БИН/ИИН</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.calledPersonBIN
+                        }}
+                      </p>
+                      <span class="infoHeadline">Место работы</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.workPlace }}
+                      </p>
+                      <span class="infoHeadline">Регион</span>
+                      <p class="infoStyle">
+                        {{ props.conclusionDetailedInformation.region.name }}
+                      </p>
                     </q-card-section>
                   </q-card>
                 </q-expansion-item>
                 <q-expansion-item
                   popup
-                  icon="drafts"
-                  label="Draft"
-                  caption="Draft a new email"
+                  icon="filter_3"
+                  label="Данные защитника"
                 >
                   <q-separator />
                   <q-card>
                     <q-card-section>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Quidem, eius reprehenderit eos corrupti commodi magni
-                      quaerat ex numquam, dolorum officiis modi facere maiores
-                      architecto suscipit iste eveniet doloribus ullam aliquid.
+                      <span class="infoHeadline">ИИН защитника</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.defenseAttorneyIIN
+                        }}
+                      </p>
+                      <span class="infoHeadline">ФИО защитника</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation
+                            .defenseAttorneyFullName
+                        }}
+                      </p>
+                    </q-card-section>
+                  </q-card>
+                </q-expansion-item>
+                <q-expansion-item
+                  popup
+                  default-opened
+                  icon="filter_4"
+                  label="Данные защитника"
+                >
+                  <q-separator />
+                  <q-card>
+                    <q-card-section>
+                      <span class="infoHeadline">ИИН защитника</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation.defenseAttorneyIIN
+                        }}
+                      </p>
+                      <span class="infoHeadline">ФИО защитника</span>
+                      <p class="infoStyle">
+                        {{
+                          props.conclusionDetailedInformation
+                            .defenseAttorneyFullName
+                        }}
+                      </p>
                     </q-card-section>
                   </q-card>
                 </q-expansion-item>
