@@ -75,7 +75,7 @@
             </q-input>
           </div>
           <div class="col">
-            <q-input v-model="endDate" mask="date" :rules="['date']">
+            <q-input v-model="endDate" mask="YYYY-MM-DD" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
@@ -233,7 +233,6 @@ const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
-
 const isOpen = ref(false);
 const detialedInformation = ref("");
 const viewDetailedInformation = (item) => {
@@ -286,8 +285,9 @@ const documentsOptions = ref("");
 const registrationNumber = ref("");
 const region = ref("");
 const regionList = ref("");
-const startDate = ref("2019/05/05");
-const endDate = ref("2024/03/03");
+const date = ref("YYYY-MM-DD");
+const startDate = ref("2019-05-05");
+const endDate = ref("2024-03-03");
 const iin = ref("");
 const idNumber = ref("");
 const idNumberList = ref();
@@ -328,6 +328,9 @@ const filter = async () => {
     }
     if (region.value) {
       params.append("region", region.value);
+    }
+    if (fcsConcordant.value) {
+      params.append("fullName", fcsConcordant.value);
     }
     if (fcsConcordant.value) {
       params.append("fullName", fcsConcordant.value);
