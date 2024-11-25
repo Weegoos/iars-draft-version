@@ -174,13 +174,16 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { ref } from "vue";
 
 import { getCurrentInstance } from "vue";
+import { useNotifyStore } from "src/stores/notify-store";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const $q = useQuasar();
+const notifyStore = useNotifyStore();
 
 const idNumber = ref("");
 const iinOfCalled = ref(null);
@@ -196,8 +199,6 @@ const isApplyToBusiness = ref("");
 const iinOfTheDefender = ref(null);
 const entrepreneurParticipation = ref("");
 const results = ref("");
-
-const $q = useQuasar();
 
 const getInfo = async () => {
   try {
@@ -220,9 +221,13 @@ getInfo();
 
 const createEvent = async () => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите, заключение создается...",
+      QSpinnerGears
+    );
     const userData = await getInfo();
     const iinofInvestigator = userData?.iin;
-    console.log(iinofInvestigator);
 
     const data = {
       jobTitle: positionTheCalledPerson.value,
@@ -250,23 +255,28 @@ const createEvent = async () => {
       withCredentials: true,
     });
 
-    console.log("Успешно создано:", response.data);
-    $q.notify({
-      message: "Документ успешно создан",
-      icon: "check",
-      color: "positive",
-    });
+    notifyStore.nofifySuccess($q, "Документ успешно создан");
     setTimeout(() => {
       window.location.reload();
     }, 1500);
+    $q.loading.hide();
   } catch (error) {
-    console.error("Ошибка при создании события:", error.response || error);
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при создании события: ${error.response || error}`
+    );
+    $q.loading.hide();
   }
 };
 
 const udOptions = ref("");
 const getAllUd = async () => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите, номер УД загружаются...",
+      QSpinnerGears
+    );
     const response = await axios.get(`${serverUrl}allUD`, {
       headers: {
         "Content-Type": "application/json",
@@ -275,7 +285,10 @@ const getAllUd = async () => {
       withCredentials: true,
     });
     udOptions.value = response.data;
+    notifyStore.nofifySuccess($q, "Номер УД успешно загружен");
+    $q.loading.hide();
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при запросе:", error);
   }
 };
