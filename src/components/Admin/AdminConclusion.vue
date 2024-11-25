@@ -63,6 +63,13 @@ const columns = [
     sortable: true,
   },
   {
+    name: "status",
+    align: "center",
+    label: "Статус документа",
+    field: "status",
+    sortable: true,
+  },
+  {
     name: "calledPersonFullName",
     align: "center",
     label: "ФИО вызываемого",
