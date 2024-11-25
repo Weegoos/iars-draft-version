@@ -7,6 +7,11 @@ export const useJavaScriptFunction = defineStore("javascript", {
 
       const date = new Date(inputDate);
 
+      // Проверка валидности даты
+      if (isNaN(date.getTime())) {
+        return "Дата указана некорректно";
+      }
+
       // Названия месяцев
       const months = [
         "января",

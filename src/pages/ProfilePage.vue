@@ -12,7 +12,7 @@
         </p>
         <p class="text-h6">
           <span class="text-bold">Дата регистрации:</span>
-          {{ registrationDate }}
+          {{ formattedDate }}
         </p>
         <p class="text-h6">
           <span class="text-bold">Департамент:</span> {{ department.name }}
@@ -56,13 +56,14 @@
 <script setup>
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 
 import ChangePassword from "../components/Profile/ChangePassword.vue";
 import EditPage from "../components/Profile/EditPage.vue";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
@@ -70,6 +71,7 @@ const webUrl = proxy.$webUrl;
 const $q = useQuasar();
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
+const javascriptStore = useJavaScriptFunction();
 const accessToken = localStorage.getItem("accessToken");
 
 const name = ref("");
@@ -77,6 +79,9 @@ const department = ref("");
 const userEmail = ref("");
 const job = ref("");
 const registrationDate = ref("");
+const formattedDate = computed(() =>
+  javascriptStore.formatDate(registrationDate.value)
+);
 const isVisible = ref(false);
 
 const getProfile = async () => {
@@ -85,7 +90,6 @@ const getProfile = async () => {
 
     await userStore.getUserInfo();
     const userInfo = userStore.userInfo;
-
     const response = await axios.get(
       `${serverUrl}profile?IIN=${userInfo.iin}`,
       {
@@ -103,7 +107,7 @@ const getProfile = async () => {
       name.value = `${response.data.name} ${response.data.secondName}`;
       department.value = response.data.department || "Не указано";
       job.value = response.data.jobTitle || "Не указано";
-      registrationDate.value = response.data.registrationDate || "Не указано";
+      registrationDate.value = response.data.registrationDate;
       isVisible.value = true;
       notifyStore.nofifySuccess($q, "Данные успешно загружены");
     } else {
