@@ -180,10 +180,12 @@ import { ref } from "vue";
 
 import { getCurrentInstance } from "vue";
 import { useNotifyStore } from "src/stores/notify-store";
+import { useUserStore } from "src/stores/getApi-store";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
+const userStore = useUserStore();
 
 const idNumber = ref("");
 const iinOfCalled = ref(null);
@@ -200,25 +202,6 @@ const iinOfTheDefender = ref(null);
 const entrepreneurParticipation = ref("");
 const results = ref("");
 
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-    throw error;
-  }
-};
-
-getInfo();
-
 const createEvent = async () => {
   try {
     notifyStore.loading(
@@ -226,8 +209,10 @@ const createEvent = async () => {
       "Подождите, заключение создается...",
       QSpinnerGears
     );
-    const userData = await getInfo();
-    const iinofInvestigator = userData?.iin;
+    await userStore.getUserInfo();
+    const userData = userStore.userInfo;
+    const iinofInvestigator = userData.iin;
+    console.log(iinofInvestigator);
 
     const data = {
       jobTitle: positionTheCalledPerson.value,

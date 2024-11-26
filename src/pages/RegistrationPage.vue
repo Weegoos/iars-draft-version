@@ -237,9 +237,9 @@ const registration = async () => {
       },
       withCredentials: true,
     });
-    console.log("Пользователь успешно зарегистрирован", response.data);
 
     notifyStore.nofifySuccess($q, "Пользователь успешно зарегистрирован");
+    $q.loading.hide();
     router.push("/authorization");
   } catch (error) {
     console.error("Ошибка при регистрации:", error);
