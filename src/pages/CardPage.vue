@@ -375,6 +375,9 @@ const defineList = async () => {
 
     await userStore.getAllStatus();
     documentsOptions.value = userStore.allStatus;
+
+    await userStore.getAllUD();
+    idNumberList.value = userStore.allUD;
     notifyStore.nofifySuccess($q, "Данные из базы успешно загружены");
     $q.loading.hide();
   } catch (error) {
@@ -403,24 +406,7 @@ const getAllRegions = async () => {
     console.error("Ошибка при запросе:", error);
   }
 };
-
-const UDAPI = `${serverUrl}allUD`;
-const getAllUD = async () => {
-  try {
-    const response = await axios.get(UDAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    idNumberList.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
 getAllRegions();
-// getAllUD();
 
 // Conclusion
 

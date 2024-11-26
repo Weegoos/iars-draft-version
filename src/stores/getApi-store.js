@@ -60,14 +60,14 @@ export const useUserStore = defineStore("user", {
     },
     async getAllUD() {
       try {
-        const response = await axios.get(`${this.serverUrl}allStatus`, {
+        const response = await axios.get(`${this.serverUrl}allUD`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
           withCredentials: true,
         });
-        this.allStatus = response.data;
+        this.allUD = response.data;
       } catch (error) {
         console.error("Ошибка при запросе:", error);
       }
