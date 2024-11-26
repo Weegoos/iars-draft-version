@@ -144,52 +144,16 @@
       class="text-h6 text-bold text-center"
       v-if="filteredConclusion.length === 0"
     >
-      Документов нету
+      <!-- Документов нету -->
     </section>
-    <q-card
-      class="q-mb-xl"
-      v-for="(items, index) in filteredConclusion"
-      :key="index"
-      @click="viewDetailedInformation(items)"
-    >
-      <section class="row" style="align-items: stretch">
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">№ (порядковый)</span>
-            <p class="infoStyle text-capitalize">{{ index + 1 }}</p>
-            <span class="infoHeadline">Дата создания документа</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.creationDate || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">Регистрационный номер</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.registrationNumber || "Не указано" }}
-            </p>
-            <span class="infoHeadline">Номер УД</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.udNumber || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">ФИО вызываемого</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.calledPersonFullName || "Не указано" }}
-            </p>
-            <span class="infoHeadline">ФИО согласующего</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.defenseAttorneyFullName || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-      </section>
-    </q-card>
+    <q-table
+      flat
+      bordered
+      :rows="rows"
+      :columns="columns"
+      row-key="id"
+      @row-click="viewDetailedInformation"
+    />
     <DetailedInformation
       :isOpen="isOpen"
       @closeWindow="closeWindow"
@@ -221,9 +185,9 @@ const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 const isOpen = ref(false);
 const detialedInformation = ref("");
-const viewDetailedInformation = (item) => {
+const viewDetailedInformation = (evt, row, index) => {
   isOpen.value = true;
-  detialedInformation.value = item;
+  detialedInformation.value = row;
 };
 
 const closeWindow = () => {
@@ -238,6 +202,62 @@ const viewAgreementComponent = () => {
 const closeAgreementWindow = () => {
   isOpenAgreementPage.value = false;
 };
+
+const columns = [
+  {
+    name: "id",
+    required: true,
+    label: "Порядковый номер",
+    align: "left",
+    field: "id",
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: "creationDate",
+    align: "center",
+    label: "Дата создания документа",
+    field: "creationDate",
+    sortable: true,
+  },
+  {
+    name: "registrationNumber",
+    align: "center",
+    label: "Регистрационный номер",
+    field: "registrationNumber",
+    sortable: true,
+  },
+  {
+    name: "udNumber",
+    align: "center",
+    label: "Номер УД",
+    field: "udNumber",
+    sortable: true,
+  },
+  {
+    name: "status",
+    align: "center",
+    label: "Статус документа",
+    field: "status",
+    sortable: true,
+  },
+  {
+    name: "calledPersonFullName",
+    align: "center",
+    label: "ФИО вызываемого",
+    field: "calledPersonFullName",
+    sortable: true,
+  },
+  {
+    name: "defenseAttorneyFullName",
+    align: "center",
+    label: "ФИО согласующего",
+    field: "defenseAttorneyFullName",
+    sortable: true,
+  },
+];
+
+const rows = ref([]);
 
 const getAllConclusionByIIN = async () => {
   try {
@@ -256,7 +276,10 @@ const getAllConclusionByIIN = async () => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
 
-    conclusions.value = sortedConclusions;
+    rows.value = sortedConclusions.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Документы успешно загружены");
   } catch (error) {
@@ -281,7 +304,7 @@ const fcsConcordant = ref("");
 const concordantList = ref("");
 const conclusions = ref("");
 
-const filteredConclusion = ref(conclusions.value);
+const filteredConclusion = ref(rows.value);
 watch(
   () => conclusions.value,
   (newVal) => {
@@ -339,6 +362,7 @@ const filter = async () => {
     });
 
     filteredConclusion.value = sortedConclusions;
+    rows.value = filteredConclusion.value;
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Документы загружены с помощью фильтрации");
   } catch (error) {
