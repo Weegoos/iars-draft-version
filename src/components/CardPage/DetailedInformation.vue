@@ -191,7 +191,7 @@
             flat
             no-caps
             label="Закрыть"
-            @click="closeAdminDialogPage"
+            @click="closeWindow"
           />
         </q-card-actions>
       </q-card>
