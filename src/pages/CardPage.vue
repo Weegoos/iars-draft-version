@@ -150,6 +150,7 @@
       class="q-mb-xl"
       v-for="(items, index) in filteredConclusion"
       :key="index"
+      @click="viewDetailedInformation(items)"
     >
       <section class="row" style="align-items: stretch">
         <div class="col">
@@ -188,21 +189,6 @@
           </q-card-section>
         </div>
       </section>
-      <q-card-actions align="center" class="row">
-        <q-btn
-          color="primary"
-          no-caps
-          label="Просмотреть"
-          @click="viewDetailedInformation(items)"
-        />
-        <q-btn
-          color="positive"
-          R
-          no-caps
-          label="Согласовать"
-          @click="viewAgreementComponent"
-        />
-      </q-card-actions>
     </q-card>
     <DetailedInformation
       :isOpen="isOpen"

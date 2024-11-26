@@ -230,6 +230,7 @@ const createEvent = async () => {
       iinofCalled: iinOfCalled.value,
       bin_IIN: binAndIin.value,
       iinofInvestigator: iinofInvestigator,
+      relation: "Нету",
     };
 
     const response = await axios.post(`${serverUrl}create`, data, {
