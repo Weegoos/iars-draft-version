@@ -7,6 +7,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     userInfo: null,
     role: null,
+    allNames: null,
   }),
   actions: {
     async getUserInfo() {
@@ -23,6 +24,21 @@ export const useUserStore = defineStore("user", {
         this.role = response.data.job.name;
       } catch (error) {
         console.error("Ошибка при получении данных пользователя:", error);
+      }
+    },
+    async getAllNames() {
+      try {
+        const response = await axios.get(`http://localhost:5002/allNames`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        });
+
+        this.allNames = response.data;
+      } catch (error) {
+        console.error("Ошибка при запросе:", error);
       }
     },
   },

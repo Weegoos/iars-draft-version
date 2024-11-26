@@ -178,6 +178,7 @@ const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
+
 const isOpen = ref(false);
 const detialedInformation = ref("");
 const viewDetailedInformation = (evt, row, index) => {
@@ -362,22 +363,18 @@ const filter = async () => {
   }
 };
 
-const concordantListAPI = `${serverUrl}allNames`;
-const getAllNames = async () => {
+const defineList = async () => {
   try {
-    const response = await axios.get(concordantListAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    concordantList.value = response.data;
+    await userStore.getAllNames();
+    concordantList.value = userStore.allNames;
   } catch (error) {
-    console.error("Ошибка при запросе:", error);
+    console.log(error);
   }
 };
+
+onMounted(() => {
+  defineList();
+});
 
 const documentOptionsAPI = `${serverUrl}allStatus`;
 const getAllDocuments = async () => {
@@ -429,7 +426,7 @@ const getAllUD = async () => {
 
 getAllDocuments();
 getAllRegions();
-getAllNames();
+// getAllNames();
 getAllUD();
 
 // Conclusion
