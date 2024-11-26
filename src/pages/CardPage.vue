@@ -365,32 +365,28 @@ const filter = async () => {
 
 const defineList = async () => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите, данные из базы загружаются...",
+      QSpinnerGears
+    );
     await userStore.getAllNames();
     concordantList.value = userStore.allNames;
+
+    await userStore.getAllStatus();
+    documentsOptions.value = userStore.allStatus;
+    notifyStore.nofifySuccess($q, "Данные из базы успешно загружены");
+    $q.loading.hide();
   } catch (error) {
+    $q.loading.hide();
     console.log(error);
+    notifyStore.notifyError($q, `Ошибка при получении данных: ${error}`);
   }
 };
 
 onMounted(() => {
   defineList();
 });
-
-const documentOptionsAPI = `${serverUrl}allStatus`;
-const getAllDocuments = async () => {
-  try {
-    const response = await axios.get(documentOptionsAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    documentsOptions.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
 
 const regionListAPI = `${serverUrl}allRegions`;
 const getAllRegions = async () => {
@@ -423,11 +419,8 @@ const getAllUD = async () => {
     console.error("Ошибка при запросе:", error);
   }
 };
-
-getAllDocuments();
 getAllRegions();
-// getAllNames();
-getAllUD();
+// getAllUD();
 
 // Conclusion
 

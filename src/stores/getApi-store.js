@@ -8,11 +8,14 @@ export const useUserStore = defineStore("user", {
     userInfo: null,
     role: null,
     allNames: null,
+    allStatus: null,
+    allUD: null,
+    serverUrl: "http://localhost:5002/",
   }),
   actions: {
     async getUserInfo() {
       try {
-        const response = await axios.get(`http://localhost:5002/getInfo`, {
+        const response = await axios.get(`${this.serverUrl}getInfo`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -28,7 +31,7 @@ export const useUserStore = defineStore("user", {
     },
     async getAllNames() {
       try {
-        const response = await axios.get(`http://localhost:5002/allNames`, {
+        const response = await axios.get(`${this.serverUrl}allNames`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -37,6 +40,34 @@ export const useUserStore = defineStore("user", {
         });
 
         this.allNames = response.data;
+      } catch (error) {
+        console.error("Ошибка при запросе:", error);
+      }
+    },
+    async getAllStatus() {
+      try {
+        const response = await axios.get(`${this.serverUrl}allStatus`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        });
+        this.allStatus = response.data;
+      } catch (error) {
+        console.error("Ошибка при запросе:", error);
+      }
+    },
+    async getAllUD() {
+      try {
+        const response = await axios.get(`${this.serverUrl}allStatus`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        });
+        this.allStatus = response.data;
       } catch (error) {
         console.error("Ошибка при запросе:", error);
       }
