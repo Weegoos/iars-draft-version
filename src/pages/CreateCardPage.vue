@@ -176,11 +176,12 @@
 <script setup>
 import { QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 import { getCurrentInstance } from "vue";
 import { useNotifyStore } from "src/stores/notify-store";
 import { useUserStore } from "src/stores/getApi-store";
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const $q = useQuasar();
@@ -263,14 +264,9 @@ const getAllUd = async () => {
       "Подождите, номер УД загружаются...",
       QSpinnerGears
     );
-    const response = await axios.get(`${serverUrl}allUD`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    udOptions.value = response.data;
+
+    await userStore.getAllUD();
+    udOptions.value = userStore.allUD;
     notifyStore.nofifySuccess($q, "Номер УД успешно загружен");
     $q.loading.hide();
   } catch (error) {
@@ -279,7 +275,9 @@ const getAllUd = async () => {
   }
 };
 
-getAllUd();
+onMounted(() => {
+  getAllUd();
+});
 </script>
 
 <style></style>
