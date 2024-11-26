@@ -378,6 +378,9 @@ const defineList = async () => {
 
     await userStore.getAllUD();
     idNumberList.value = userStore.allUD;
+
+    await userStore.getAllRegions();
+    regionList.value = userStore.allRegions;
     notifyStore.nofifySuccess($q, "Данные из базы успешно загружены");
     $q.loading.hide();
   } catch (error) {
@@ -390,23 +393,6 @@ const defineList = async () => {
 onMounted(() => {
   defineList();
 });
-
-const regionListAPI = `${serverUrl}allRegions`;
-const getAllRegions = async () => {
-  try {
-    const response = await axios.get(regionListAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    regionList.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
-getAllRegions();
 
 // Conclusion
 
