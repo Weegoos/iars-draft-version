@@ -101,7 +101,7 @@
         </div>
       </div>
       <div class="col">
-        <q-input v-model="iin" type="text" label="ИИН вызываемого" />
+        <q-input v-model="iinOfCalled" type="text" label="ИИН вызываемого" />
       </div>
       <div class="col">
         <q-input
@@ -159,17 +159,12 @@
       @closeWindow="closeWindow"
       :detialedInformation="detialedInformation"
     />
-    <AgreementComponent
-      :isOpenAgreementPage="isOpenAgreementPage"
-      @closeAgreementWindow="closeAgreementWindow"
-    />
   </div>
 </template>
 
 <script setup>
 import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
-import AgreementComponent from "../components/CardPage/AgreementComponent.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
@@ -192,15 +187,6 @@ const viewDetailedInformation = (evt, row, index) => {
 
 const closeWindow = () => {
   isOpen.value = false;
-};
-
-const isOpenAgreementPage = ref(false);
-const viewAgreementComponent = () => {
-  isOpenAgreementPage.value = true;
-};
-
-const closeAgreementWindow = () => {
-  isOpenAgreementPage.value = false;
 };
 
 const columns = [
@@ -297,7 +283,7 @@ const regionList = ref("");
 const date = ref("YYYY-MM-DD");
 const startDate = ref("2019-05-05");
 const endDate = ref("2024-03-03");
-const iin = ref("");
+const iinOfCalled = ref("");
 const idNumber = ref("");
 const idNumberList = ref();
 const fcsConcordant = ref("");
@@ -344,6 +330,9 @@ const filter = async () => {
     if (fcsConcordant.value) {
       params.append("fullName", fcsConcordant.value);
     }
+    if (iinOfCalled.value) {
+      params.append("iinOfCalled", iinOfCalled.value);
+    }
 
     params.append("iin", iin);
     const response = await axios.get(
@@ -361,7 +350,10 @@ const filter = async () => {
       return new Date(b.creationDate) - new Date(a.creationDate);
     });
 
-    filteredConclusion.value = sortedConclusions;
+    filteredConclusion.value = sortedConclusions.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
     rows.value = filteredConclusion.value;
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Документы загружены с помощью фильтрации");
@@ -517,7 +509,6 @@ const redirectToKeycloakLogin = () => {
   router.push("/authorization");
   window.location.href = `${webUrl}authorization`;
 };
-console.log("Batyr");
 
 onBeforeMount(() => {
   const accessToken = localStorage.getItem("accessToken");
