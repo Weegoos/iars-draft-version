@@ -140,12 +140,6 @@
         @click="downloadExcel"
       />
     </div>
-    <section
-      class="text-h6 text-bold text-center"
-      v-if="filteredConclusion.length === 0"
-    >
-      <!-- Документов нету -->
-    </section>
     <q-table
       flat
       bordered
@@ -163,7 +157,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import DetailedInformation from "../components/CardPage/DetailedInformation.vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -397,6 +391,7 @@ onMounted(() => {
 // Conclusion
 
 const downloadPdf = async () => {
+  $q.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
@@ -421,14 +416,17 @@ const downloadPdf = async () => {
     link.href = window.URL.createObjectURL(blob);
     link.download = `User_${iin}.pdf`;
     link.click();
+    $q.loading.hide();
     notifyStore.nofifySuccess($q, `PDF успешно загружен.`);
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при загрузке PDF:", error);
     notifyStore.notifyError($q, `Ошибка при загрузке PDF:", ${error}`);
   }
 };
 
 const downloadExcel = async () => {
+  $q.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
@@ -458,8 +456,10 @@ const downloadExcel = async () => {
     link.download = `User_${iin}.xlsx`;
     link.click();
 
+    $q.loading.hide();
     notifyStore.nofifySuccess($q, `Excel успешно загружен.`);
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при загрузке Excel:", error);
     notifyStore.notifyError($q, `Ошибка при загрузке Excel:", ${error}`);
   }

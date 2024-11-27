@@ -111,7 +111,7 @@ const getProfile = async () => {
       isVisible.value = true;
       notifyStore.nofifySuccess($q, "Данные успешно загружены");
     } else {
-      console.error("Профиль пуст.");
+      notifyStore.notifyError($q, "Профиль пуст");
     }
   } catch (error) {
     console.error("Ошибка при получении данных профиля:", error);

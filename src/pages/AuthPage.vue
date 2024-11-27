@@ -73,6 +73,7 @@ const password = ref("");
 const isPwd = ref(true);
 
 const login = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
     const data = {
       email: email.value,
@@ -86,25 +87,21 @@ const login = async () => {
       },
       withCredentials: true,
     });
-    console.log(
-      "The user has successfully logged in",
-      response.data.accessToken
-    );
+
     localStorage.setItem("accessToken", response.data.accessToken);
-    notifyStore.loading($q, "Подождите...", QSpinnerGears);
-    notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
     $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
 
     setTimeout(() => {
       router.push("/");
     }, 2500);
   } catch (error) {
     console.error("Error during registration:", error);
+    $q.loading.hide();
     notifyStore.notifyError(
       $q,
       `Ошибка при авторизации: ${error.response.data.error}`
     );
-    $q.loading.hide();
   }
 };
 
