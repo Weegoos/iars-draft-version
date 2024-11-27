@@ -1,5 +1,15 @@
 <template>
-  <div>Temporary conclusion page</div>
+  <div>
+    <p class="text-h5 text-bold text-center">Временные заключении</p>
+    <q-table
+      flat
+      bordered
+      :rows="rows"
+      :columns="columns"
+      row-key="id"
+      @row-click="viewDetailedInformation"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -7,7 +17,7 @@ import { QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance, onMounted, ref } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
@@ -15,6 +25,61 @@ const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 const $q = useQuasar();
 
+const columns = [
+  {
+    name: "id",
+    required: true,
+    label: "Порядковый номер",
+    align: "left",
+    field: "id",
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: "creationDate",
+    align: "center",
+    label: "Дата создания документа",
+    field: "creationDate",
+    sortable: true,
+  },
+  {
+    name: "registrationNumber",
+    align: "center",
+    label: "Регистрационный номер",
+    field: "registrationNumber",
+    sortable: true,
+  },
+  {
+    name: "udNumber",
+    align: "center",
+    label: "Номер УД",
+    field: "udNumber",
+    sortable: true,
+  },
+  {
+    name: "status",
+    align: "center",
+    label: "Статус документа",
+    field: "status",
+    sortable: true,
+  },
+  {
+    name: "calledPersonFullName",
+    align: "center",
+    label: "ФИО вызываемого",
+    field: "calledPersonFullName",
+    sortable: true,
+  },
+  {
+    name: "defenseAttorneyFullName",
+    align: "center",
+    label: "ФИО согласующего",
+    field: "defenseAttorneyFullName",
+    sortable: true,
+  },
+];
+
+const rows = ref([]);
 const getTemporaryConclusion = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -29,6 +94,10 @@ const getTemporaryConclusion = async () => {
     });
 
     console.log(response.data);
+    rows.value = response.data.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
     notifyStore.nofifySuccess($q, "Временные заключении успешно загружены");
     $q.loading.hide();
   } catch (error) {
