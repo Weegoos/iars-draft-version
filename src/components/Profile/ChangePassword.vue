@@ -61,14 +61,17 @@
 <script setup>
 import axios from "axios";
 import { useQuasar } from "quasar";
+import { useNotifyStore } from "src/stores/notify-store";
 import { ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const $q = useQuasar();
+const notifyStore = useNotifyStore();
+
 const isPwd = ref(true);
 const isPwdNewPassword = ref(true);
-
 const props = defineProps({
   changePasswordStatus: {
     type: Boolean,
@@ -76,12 +79,14 @@ const props = defineProps({
   },
 });
 const changePasswordDialog = ref(props.changePasswordStatus);
+
 watch(
   () => props.changePasswordStatus,
   (newVal) => {
     changePasswordDialog.value = newVal;
   }
 );
+
 const emit = defineEmits(["closeDialog"]);
 const closeChangePasswordDialog = () => {
   emit("closeDialog");
@@ -90,7 +95,6 @@ const closeChangePasswordDialog = () => {
 const email = ref("");
 const oldPassword = ref("");
 const newPassword = ref("");
-const $q = useQuasar();
 
 const savePassword = async () => {
   try {
@@ -106,22 +110,16 @@ const savePassword = async () => {
       },
       withCredentials: true,
     });
-    console.log("Пароль успешно изменен", response.data);
-    $q.notify({
-      message: `Пароль успешно изменен`,
-      color: "positive",
-      icon: "check",
-    });
+    notifyStore.nofifySuccess($q, `Пароль успешно изменен`);
     email.value = "";
     oldPassword.value = "";
     newPassword.value = "";
   } catch (error) {
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при изменении пароля: ${error.response.data}`
+    );
     console.error("Ошибка при изменении пароля", error);
-    $q.notify({
-      message: `Ошибка при изменении пароля: ${error.response.data}`,
-      color: "negative",
-      icon: "error",
-    });
   }
 };
 </script>
