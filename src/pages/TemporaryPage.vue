@@ -111,7 +111,6 @@ const getTemporaryConclusion = async () => {
       withCredentials: true,
     });
 
-    console.log(response.data);
     rows.value = response.data.map((item, index) => ({
       ...item,
       id: index + 1,

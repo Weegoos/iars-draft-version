@@ -208,6 +208,12 @@
         </div>
         <q-card-actions align="center">
           <q-btn
+            color="green-4"
+            no-caps
+            label="Согласовать"
+            @click="turnToPermanent(props.conclusionDetailedInformation)"
+          />
+          <q-btn
             color="red-4"
             flat
             no-caps
@@ -221,11 +227,19 @@
 </template>
 
 <script setup>
+import { QSpinnerGears, useQuasar } from "quasar";
+import axios from "axios";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
-import { computed, ref, watch } from "vue";
+import { useNotifyStore } from "src/stores/notify-store";
+import { computed, getCurrentInstance, ref, watch } from "vue";
 
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
 const tab = ref("info");
+const $q = useQuasar();
 const javascriptStore = useJavaScriptFunction();
+const notifyStore = useNotifyStore();
+
 const props = defineProps({
   isOpenDialog: {
     type: Boolean,
@@ -263,6 +277,38 @@ const formattedRegistrationDate = computed(() =>
 const formattedEventDateTime = computed(() =>
   javascriptStore.formatDate(props.conclusionDetailedInformation.eventDateTime)
 );
+
+const turnToPermanent = async (documentInfo) => {
+  console.log(
+    `${serverUrl}turn?registrationNumber=${documentInfo.registrationNumber}`
+  );
+  try {
+    notifyStore.loading($q, "Подождите, документ в обработке", QSpinnerGears);
+
+    const response = await axios.post(
+      `${serverUrl}turn?registrationNumber=${documentInfo.registrationNumber}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Статус документа успешно изменен");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  } catch (error) {
+    $q.loading.hide();
+    notifyStore.notifyError($q, `Ошибка при смене статуса документа: ${error}`);
+    console.error(error);
+  }
+};
 </script>
 
 <style></style>
