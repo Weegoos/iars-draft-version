@@ -22,17 +22,17 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { getCurrentInstance } from "vue";
 import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
 
 const name = ref("");
 const surname = ref("");
-const router = useRouter();
 const userStore = useUserStore();
+const notifyStore = useNotifyStore();
 const $q = useQuasar();
 
 const { proxy } = getCurrentInstance();
@@ -61,7 +61,7 @@ const editProfile = async () => {
   const accessToken = localStorage.getItem("accessToken");
 
   if (!accessToken) {
-    console.log("Ошибка: Токен не найден");
+    notifyStore.notifyError($q, "Ошибка: Токен не найден");
     return;
   }
 
@@ -88,37 +88,26 @@ const editProfile = async () => {
       }
     );
 
-    console.log("Профиль успешно обновлен:", response.data);
-    $q.notify({
-      message: "Профиль успешно обновлен",
-      color: "positive",
-      icon: "check",
-    });
+    notifyStore.nofifySuccess($q, "Профиль успешно обновлен");
     setTimeout(() => {
       window.location.reload();
     }, 1500);
   } catch (error) {
     if (error.response) {
+      notifyStore.notifyError(
+        $q,
+        `Ошибка ответа от сервера: ${error.response.data}`
+      );
       console.error("Ошибка ответа от сервера:", error.response.data);
-      $q.notify({
-        message: `Ошибка ответа от сервера ${error.response.data}`,
-        color: "negative",
-        icon: "error",
-      });
     } else if (error.request) {
       console.error("Ошибка запроса:", error.request);
-      $q.notify({
-        message: `Не удалось отправить запрос. Проверьте соединение.`,
-        color: "negative",
-        icon: "error",
-      });
+      notifyStore.notifyError(
+        $q,
+        `Не удалось отправить запрос. Проверьте соединение.`
+      );
     } else {
       console.error("Ошибка:", error.message);
-      $q.notify({
-        message: `Ошибка при отправке запроса.`,
-        color: "negative",
-        icon: "error",
-      });
+      notifyStore.notifyError($q, `Ошибка при отправке запроса.`);
     }
   }
 };
