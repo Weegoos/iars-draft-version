@@ -22,15 +22,17 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { getCurrentInstance } from "vue";
+import { useUserStore } from "src/stores/getApi-store";
 
 const name = ref("");
 const surname = ref("");
 const router = useRouter();
+const userStore = useUserStore();
 const $q = useQuasar();
 
 const { proxy } = getCurrentInstance();
@@ -55,28 +57,7 @@ const closeEditDialog = () => {
   emit("closeEditDialog");
 };
 
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    if (response.data && response.data.iin) {
-      // Передаем IIN в editProfile
-      await editProfile(response.data.iin);
-    } else {
-      console.error("ИИН не найден в данных пользователя.");
-    }
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-  }
-};
-
-const editProfile = async (iin) => {
+const editProfile = async () => {
   const accessToken = localStorage.getItem("accessToken");
 
   if (!accessToken) {
@@ -87,9 +68,11 @@ const editProfile = async (iin) => {
   try {
     // Формируем параметры URL
     const params = new URLSearchParams();
+    await userStore.getUserInfo();
+    const userInfo = userStore.userInfo;
     if (name.value) params.append("name", name.value);
     if (surname.value) params.append("surname", surname.value);
-    params.append("IIN", iin);
+    params.append("IIN", userInfo.iin);
 
     // Отправляем PUT-запрос с параметрами в URL
     const response = await axios.put(
@@ -139,9 +122,8 @@ const editProfile = async (iin) => {
     }
   }
 };
-
 const save = () => {
-  getInfo();
+  editProfile();
 };
 </script>
 
