@@ -205,10 +205,6 @@
                 </q-expansion-item>
               </q-list>
             </q-tab-panel>
-
-            <q-tab-panel name="history">
-              <p>История будет храниться здесь</p>
-            </q-tab-panel>
           </q-tab-panels>
         </div>
         <q-card-actions align="center">
