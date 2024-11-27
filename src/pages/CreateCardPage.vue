@@ -125,9 +125,9 @@
             />
           </div>
           <div class="col">
-            <q-input
+            <q-select
               v-model="isApplyToBusiness"
-              type="text"
+              :options="applyBusinessOptions"
               label="Относится ли к бизнесу"
             />
           </div>
@@ -161,7 +161,7 @@
         </div>
       </q-card-section>
       <q-card-actions align="center">
-        <q-btn color="primary" no-caps label="Сохранить" />
+        <q-btn color="primary" no-caps label="Сохранить" @click="saveEvent" />
         <q-btn
           color="positive"
           no-caps
@@ -199,6 +199,7 @@ const locationOfTheEvent = ref("");
 const relationshipOfTheCaller = ref("");
 const typesOfPlannedInvestigation = ref("");
 const isApplyToBusiness = ref("");
+const applyBusinessOptions = ref(["true", "false"]);
 const iinOfTheDefender = ref(null);
 const entrepreneurParticipation = ref("");
 const results = ref("");
@@ -222,16 +223,15 @@ const createEvent = async () => {
       eventDateTime: "2024-11-19T15:26:10.949Z",
       eventPlace: locationOfTheEvent.value,
       relation: relationshipOfTheCaller.value,
-      investigationType: "string",
-      relatesToBusiness: true,
-      justification: "string",
+      investigationType: typesOfPlannedInvestigation.value,
+      relatesToBusiness: isApplyToBusiness.value,
+      justification: entrepreneurParticipation.value,
       result: results.value,
       ud: idNumber.value,
       iindefender: iinOfTheDefender.value,
       iinofCalled: iinOfCalled.value,
       bin_IIN: binAndIin.value,
       iinofInvestigator: iinofInvestigator,
-      relation: "Нету",
     };
 
     const response = await axios.post(`${serverUrl}create`, data, {
@@ -252,6 +252,63 @@ const createEvent = async () => {
       $q,
       `Ошибка при создании события: ${error.response || error}`
     );
+    $q.loading.hide();
+  }
+};
+
+const saveEvent = async () => {
+  try {
+    notifyStore.loading(
+      $q,
+      "Подождите, временное заключение создается...",
+      QSpinnerGears
+    );
+    await userStore.getUserInfo();
+    const userData = userStore.userInfo;
+    const iinofInvestigator = userData.iin;
+    console.log(iinofInvestigator);
+
+    const data = {
+      jobTitle: positionTheCalledPerson.value,
+      region: region.value,
+      plannedActions: plannedInvestigateActions.value,
+      eventDateTime: "2024-11-19T15:26:10.949Z",
+      eventPlace: locationOfTheEvent.value,
+      relation: relationshipOfTheCaller.value,
+      investigationType: typesOfPlannedInvestigation.value,
+      relatesToBusiness: isApplyToBusiness.value,
+      justification: entrepreneurParticipation.value,
+      result: results.value,
+      ud: idNumber.value,
+      iindefender: iinOfTheDefender.value,
+      iinofCalled: iinOfCalled.value,
+      bin_IIN: binAndIin.value,
+      iinofInvestigator: iinofInvestigator,
+    };
+
+    const response = await axios.post(`${serverUrl}save`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    notifyStore.nofifySuccess(
+      $q,
+      "Документ успешно сохранен в странице `Временные заключении`"
+    );
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+    $q.loading.hide();
+  } catch (error) {
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при создании события: ${error.response || error}`
+    );
+    console.error(`Ошибка при создании события: ${error.response || error}`);
+
     $q.loading.hide();
   }
 };
