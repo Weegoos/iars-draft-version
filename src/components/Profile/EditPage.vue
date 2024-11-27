@@ -24,7 +24,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import axios from "axios";
-import { useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar } from "quasar";
 import { getCurrentInstance } from "vue";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
@@ -58,13 +58,13 @@ const closeEditDialog = () => {
 };
 
 const editProfile = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   const accessToken = localStorage.getItem("accessToken");
-
   if (!accessToken) {
     notifyStore.notifyError($q, "Ошибка: Токен не найден");
+    $q.loading.hide();
     return;
   }
-
   try {
     // Формируем параметры URL
     const params = new URLSearchParams();
@@ -74,7 +74,6 @@ const editProfile = async () => {
     if (surname.value) params.append("surname", surname.value);
     params.append("IIN", userInfo.iin);
 
-    // Отправляем PUT-запрос с параметрами в URL
     const response = await axios.put(
       `${serverUrl}editProfile?${params.toString()}`,
       null,
@@ -89,6 +88,7 @@ const editProfile = async () => {
     );
 
     notifyStore.nofifySuccess($q, "Профиль успешно обновлен");
+    $q.loading.hide();
     setTimeout(() => {
       window.location.reload();
     }, 1500);
@@ -109,6 +109,7 @@ const editProfile = async () => {
       console.error("Ошибка:", error.message);
       notifyStore.notifyError($q, `Ошибка при отправке запроса.`);
     }
+    $q.loading.hide();
   }
 };
 const save = () => {
