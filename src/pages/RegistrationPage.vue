@@ -169,6 +169,7 @@ import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useNotifyStore } from "../stores/notify-store";
 import { getCurrentInstance } from "vue";
+import { useUserStore } from "src/stores/getApi-store";
 
 // global variable
 const { proxy } = getCurrentInstance();
@@ -176,6 +177,7 @@ const serverUrl = proxy.$serverUrl;
 const router = useRouter();
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
+const userStore = useUserStore();
 
 // slide
 const slide = ref("style");
@@ -262,8 +264,8 @@ const getAllDepartments = async () => {
       "Подождите данные о департаменте загружаются...",
       QSpinnerGears
     );
-    const response = await axios.get(`${serverUrl}allDepartments`);
-    departmentList.value = response.data;
+    await userStore.getAllDepartments();
+    departmentList.value = userStore.allDepartments;
     $q.loading.hide();
   } catch (error) {
     $q.loading.hide();
