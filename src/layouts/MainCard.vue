@@ -3,7 +3,13 @@
     <section v-if="role === 'Сотрудник СУ'">
       <CardPage />
     </section>
-    <section v-else-if="role === 'Аналитик СД'">
+    <section
+      v-else-if="
+        role === 'Аналитик СД' ||
+        role === 'Куратор отдела' ||
+        role === 'Специалист по данным'
+      "
+    >
       <AnalyticsPage />
     </section>
     <section v-else-if="role === 'Модератор'">
