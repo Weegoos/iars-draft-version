@@ -5,7 +5,6 @@
         <div>
           <q-tabs v-model="tab" class="text-teal">
             <q-tab name="info" icon="info" label="Подробная информация" />
-            <q-tab name="history" icon="history" label="История" />
           </q-tabs>
 
           <q-tab-panels
