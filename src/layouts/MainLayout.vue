@@ -75,6 +75,11 @@ const adminNavigation = [
 
 const employeeNavigation = [
   { name: "Журнал заключений", icon: "description", link: "/" },
+  {
+    name: "Временные заключении",
+    icon: "description",
+    link: "/temporary-conclusion",
+  },
   { name: "Создание заключений", icon: "add", link: "/create-conclusion" },
   { name: "Профиль", icon: "person", link: "/profile" },
 ];
