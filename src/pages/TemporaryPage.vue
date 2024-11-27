@@ -9,6 +9,11 @@
       row-key="id"
       @row-click="viewDetailedInformation"
     />
+    <DetailedInformation
+      :isOpenDialog="isOpenDialog"
+      :conclusionDetailedInformation="conclusionDetailedInformation"
+      @closeAdminDialogPage="closeAdminDialogPage"
+    />
   </div>
 </template>
 
@@ -19,11 +24,24 @@ import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { getCurrentInstance, onMounted, ref } from "vue";
 
+import DetailedInformation from "../components/TemporaryConclusion/DetailedInformation.vue";
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 const $q = useQuasar();
+
+const isOpenDialog = ref(false);
+const conclusionDetailedInformation = ref("");
+const viewDetailedInformation = (evt, row, index) => {
+  isOpenDialog.value = true;
+  conclusionDetailedInformation.value = row;
+};
+
+const closeAdminDialogPage = () => {
+  isOpenDialog.value = false;
+};
 
 const columns = [
   {
