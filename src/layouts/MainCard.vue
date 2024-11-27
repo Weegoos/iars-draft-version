@@ -14,7 +14,7 @@
 
 <script setup>
 import axios from "axios";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import CardPage from "../pages/CardPage.vue";
 import AnalyticsPage from "../pages/AnalyticsPage.vue";

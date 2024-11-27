@@ -28,10 +28,15 @@ import axios from "axios";
 
 import { getCurrentInstance } from "vue";
 import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
+import { QSpinnerGears, useQuasar } from "quasar";
+
+const $q = useQuasar();
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
 const userStore = useUserStore();
+const notifyStore = useNotifyStore();
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -42,6 +47,7 @@ onMounted(() => {
 });
 
 const downloadPdf = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
@@ -72,13 +78,16 @@ const downloadPdf = async () => {
     link.download = `User_${iin}.pdf`;
     link.click();
 
-    console.log("PDF успешно загружен.");
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "PDF успешно загружен");
   } catch (error) {
-    console.error("Ошибка при загрузке PDF:", error);
+    $q.loading.hide();
+    notifyStore.notifyError($q, `Ошибка при загрузке PDF: ${error}`);
   }
 };
 
 const downloadExcel = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
@@ -107,9 +116,11 @@ const downloadExcel = async () => {
     link.download = `User_${iin}.xlsx`;
     link.click();
 
-    console.log("Excel успешно загружен.");
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Excel успешно загружен");
   } catch (error) {
-    console.error("Ошибка при загрузке Excel:", error);
+    $q.loading.hide();
+    notifyStore.notifyError($q, `Ошибка при загрузке Excel: ${error}`);
   }
 };
 </script>
