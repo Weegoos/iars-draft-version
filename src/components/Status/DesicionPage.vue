@@ -11,12 +11,12 @@
           />
         </q-card-section>
         <q-card-actions align="right">
-          <!-- <q-btn
+          <q-btn
             :color="props.buttonColor"
             no-caps
             :label="props.buttonLabel"
             @click="refuseButton"
-          /> -->
+          />
           <q-btn
             flat
             no-caps
@@ -33,11 +33,13 @@
 <script setup>
 import axios from "axios";
 import { useQuasar } from "quasar";
+import { useUserStore } from "src/stores/getApi-store";
 import { ref, watch } from "vue";
 
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const userStore = useUserStore();
 
 const $q = useQuasar();
 
@@ -50,22 +52,22 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  // docsStatus: {
-  //   type: String,
-  //   required: true,
-  // },
-  // logAnswer: {
-  //   type: String,
-  //   required: true,
-  // },
-  // buttonLabel: {
-  //   type: String,
-  //   required: true,
-  // },
-  // buttonColor: {
-  //   type: String,
-  //   required: true,
-  // },
+  docsStatus: {
+    type: String,
+    required: true,
+  },
+  logAnswer: {
+    type: String,
+    required: true,
+  },
+  buttonLabel: {
+    type: String,
+    required: true,
+  },
+  buttonColor: {
+    type: String,
+    required: true,
+  },
 });
 
 const openRefusedDialog = ref(props.openRefusedDialogPage);
@@ -81,31 +83,12 @@ const closeRefusedDialog = () => {
   emit("closeRefusedDialog");
 };
 
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-    throw error;
-  }
-};
-
-getInfo();
-
 const reason = ref("");
 
 const refuseButton = async () => {
   try {
-    const userData = await getInfo();
-    const iinofInvestigator = userData?.iin;
+    await userStore.getUserInfo();
+    const iinofInvestigator = userStore.userInfo.iin;
 
     const data = {
       registrationNumber:
@@ -115,6 +98,8 @@ const refuseButton = async () => {
       iin: iinofInvestigator,
     };
 
+    console.log(props.informationForRefusedComponent.registrationNumber);
+
     const response = await axios.post(`${serverUrl}decision`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -123,7 +108,6 @@ const refuseButton = async () => {
       withCredentials: true,
     });
 
-    console.log("Успешно создано:", response.data);
     $q.notify({
       message: props.logAnswer,
       icon: "check",

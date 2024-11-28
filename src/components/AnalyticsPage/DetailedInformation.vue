@@ -188,7 +188,14 @@
             color="green-4"
             no-caps
             label="Согласовать"
-            @click="openDesicionPage"
+            @click="
+              openDesicionPage(
+                'Согласовано',
+                'Согласовать',
+                'green-4',
+                'Документ успешно согласован'
+              )
+            "
           />
           <q-btn
             color="red-4"
@@ -203,6 +210,11 @@
     <DesicionPage
       :openRefusedDialogPage="openRefusedDialogPage"
       @closeRefusedDialog="closeRefusedDialog"
+      :docsStatus="docsStatus"
+      :buttonLabel="buttonLabel"
+      :buttonColor="buttonColor"
+      :logAnswer="logAnswer"
+      :informationForRefusedComponent="informationForRefusedComponent"
     />
   </div>
 </template>
@@ -217,10 +229,10 @@ const tab = ref("info");
 const javascriptStore = useJavaScriptFunction();
 
 const openRefusedDialogPage = ref(false);
-
-const openDesicionPage = () => {
-  openRefusedDialogPage.value = true;
-};
+const buttonLabel = ref("");
+const docsStatus = ref("");
+const buttonColor = ref("");
+const logAnswer = ref("");
 
 const closeRefusedDialog = () => {
   openRefusedDialogPage.value = false;
@@ -244,6 +256,16 @@ watch(
     openDialogPage.value = newVal;
   }
 );
+
+const informationForRefusedComponent = ref("");
+const openDesicionPage = (status, label, color, log) => {
+  openRefusedDialogPage.value = true;
+  docsStatus.value = status;
+  buttonLabel.value = label;
+  buttonColor.value = color;
+  logAnswer.value = log;
+  informationForRefusedComponent.value = props.conclusionInfo;
+};
 
 const emit = defineEmits(["closeWindow"]);
 const closeWindow = () => {
