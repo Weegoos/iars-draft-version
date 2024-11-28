@@ -401,75 +401,37 @@ const idNumberList = ref();
 const fcsConcordant = ref("");
 
 const concordantList = ref("");
-const concordantListAPI = `${serverUrl}allNames`;
-const getAllNames = async () => {
-  try {
-    const response = await axios.get(concordantListAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
 
-    concordantList.value = response.data;
+const defineList = async () => {
+  try {
+    notifyStore.loading(
+      $q,
+      "Подождите, данные из базы загружаются...",
+      QSpinnerGears
+    );
+    await userStore.getAllNames();
+    concordantList.value = userStore.allNames;
+
+    await userStore.getAllStatus();
+    documentsOptions.value = userStore.allStatus;
+
+    await userStore.getAllUD();
+    idNumberList.value = userStore.allUD;
+
+    await userStore.getAllRegions();
+    regionList.value = userStore.allRegions;
+    notifyStore.nofifySuccess($q, "Данные из базы успешно загружены");
+    $q.loading.hide();
   } catch (error) {
-    console.error("Ошибка при запросе:", error);
+    $q.loading.hide();
+    console.log(error);
+    notifyStore.notifyError($q, `Ошибка при получении данных: ${error}`);
   }
 };
 
-const documentOptionsAPI = `${serverUrl}allStatus`;
-const getAllDocuments = async () => {
-  try {
-    const response = await axios.get(documentOptionsAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    documentsOptions.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
-
-const regionListAPI = `${serverUrl}allRegions`;
-const getAllRegions = async () => {
-  try {
-    const response = await axios.get(regionListAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    regionList.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
-
-const UDAPI = `${serverUrl}allUD`;
-const getAllUD = async () => {
-  try {
-    const response = await axios.get(UDAPI, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    idNumberList.value = response.data;
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
-
-getAllDocuments();
-getAllRegions();
-getAllNames();
-getAllUD();
+onMounted(() => {
+  defineList();
+});
 
 // Conclusion
 const router = useRouter();
