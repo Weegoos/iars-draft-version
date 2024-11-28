@@ -125,9 +125,9 @@
             />
           </div>
           <div class="col">
-            <q-select
+            <q-input
               v-model="isApplyToBusiness"
-              :options="applyBusinessOptions"
+              type="text"
               label="Относится ли к бизнесу"
             />
           </div>
@@ -236,7 +236,7 @@ const createEvent = async () => {
 
     const response = await axios.post(`${serverUrl}create`, data, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Убедитесь, что токен есть
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       withCredentials: true,
