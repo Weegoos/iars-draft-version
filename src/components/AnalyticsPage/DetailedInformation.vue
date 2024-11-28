@@ -199,6 +199,32 @@
           />
           <q-btn
             color="red-4"
+            no-caps
+            label="Отказать"
+            @click="
+              openDesicionPage(
+                'Отказано',
+                'Отказать',
+                'red-4',
+                'Документу успешно отказано'
+              )
+            "
+          />
+          <q-btn
+            color="blue-4"
+            no-caps
+            label="Оставить без рассмотрения"
+            @click="
+              openDesicionPage(
+                'Оставлено без рассмотрения',
+                'Оставить без рассмотрения',
+                'blue-4',
+                'Документу успешно оставлен без рассмотрения'
+              )
+            "
+          />
+          <q-btn
+            color="red-4"
             flat
             no-caps
             label="Закрыть"
