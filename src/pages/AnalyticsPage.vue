@@ -160,7 +160,6 @@
 
 <script setup>
 import DetailedInformation from "../components/AnalyticsPage/DetailedInformation.vue";
-import RefusedPage from "../components/Status/RefusedPage.vue";
 
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";

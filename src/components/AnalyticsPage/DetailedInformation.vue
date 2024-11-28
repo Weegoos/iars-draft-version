@@ -185,26 +185,46 @@
         </div>
         <q-card-actions align="center">
           <q-btn
+            color="green-4"
+            no-caps
+            label="Согласовать"
+            @click="openDesicionPage"
+          />
+          <q-btn
             color="red-4"
             flat
             no-caps
             label="Закрыть"
             @click="closeWindow"
           />
-          <q-btn color="primary" icon="check" label="OK" @click="onClick" />
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <DesicionPage
+      :openRefusedDialogPage="openRefusedDialogPage"
+      @closeRefusedDialog="closeRefusedDialog"
+    />
   </div>
 </template>
 
 <script setup>
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
+import DesicionPage from "../Status/DesicionPage.vue";
 import HistoryPage from "../../pages/HistoryPage.vue";
 import { computed, ref, watch } from "vue";
 
 const tab = ref("info");
 const javascriptStore = useJavaScriptFunction();
+
+const openRefusedDialogPage = ref(false);
+
+const openDesicionPage = () => {
+  openRefusedDialogPage.value = true;
+};
+
+const closeRefusedDialog = () => {
+  openRefusedDialogPage.value = false;
+};
 
 const props = defineProps({
   isOpenDetailedWindow: {

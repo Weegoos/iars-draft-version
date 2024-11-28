@@ -16,14 +16,14 @@
             no-caps
             :label="props.buttonLabel"
             @click="refuseButton"
-          />
+          /> -->
           <q-btn
             flat
             no-caps
             label="Закрыть"
             color="primary"
             @click="closeRefusedDialog"
-          /> -->
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
