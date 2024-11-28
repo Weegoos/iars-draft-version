@@ -142,80 +142,6 @@
       row-key="id"
       @row-click="viewDetailedInformation"
     />
-    <!-- <q-card
-      class="q-mb-md"
-      v-for="(items, index) in analyticsDosc"
-      :key="index"
-      :class="items.status === 'На согласовании' ? 'activeDocs' : ''"
-    >
-      <section class="row" style="align-items: stretch">
-        <div class="unreadDocs"></div>
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">№ (порядковый)</span>
-            <p class="infoStyle text-capitalize">{{ index + 1 }}</p>
-            <span class="infoHeadline">Дата создания документа</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.creationDate || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">Регистрационный номер</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.registrationNumber || "Не указано" }}
-            </p>
-            <span class="infoHeadline">Номер УД</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.udNumber || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-
-        <div class="col">
-          <q-card-section>
-            <span class="infoHeadline">ФИО вызываемого</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.calledPersonFullName || "Не указано" }}
-            </p>
-            <span class="infoHeadline">ФИО согласующего</span>
-            <p class="infoStyle text-capitalize">
-              {{ items.defenseAttorneyFullName || "Не указано" }}
-            </p>
-          </q-card-section>
-        </div>
-      </section>
-      <q-card-actions align="center" class="row">
-        <q-btn
-          color="positive"
-          no-caps
-          label="Согласовать"
-          @click="viewAgreementComponent(items)"
-        />
-        <q-btn
-          color="negative"
-          no-caps
-          label="Отказать"
-          @click="openRefusePage(items)"
-        />
-
-        <q-btn
-          color="primary"
-          flat
-          no-caps
-          label="Отправить на доработку"
-          @click="sendForRevision(items)"
-        />
-        <q-btn
-          color="primary"
-          no-caps
-          flat
-          label="Оставить без рассмотрения"
-          @click="leaveWithoutConsideration(items)"
-        />
-      </q-card-actions>
-    </q-card> -->
     <DetailedInformation
       :isOpenDetailedWindow="isOpenDetailedWindow"
       @closeWindow="closeWindow"
@@ -239,6 +165,8 @@ import RefusedPage from "../components/Status/RefusedPage.vue";
 
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
+import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
@@ -247,6 +175,8 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
 const $q = useQuasar();
+const notifyStore = useNotifyStore();
+const userStore = useUserStore();
 
 const openRefusedDialogPage = ref(false);
 const informationForRefusedComponent = ref("");
@@ -426,7 +356,10 @@ const rows = ref([]);
 const getUserDocs = async () => {
   const accessToken = localStorage.getItem("accessToken");
   try {
-    const response = await axios.get(`${serverUrl}usersDocs?IIN=${userIIN}`, {
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+
+    const response = await axios.get(`${serverUrl}usersDocs?IIN=${data.iin}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
@@ -446,7 +379,7 @@ const getUserDocs = async () => {
 };
 
 onMounted(() => {
-  getInfo();
+  getUserDocs();
 });
 
 const statusOfDocuments = ref("");
