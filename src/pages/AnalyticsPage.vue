@@ -134,10 +134,15 @@
         @click="downloadExcel"
       />
     </div>
-    <section v-if="analyticsDosc.length === 0">
-      <p class="text-center text-h5 text-bold">Документы отсутствуют</p>
-    </section>
-    <q-card
+    <q-table
+      flat
+      bordered
+      :rows="rows"
+      :columns="columns"
+      row-key="id"
+      @row-click="viewDetailedInformation"
+    />
+    <!-- <q-card
       class="q-mb-md"
       v-for="(items, index) in analyticsDosc"
       :key="index"
@@ -183,12 +188,6 @@
       </section>
       <q-card-actions align="center" class="row">
         <q-btn
-          color="primary"
-          no-caps
-          label="Просмотреть"
-          @click="viewDetailedInformation(items)"
-        />
-        <q-btn
           color="positive"
           no-caps
           label="Согласовать"
@@ -216,7 +215,7 @@
           @click="leaveWithoutConsideration(items)"
         />
       </q-card-actions>
-    </q-card>
+    </q-card> -->
     <DetailedInformation
       :isOpenDetailedWindow="isOpenDetailedWindow"
       @closeWindow="closeWindow"
@@ -243,11 +242,10 @@ import { QSpinnerGears, useQuasar } from "quasar";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
-
-const analyticsDosc = ref("");
 const $q = useQuasar();
 
 const openRefusedDialogPage = ref(false);
@@ -298,23 +296,59 @@ const closeRefusedDialog = () => {
   openRefusedDialogPage.value = false;
 };
 
-const getInfo = async () => {
-  try {
-    const response = await axios.get(`${serverUrl}getInfo`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-    getUserDocs(response.data.iin);
-    getAllConclusionByIIN(response.data.iin);
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при получении данных пользователя:", error);
-    throw error;
-  }
-};
+const columns = [
+  {
+    name: "id",
+    required: true,
+    label: "Порядковый номер",
+    align: "left",
+    field: "id",
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: "creationDate",
+    align: "center",
+    label: "Дата создания документа",
+    field: "creationDate",
+    sortable: true,
+  },
+  {
+    name: "registrationNumber",
+    align: "center",
+    label: "Регистрационный номер",
+    field: "registrationNumber",
+    sortable: true,
+  },
+  {
+    name: "udNumber",
+    align: "center",
+    label: "Номер УД",
+    field: "udNumber",
+    sortable: true,
+  },
+  {
+    name: "status",
+    align: "center",
+    label: "Статус документа",
+    field: "status",
+    sortable: true,
+  },
+  {
+    name: "calledPersonFullName",
+    align: "center",
+    label: "ФИО вызываемого",
+    field: "calledPersonFullName",
+    sortable: true,
+  },
+  {
+    name: "defenseAttorneyFullName",
+    align: "center",
+    label: "ФИО согласующего",
+    field: "defenseAttorneyFullName",
+    sortable: true,
+  },
+];
 
 const downloadPdf = async () => {
   try {
@@ -387,7 +421,9 @@ const downloadExcel = async () => {
   }
 };
 
-const getUserDocs = async (userIIN) => {
+const rows = ref([]);
+
+const getUserDocs = async () => {
   const accessToken = localStorage.getItem("accessToken");
   try {
     const response = await axios.get(`${serverUrl}usersDocs?IIN=${userIIN}`, {
@@ -399,7 +435,10 @@ const getUserDocs = async (userIIN) => {
       withCredentials: true,
     });
 
-    analyticsDosc.value = response.data;
+    rows.value = response.data.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
   } catch (error) {
     console.error("Ошибка при получении документов:", error);
     throw error;
@@ -499,37 +538,6 @@ getAllNames();
 getAllUD();
 
 // Conclusion
-const conclusions = ref("");
-
-const getAllConclusionByIIN = async (iin) => {
-  try {
-    $q.loading.show({
-      message: "Подождите данные загружаются...",
-      spinner: QSpinnerGears,
-      messageColor: "white",
-      backgroundColor: "black",
-    });
-    const response = await axios.get(`${serverUrl}temps?IIN=${iin}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      withCredentials: true,
-    });
-
-    const sortedConclusions = response.data.sort((a, b) => {
-      // Сортировка по убыванию (новые сверху)
-      return new Date(b.creationDate) - new Date(a.creationDate);
-    });
-
-    conclusions.value = sortedConclusions;
-
-    $q.loading.hide();
-  } catch (error) {
-    console.error("Ошибка при запросе:", error);
-  }
-};
-
 const router = useRouter();
 
 const redirectToKeycloakLogin = () => {
@@ -547,10 +555,9 @@ onBeforeMount(() => {
 const isOpenDetailedWindow = ref(false);
 
 const conclusionInfo = ref("");
-const viewDetailedInformation = (item) => {
+const viewDetailedInformation = (evt, row, index) => {
   isOpenDetailedWindow.value = true;
-  console.log(item);
-  conclusionInfo.value = item;
+  conclusionInfo.value = row;
 };
 
 const closeWindow = () => {
