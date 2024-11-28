@@ -391,7 +391,7 @@ onMounted(() => {
 // Conclusion
 
 const downloadPdf = async () => {
-  $q.loading($q, "Подождите...", QSpinnerGears);
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
@@ -426,7 +426,7 @@ const downloadPdf = async () => {
 };
 
 const downloadExcel = async () => {
-  $q.loading($q, "Подождите...", QSpinnerGears);
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;

@@ -193,16 +193,6 @@ const logAnswer = ref("");
 const buttonLabel = ref("");
 const buttonColor = ref("");
 
-const openRefusePage = (item) => {
-  openRefusedDialogPage.value = true;
-  informationForRefusedComponent.value = item;
-  docsStatus.value = "Отказано";
-  logAnswer.value = "Документу успешно было отказано";
-  console.log(item);
-  buttonLabel.value = "Отказать";
-  buttonColor.value = "negative";
-};
-
 const viewAgreementComponent = (item) => {
   openRefusedDialogPage.value = true;
   informationForRefusedComponent.value = item;
@@ -289,45 +279,46 @@ const columns = [
 ];
 
 const downloadPdf = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
-    const data = await getInfo();
-    const iin = data?.iin;
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
 
     if (!iin) {
       console.error("IIN не найден!");
       return;
     }
-
-    const response = await axios.get(
-      `${serverUrl}pdf?IIN=${iin}`,
-
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
-          Accept: "application/pdf",
-        },
-        responseType: "blob",
-        withCredentials: true,
-      }
-    );
+    const response = await axios.get(`${serverUrl}pdf?IIN=${iin}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+        Accept: "application/pdf",
+      },
+      responseType: "blob",
+      withCredentials: true,
+    });
 
     const blob = new Blob([response.data], { type: "application/pdf" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
     link.download = `User_${iin}.pdf`;
     link.click();
-
-    console.log("PDF успешно загружен.");
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, `PDF успешно загружен.`);
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при загрузке PDF:", error);
+    notifyStore.notifyError($q, `Ошибка при загрузке PDF:", ${error}`);
   }
 };
 
 const downloadExcel = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
-    const data = await getInfo();
-    const iin = data?.iin;
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
 
     if (!iin) {
       console.error("IIN не найден!");
@@ -353,12 +344,14 @@ const downloadExcel = async () => {
     link.download = `User_${iin}.xlsx`;
     link.click();
 
-    console.log("Excel успешно загружен.");
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, `Excel успешно загружен.`);
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при загрузке Excel:", error);
+    notifyStore.notifyError($q, `Ошибка при загрузке Excel:", ${error}`);
   }
 };
-
 const rows = ref([]);
 const getUserDocs = async () => {
   const accessToken = localStorage.getItem("accessToken");
