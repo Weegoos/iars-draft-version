@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-dialog v-model="confirm" persistent>
+    <q-dialog v-model="openDialogPage" persistent>
       <q-card style="width: 1200px">
         <div>
           <q-tabs v-model="tab" class="text-teal">

@@ -142,6 +142,7 @@
       row-key="id"
       @row-click="viewDetailedInformation"
     />
+
     <DetailedInformation
       :isOpenDetailedWindow="isOpenDetailedWindow"
       @closeWindow="closeWindow"
