@@ -6,7 +6,7 @@
           <q-input
             v-model="reason"
             type="text"
-            label="Напишите причину отказа"
+            label="Напишите причину"
             autogrow
           />
         </q-card-section>

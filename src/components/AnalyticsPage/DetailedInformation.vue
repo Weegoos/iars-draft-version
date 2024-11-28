@@ -260,7 +260,7 @@
 
 <script setup>
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
-import DesicionPage from "../Status/DesicionPage.vue";
+import DesicionPage from "../Status/DecisionPage.vue";
 import HistoryPage from "../../pages/HistoryPage.vue";
 import { computed, ref, watch } from "vue";
 
