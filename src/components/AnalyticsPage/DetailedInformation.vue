@@ -191,6 +191,7 @@
             label="Закрыть"
             @click="closeWindow"
           />
+          <q-btn color="primary" icon="check" label="OK" @click="onClick" />
         </q-card-actions>
       </q-card>
     </q-dialog>

@@ -11,7 +11,7 @@
           />
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn
+          <!-- <q-btn
             :color="props.buttonColor"
             no-caps
             :label="props.buttonLabel"
@@ -23,7 +23,7 @@
             label="Закрыть"
             color="primary"
             @click="closeRefusedDialog"
-          />
+          /> -->
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -50,22 +50,22 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  docsStatus: {
-    type: String,
-    required: true,
-  },
-  logAnswer: {
-    type: String,
-    required: true,
-  },
-  buttonLabel: {
-    type: String,
-    required: true,
-  },
-  buttonColor: {
-    type: String,
-    required: true,
-  },
+  // docsStatus: {
+  //   type: String,
+  //   required: true,
+  // },
+  // logAnswer: {
+  //   type: String,
+  //   required: true,
+  // },
+  // buttonLabel: {
+  //   type: String,
+  //   required: true,
+  // },
+  // buttonColor: {
+  //   type: String,
+  //   required: true,
+  // },
 });
 
 const openRefusedDialog = ref(props.openRefusedDialogPage);

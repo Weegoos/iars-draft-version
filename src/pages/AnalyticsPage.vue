@@ -155,15 +155,6 @@
       @closeWindow="closeWindow"
       :conclusionInfo="conclusionInfo"
     />
-    <RefusedPage
-      :openRefusedDialogPage="openRefusedDialogPage"
-      @closeRefusedDialog="closeRefusedDialog"
-      :informationForRefusedComponent="informationForRefusedComponent"
-      :docsStatus="docsStatus"
-      :logAnswer="logAnswer"
-      :buttonLabel="buttonLabel"
-      :buttonColor="buttonColor"
-    />
   </div>
 </template>
 
@@ -185,44 +176,6 @@ const webUrl = proxy.$webUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
 const userStore = useUserStore();
-
-const openRefusedDialogPage = ref(false);
-const informationForRefusedComponent = ref("");
-const docsStatus = ref("");
-const logAnswer = ref("");
-const buttonLabel = ref("");
-const buttonColor = ref("");
-
-const viewAgreementComponent = (item) => {
-  openRefusedDialogPage.value = true;
-  informationForRefusedComponent.value = item;
-  docsStatus.value = "Согласовано";
-  logAnswer.value = "Документ успешно согласован";
-  buttonLabel.value = "Согласовать";
-  buttonColor.value = "positive";
-};
-
-const sendForRevision = (item) => {
-  openRefusedDialogPage.value = true;
-  informationForRefusedComponent.value = item;
-  docsStatus.value = "Отправлено на доработку";
-  logAnswer.value = "Документ успешно отправлен на доработку";
-  buttonLabel.value = "Отправить на доработку";
-  buttonColor.value = "primary";
-};
-
-const leaveWithoutConsideration = (item) => {
-  openRefusedDialogPage.value = true;
-  informationForRefusedComponent.value = item;
-  docsStatus.value = "Оставлено без рассмотрения";
-  logAnswer.value = "Документ успешно оставлен без рассмотрения";
-  buttonLabel.value = "Оставить без рассмотрения";
-  buttonColor.value = "primary";
-};
-
-const closeRefusedDialog = () => {
-  openRefusedDialogPage.value = false;
-};
 
 const columns = [
   {
