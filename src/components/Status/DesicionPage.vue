@@ -34,12 +34,14 @@
 import axios from "axios";
 import { useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
 import { ref, watch } from "vue";
 
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const userStore = useUserStore();
+const notifyStore = useNotifyStore();
 
 const $q = useQuasar();
 
@@ -108,15 +110,15 @@ const refuseButton = async () => {
       withCredentials: true,
     });
 
-    $q.notify({
-      message: props.logAnswer,
-      icon: "check",
-      color: "positive",
-    });
+    notifyStore.nofifySuccess($q, props.logAnswer);
     setTimeout(() => {
       window.location.reload();
     }, 1500);
   } catch (error) {
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при создании события: ${error.response || error}`
+    );
     console.error("Ошибка при создании события:", error.response || error);
   }
 };
