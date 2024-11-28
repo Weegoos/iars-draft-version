@@ -102,7 +102,7 @@
       </div>
 
       <div class="col">
-        <q-input v-model="iin" type="text" label="ИИН вызываемого" />
+        <q-input v-model="iinOfCalled" type="text" label="ИИН вызываемого" />
       </div>
       <div class="col">
         <q-input
@@ -119,6 +119,13 @@
       </div>
     </div>
     <div class="col q-gutter-md" align="right">
+      <q-btn
+        color="primary"
+        no-caps
+        label="Фильтровать"
+        class="q-mb-md"
+        @click="filter"
+      />
       <q-btn
         color="primary"
         class="q-mb-md"
@@ -168,7 +175,7 @@ import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 
@@ -353,7 +360,6 @@ const downloadExcel = async () => {
 };
 
 const rows = ref([]);
-
 const getUserDocs = async () => {
   const accessToken = localStorage.getItem("accessToken");
   try {
@@ -378,29 +384,93 @@ const getUserDocs = async () => {
     throw error;
   }
 };
-
-onMounted(() => {
-  getUserDocs();
-});
+getUserDocs();
 
 const statusOfDocuments = ref("");
 const documentsOptions = ref("");
-
 const registrationNumber = ref("");
-
 const region = ref("");
 const regionList = ref("");
-
 const startDate = ref("2019/05/05");
 const endDate = ref("2024/03/03");
-const iin = ref("");
-
+const iinOfCalled = ref("");
 const idNumber = ref("");
 const idNumberList = ref();
-
 const fcsConcordant = ref("");
-
 const concordantList = ref("");
+const conclusions = ref("");
+const filteredConclusion = ref(rows.value);
+
+watch(
+  () => conclusions.value,
+  (newVal) => {
+    filteredConclusion.value = newVal;
+  }
+);
+
+const filter = async () => {
+  try {
+    notifyStore.loading($q, "Подождите, фильтрация в обработке", QSpinnerGears);
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.error("Access token is missing");
+      notifyStore.notifyError($q, "Access token is missing");
+      return;
+    }
+    const params = new URLSearchParams();
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
+
+    if (registrationNumber.value) {
+      params.append("registrationNumber", registrationNumber.value);
+    }
+    if (idNumber.value) {
+      params.append("ud", idNumber.value);
+    }
+    if (statusOfDocuments.value) {
+      params.append("status", statusOfDocuments.value);
+    }
+    if (region.value) {
+      params.append("region", region.value);
+    }
+    if (fcsConcordant.value) {
+      params.append("fullName", fcsConcordant.value);
+    }
+    if (fcsConcordant.value) {
+      params.append("fullName", fcsConcordant.value);
+    }
+    if (iinOfCalled.value) {
+      params.append("iinOfCalled", iinOfCalled.value);
+    }
+
+    params.append("iin", iin);
+    const response = await axios.get(
+      `${serverUrl}filter?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    const sortedConclusions = response.data.sort((a, b) => {
+      return new Date(b.creationDate) - new Date(a.creationDate);
+    });
+
+    filteredConclusion.value = sortedConclusions.map((item, index) => ({
+      ...item,
+      id: index + 1,
+    }));
+    rows.value = filteredConclusion.value;
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Документы загружены с помощью фильтрации");
+  } catch (error) {
+    console.error("Error during filter request:", error);
+  }
+};
 
 const defineList = async () => {
   try {
