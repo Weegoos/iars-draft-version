@@ -76,6 +76,12 @@
             @click="promoteUser(props.conclusionDetailedInformation)"
           />
           <q-btn
+            color="red-4"
+            no-caps
+            label="Удалить"
+            @click="deleteUser(props.conclusionDetailedInformation)"
+          />
+          <q-btn
             flat
             no-caps
             label="Закрыть"
@@ -161,6 +167,46 @@ const promoteUser = async (item) => {
       `Ошибка при повышении: ${error.response || error}`
     );
     $q.loading.hide();
+  }
+};
+
+const deleteUser = async (item) => {
+  try {
+    notifyStore.loading(
+      $q,
+      "Подождите, удаление в обработке...",
+      QSpinnerGears
+    );
+    const accessToken = localStorage.getItem("accessToken");
+    const data = {
+      email: item.email,
+    };
+    const response = await axios.delete(`${serverUrl}delete/`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, `Удаление выполнено успешно`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  } catch (error) {
+    $q.loading.hide();
+    notifyStore.notifyError($q, "Ошибка при удалении указана в консоли");
+    console.error(
+      "Ошибка при удалении пользователя:",
+      error.response?.data || error.message
+    );
+    console.error("Детали ошибки:", error.response || error);
+
+    if (error.response?.status === 403) {
+      console.error(
+        "Проблема с доступом. Проверьте права пользователя или токен."
+      );
+    }
   }
 };
 
