@@ -177,35 +177,49 @@ const deleteUser = async (item) => {
       "Подождите, удаление в обработке...",
       QSpinnerGears
     );
+
     const accessToken = localStorage.getItem("accessToken");
-    const data = {
-      email: item.email,
-    };
-    const response = await axios.delete(`${serverUrl}delete/`, data, {
+    if (!accessToken) {
+      throw new Error("Токен отсутствует, повторите авторизацию.");
+    }
+
+    const data = { email: item.email };
+
+    console.log("Удаляем пользователя с данными:", data);
+
+    const response = await axios({
+      method: "delete", // Указываем метод DELETE
+      url: `${serverUrl}delete/`, // URL вашего API
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
+      data: data, // Тело запроса
       withCredentials: true,
     });
+
     $q.loading.hide();
-    notifyStore.nofifySuccess($q, `Удаление выполнено успешно`);
+    notifyStore.nofifySuccess($q, "Удаление выполнено успешно");
+    console.log("Ответ сервера:", response.data);
+
     setTimeout(() => {
       window.location.reload();
     }, 1500);
   } catch (error) {
     $q.loading.hide();
     notifyStore.notifyError($q, "Ошибка при удалении указана в консоли");
+
     console.error(
       "Ошибка при удалении пользователя:",
       error.response?.data || error.message
     );
-    console.error("Детали ошибки:", error.response || error);
 
-    if (error.response?.status === 403) {
-      console.error(
-        "Проблема с доступом. Проверьте права пользователя или токен."
-      );
+    if (error.response?.status === 400) {
+      console.error("Неверный запрос. Проверьте отправляемые данные.");
+    } else if (error.response?.status === 403) {
+      console.error("Недостаточно прав для выполнения операции.");
+    } else {
+      console.error("Детали ошибки:", error.response || error);
     }
   }
 };
