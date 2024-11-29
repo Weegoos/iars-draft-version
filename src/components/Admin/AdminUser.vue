@@ -125,7 +125,7 @@ const isOpenAdminDialogPage = ref(false);
 const conclusionDetailedInformation = ref("");
 
 const getAllUsers = async () => {
-  notifyStore.loading($q, "Данные загружаются...", QSpinnerGears);
+  notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
     const response = await axios.get(`${serverUrl}allUsers`, {
       headers: {

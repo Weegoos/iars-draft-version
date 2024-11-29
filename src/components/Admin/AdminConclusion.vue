@@ -100,7 +100,7 @@ const closeAdminDialogPage = () => {
 };
 
 const getAllConclusion = async () => {
-  notifyStore.loading($q, "Подождите документы загружаются...", QSpinnerGears);
+  notifyStore.loading($q, "Подождите, документы загружаются...", QSpinnerGears);
   try {
     const response = await axios.get(`${serverUrl}admin/allConclusions`, {
       headers: {
