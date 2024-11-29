@@ -233,7 +233,9 @@
 
 <script setup>
 import axios from "axios";
+import { QSpinnerGears, useQuasar } from "quasar";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
+import { useNotifyStore } from "src/stores/notify-store";
 import { computed, ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
 
@@ -241,6 +243,8 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const tab = ref("info");
 const javascriptStore = useJavaScriptFunction();
+const notifyStore = useNotifyStore();
+const $q = useQuasar();
 const props = defineProps({
   isOpenAdminDialogPage: {
     type: Boolean,
@@ -281,6 +285,11 @@ const formattedEventDateTime = computed(() =>
 
 const deleteConclusion = async (item) => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите, удаление в обработке...",
+      QSpinnerGears
+    );
     const accessToken = localStorage.getItem("accessToken");
     console.log(accessToken);
 
@@ -297,9 +306,14 @@ const deleteConclusion = async (item) => {
       },
       withCredentials: true,
     });
-
-    console.log("Удаление выполнено успешно:", response.data);
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, `Удаление выполнено успешно`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   } catch (error) {
+    $q.loading.hide();
+    notifyStore.notifyError($q, "Ошибка при удалении указана в консоли");
     console.error(
       "Ошибка при удалении заключения:",
       error.response?.data || error.message
