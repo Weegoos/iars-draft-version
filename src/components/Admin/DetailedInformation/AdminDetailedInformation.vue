@@ -214,6 +214,12 @@
         <q-card-actions align="center">
           <q-btn
             color="red-4"
+            no-caps
+            label="Удалить"
+            @click="deleteConclusion(props.conclusionDetailedInformation)"
+          />
+          <q-btn
+            color="red-4"
             flat
             no-caps
             label="Закрыть"
@@ -226,9 +232,13 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { computed, ref, watch } from "vue";
+import { getCurrentInstance } from "vue";
 
+const { proxy } = getCurrentInstance();
+const serverUrl = proxy.$serverUrl;
 const tab = ref("info");
 const javascriptStore = useJavaScriptFunction();
 const props = defineProps({
@@ -268,6 +278,41 @@ const formattedRegistrationDate = computed(() =>
 const formattedEventDateTime = computed(() =>
   javascriptStore.formatDate(props.conclusionDetailedInformation.eventDateTime)
 );
+
+const deleteConclusion = async (item) => {
+  try {
+    const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
+
+    console.log(
+      "Отправка запроса на удаление с номером:",
+      item.registrationNumber
+    );
+
+    const response = await axios.delete(`${serverUrl}admin/deleteConclusion`, {
+      params: { registrationNumber: item.registrationNumber },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    console.log("Удаление выполнено успешно:", response.data);
+  } catch (error) {
+    console.error(
+      "Ошибка при удалении заключения:",
+      error.response?.data || error.message
+    );
+    console.error("Детали ошибки:", error.response || error);
+
+    if (error.response?.status === 403) {
+      console.error(
+        "Проблема с доступом. Проверьте права пользователя или токен."
+      );
+    }
+  }
+};
 </script>
 
 <style></style>
