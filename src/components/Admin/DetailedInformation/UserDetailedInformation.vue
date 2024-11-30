@@ -187,17 +187,14 @@ const deleteUser = async (item) => {
 
     console.log("Удаляем пользователя с данными:", data);
 
-    const response = await axios({
-      method: "delete", // Указываем метод DELETE
-      url: `${serverUrl}delete/`, // URL вашего API
+    const response = await axios.delete(`${serverUrl}admin/delete`, {
+      params: { email: item.email },
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
-      data: data, // Тело запроса
       withCredentials: true,
     });
-
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Удаление выполнено успешно");
     console.log("Ответ сервера:", response.data);
