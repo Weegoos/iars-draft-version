@@ -220,7 +220,6 @@ const deleteUser = async (item) => {
     }
   }
 };
-
 const formattedRegistrationDate = computed(() =>
   javascriptStore.formatDate(
     props.conclusionDetailedInformation.registrationDate
