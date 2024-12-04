@@ -27,7 +27,13 @@
             />
           </div>
           <div class="col">
-            <q-input v-model="binAndIin" type="text" label="БИН/ИИН" />
+            <q-input
+              v-model="binAndIin"
+              type="text"
+              label="БИН/ИИН"
+              mask="############"
+              hint="Маска : ############"
+            />
           </div>
         </div>
       </q-card-section>
@@ -336,9 +342,11 @@ const saveEvent = async () => {
   } catch (error) {
     notifyStore.notifyError(
       $q,
-      `Ошибка при создании события: ${error.response || error}`
+      `Ошибка при создании события: ${error.response.data || error}`
     );
-    console.error(`Ошибка при создании события: ${error.response || error}`);
+    console.error(
+      `Ошибка при создании события: ${error.response.data || error}`
+    );
 
     $q.loading.hide();
   }
@@ -369,7 +377,7 @@ const getAllRegions = async () => {
     notifyStore.loading($q, "Подождите, регионы загружаются...", QSpinnerGears);
     await userStore.getAllRegions();
     regions.value = userStore.allRegions;
-    notifyStore.nofifySuccess($q, "Регионы успешно загружен");
+    notifyStore.nofifySuccess($q, "Регионы успешно загружены");
     $q.loading.hide();
   } catch (error) {
     $q.loading.hide();
