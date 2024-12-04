@@ -51,7 +51,7 @@
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
-            <q-input v-model="startDate">
+            <q-input v-model="startDate" label="С">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
@@ -75,7 +75,7 @@
             </q-input>
           </div>
           <div class="col">
-            <q-input v-model="endDate">
+            <q-input v-model="endDate" label="До">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
@@ -117,21 +117,21 @@
         </datalist>
       </div>
     </div>
-    <div class="col q-gutter-md" align="right">
+    <div class="col q-gutter-md q-mt-sm" align="right">
       <q-btn
         color="primary"
-        no-caps
         label="Фильтровать"
         class="q-mb-md"
+        icon="filter"
         @click="filter"
       />
-      <q-btn
+      <!-- <q-btn
         color="primary"
         class="q-mb-md"
         icon="download"
         label="Скачать в формате pdf"
         @click="downloadPdf"
-      />
+      /> -->
       <q-btn
         color="primary"
         class="q-mb-md"
@@ -165,6 +165,7 @@ import { getCurrentInstance } from "vue";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 
 const $q = useQuasar();
 const { proxy } = getCurrentInstance();
@@ -172,6 +173,7 @@ const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
+const javascriptFunction = useJavaScriptFunction();
 
 const isOpen = ref(false);
 const detialedInformation = ref("");
@@ -199,6 +201,7 @@ const columns = [
     align: "center",
     label: "Дата создания документа",
     field: "creationDate",
+    format: (val) => javascriptFunction.formatDate(val),
     sortable: true,
   },
   {
@@ -244,7 +247,7 @@ const getAllConclusionByIIN = async () => {
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
-    notifyStore.loading($q, "Подождите данные загружаются...", QSpinnerGears);
+    notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
     const response = await axios.get(`${serverUrl}usersDocs?IIN=${data.iin}`, {
       headers: {
         "Content-Type": "application/json",
@@ -276,8 +279,8 @@ const registrationNumber = ref("");
 const region = ref("");
 const regionList = ref("");
 const date = ref("YYYY-MM-DD");
-const startDate = ref("С определенной даты");
-const endDate = ref("До определенной даты");
+const startDate = ref("");
+const endDate = ref("");
 const iinOfCalled = ref("");
 const idNumber = ref("");
 const idNumberList = ref();
@@ -359,7 +362,7 @@ const filter = async () => {
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Документы загружены с помощью фильтрации");
   } catch (error) {
-    console.log("Error during filter request:", error);
+    console.error("Error during filter request:", error);
   }
 };
 
