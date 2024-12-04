@@ -293,7 +293,7 @@ const saveEvent = async () => {
       jobTitle: positionTheCalledPerson.value,
       region: region.value,
       plannedActions: plannedInvestigateActions.value,
-      eventDateTime: "2024-11-19T15:26:10.949Z",
+      eventDateTime: formattedDate.value,
       eventPlace: locationOfTheEvent.value,
       relation: relationshipOfTheCaller.value,
       investigationType: typesOfPlannedInvestigation.value,

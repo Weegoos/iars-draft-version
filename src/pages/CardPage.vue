@@ -51,15 +51,15 @@
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
-            <q-input v-model="startDate" mask="date" :rules="['date']">
-              <template v-slot:append>
+            <q-input v-model="startDate">
+              <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
                     cover
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="startDate">
+                    <q-date v-model="startDate" mask="YYYY-MM-DD">
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -75,15 +75,15 @@
             </q-input>
           </div>
           <div class="col">
-            <q-input v-model="endDate" mask="YYYY-MM-DD" :rules="['date']">
-              <template v-slot:append>
+            <q-input v-model="endDate">
+              <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
                     cover
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="endDate">
+                    <q-date v-model="endDate" mask="YYYY-MM-DD">
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -276,8 +276,8 @@ const registrationNumber = ref("");
 const region = ref("");
 const regionList = ref("");
 const date = ref("YYYY-MM-DD");
-const startDate = ref("2019-05-05");
-const endDate = ref("2024-03-03");
+const startDate = ref("С определенной даты");
+const endDate = ref("До определенной даты");
 const iinOfCalled = ref("");
 const idNumber = ref("");
 const idNumberList = ref();
@@ -327,6 +327,12 @@ const filter = async () => {
     }
     if (iinOfCalled.value) {
       params.append("iinOfCalled", iinOfCalled.value);
+    }
+    if (startDate.value) {
+      params.append("from", startDate.value);
+    }
+    if (endDate.value) {
+      params.append("to", endDate.value);
     }
 
     params.append("iin", iin);
