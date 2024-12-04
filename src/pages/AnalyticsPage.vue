@@ -126,13 +126,13 @@
         class="q-mb-md"
         @click="filter"
       />
-      <q-btn
+      <!-- <q-btn
         color="primary"
         class="q-mb-md"
         icon="download"
         label="Скачать в формате pdf"
         @click="downloadPdf"
-      />
+      /> -->
       <q-btn
         color="primary"
         class="q-mb-md"
@@ -148,6 +148,10 @@
       :columns="columns"
       row-key="id"
       @row-click="viewDetailedInformation"
+      :row-style="getRowStyle"
+      virtual-scroll
+      class="my-sticky-header-column-table"
+      v-model:pagination="pagination"
     />
 
     <DetailedInformation
@@ -305,6 +309,8 @@ const downloadExcel = async () => {
   }
 };
 const rows = ref([]);
+
+const pagination = ref({ rowsPerPage: 0 });
 const getUserDocs = async () => {
   const accessToken = localStorage.getItem("accessToken");
   try {
@@ -479,5 +485,10 @@ const closeWindow = () => {
 <style scoped>
 .activeDocs {
   border: 1px solid green;
+}
+
+.on-approval {
+  background: linear-gradient(90deg, #a8e063, #56ab2f) !important;
+  color: white !important;
 }
 </style>

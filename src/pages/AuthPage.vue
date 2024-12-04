@@ -98,10 +98,7 @@ const login = async () => {
   } catch (error) {
     console.error("Error during registration:", error);
     $q.loading.hide();
-    notifyStore.notifyError(
-      $q,
-      `Ошибка при авторизации: ${error.response.data.error}`
-    );
+    notifyStore.notifyError($q, `Ошибка при авторизации: ${error}`);
   }
 };
 
