@@ -86,7 +86,13 @@ const isVisible = ref(false);
 
 const getProfile = async () => {
   try {
-    notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
+    if (localStorage.getItem("accessToken")) {
+      notifyStore.loading(
+        $q,
+        "Подождите, данные загружаются...",
+        QSpinnerGears
+      );
+    }
 
     await userStore.getUserInfo();
     const userInfo = userStore.userInfo;

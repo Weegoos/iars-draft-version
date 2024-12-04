@@ -55,7 +55,7 @@
       <q-card-section>
         <div class="row q-gutter-sm">
           <div class="col">
-            <q-input v-model="date">
+            <q-input v-model="formattedDate">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
@@ -63,7 +63,11 @@
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+                    <q-date
+                      v-model="date"
+                      mask="YYYY-MM-DD HH:mm"
+                      @update:model-value="updateFormattedDate"
+                    >
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -84,7 +88,12 @@
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+                    <q-time
+                      v-model="date"
+                      mask="YYYY-MM-DD HH:mm"
+                      format24h
+                      @update:model-value="updateFormattedDate"
+                    >
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -176,7 +185,7 @@
 <script setup>
 import { QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 import { getCurrentInstance } from "vue";
 import { useNotifyStore } from "src/stores/notify-store";
@@ -194,7 +203,8 @@ const binAndIin = ref("");
 const positionTheCalledPerson = ref("");
 const region = ref("");
 const plannedInvestigateActions = ref("");
-const date = ref("Дата и время проведения");
+const date = ref("");
+const formattedDate = ref("Дата и время проведения");
 const locationOfTheEvent = ref("");
 const relationshipOfTheCaller = ref("");
 const typesOfPlannedInvestigation = ref("");
@@ -203,6 +213,16 @@ const applyBusinessOptions = ref(["true", "false"]);
 const iinOfTheDefender = ref(null);
 const entrepreneurParticipation = ref("");
 const results = ref("");
+
+function updateFormattedDate(newValue) {
+  date.value = newValue;
+  formattedDate.value = newValue.replace(" ", "T"); // Заменяем пробел на 'T'
+}
+
+// Следим за изменениями и сразу форматируем
+watch(date, (newVal) => {
+  formattedDate.value = newVal.replace(" ", "T");
+});
 
 const createEvent = async () => {
   try {
@@ -214,13 +234,12 @@ const createEvent = async () => {
     await userStore.getUserInfo();
     const userData = userStore.userInfo;
     const iinofInvestigator = userData.iin;
-    console.log(iinofInvestigator);
 
     const data = {
       jobTitle: positionTheCalledPerson.value,
       region: region.value,
       plannedActions: plannedInvestigateActions.value,
-      eventDateTime: "2024-11-19T15:26:10.949Z",
+      eventDateTime: formattedDate.value,
       eventPlace: locationOfTheEvent.value,
       relation: relationshipOfTheCaller.value,
       investigationType: typesOfPlannedInvestigation.value,
@@ -238,6 +257,7 @@ const createEvent = async () => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
       withCredentials: true,
     });
@@ -248,9 +268,10 @@ const createEvent = async () => {
     }, 1500);
     $q.loading.hide();
   } catch (error) {
+    console.error(error);
     notifyStore.notifyError(
       $q,
-      `Ошибка при создании события: ${error.response || error}`
+      `Ошибка при создании события: ${error.response.data || error}`
     );
     $q.loading.hide();
   }
