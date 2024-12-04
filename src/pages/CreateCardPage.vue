@@ -195,10 +195,15 @@
         />
       </q-card-actions>
     </q-card>
+    <div>
+      <MorphPage />
+    </div>
   </div>
 </template>
 
 <script setup>
+import MorphPage from "../components/Morph/MorphPage.vue";
+
 import { QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";

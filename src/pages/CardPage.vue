@@ -75,7 +75,7 @@
             </q-input>
           </div>
           <div class="col">
-            <q-input v-model="endDate" label="До">
+            <q-input v-model="endDate" label="По">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
