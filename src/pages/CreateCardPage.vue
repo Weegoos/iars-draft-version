@@ -41,7 +41,17 @@
             />
           </div>
           <div class="col">
-            <q-input v-model="region" type="text" label="Регион" />
+            <q-input
+              v-model="region"
+              type="text"
+              label="Регион"
+              list="region"
+            />
+            <datalist id="region">
+              <div v-for="(item, index) in regions" :key="index">
+                <option :value="item">{{ item }}</option>
+              </div>
+            </datalist>
           </div>
           <div class="col">
             <q-input
@@ -353,8 +363,23 @@ const getAllUd = async () => {
   }
 };
 
+const regions = ref("");
+const getAllRegions = async () => {
+  try {
+    notifyStore.loading($q, "Подождите, регионы загружаются...", QSpinnerGears);
+    await userStore.getAllRegions();
+    regions.value = userStore.allRegions;
+    notifyStore.nofifySuccess($q, "Регионы успешно загружен");
+    $q.loading.hide();
+  } catch (error) {
+    $q.loading.hide();
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
 onMounted(() => {
   getAllUd();
+  getAllRegions();
 });
 </script>
 
