@@ -11,46 +11,16 @@ const $q = useQuasar();
 function show(grid) {
   $q.bottomSheet({
     dark: true,
-    message: "Bottom Sheet message",
+    message: "Горячие клавиши",
     grid,
     actions: [
       {
-        label: "Drive",
-        img: "https://cdn.quasar.dev/img/logo_drive_128px.png",
-        id: "drive",
+        label: "Авторизация",
+        icon: "filter_1",
       },
       {
-        label: "Keep",
-        img: "https://cdn.quasar.dev/img/logo_keep_128px.png",
-        id: "keep",
-      },
-      {
-        label: "Google Hangouts",
-        img: "https://cdn.quasar.dev/img/logo_hangouts_128px.png",
-        id: "hangouts",
-      },
-      {
-        label: "Calendar",
-        img: "https://cdn.quasar.dev/img/logo_calendar_128px.png",
-        id: "calendar",
-      },
-      {},
-      {
-        label: "Share",
-        icon: "share",
-        id: "share",
-      },
-      {
-        label: "Upload",
-        icon: "cloud_upload",
-        color: "primary",
-        id: "upload",
-      },
-      {},
-      {
-        label: "John",
-        avatar: "https://cdn.quasar.dev/img/boy-avatar.png",
-        id: "john",
+        label: "Авторизоваться (Enter)",
+        icon: "1",
       },
     ],
   })

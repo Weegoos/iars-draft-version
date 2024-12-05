@@ -14,6 +14,7 @@
       :conclusionDetailedInformation="conclusionDetailedInformation"
       @closeAdminDialogPage="closeAdminDialogPage"
     />
+    <q-btn icon="mdi-account" label="Профиль" />
   </div>
 </template>
 

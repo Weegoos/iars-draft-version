@@ -72,11 +72,10 @@ const callChildMethod = () => {
   childRef.value?.show();
 };
 
-const isKeyDownHandled = ref(false);
 const handle = (event) => {
   if (event.key === "Shift") {
     callChildMethod();
-    window.removeEventListener("keydown", handle); // Удаляем обработчик
+    window.removeEventListener("keydown", handle);
   }
 };
 
