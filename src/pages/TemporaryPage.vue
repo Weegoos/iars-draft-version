@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { QSpinnerGears, useQuasar } from "quasar";
+import { event, QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";

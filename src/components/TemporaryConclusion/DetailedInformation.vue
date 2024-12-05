@@ -5,6 +5,7 @@
         <div>
           <q-tabs v-model="tab" class="text-teal">
             <q-tab name="info" icon="info" label="Подробная информация" />
+            <q-tab name="edit" icon="edit" label="Редактировать" />
           </q-tabs>
 
           <q-tab-panels
@@ -204,6 +205,9 @@
                 </q-expansion-item>
               </q-list>
             </q-tab-panel>
+            <q-tab-panel name="edit">
+              <EditPage />
+            </q-tab-panel>
           </q-tab-panels>
         </div>
         <q-card-actions align="center">
@@ -227,6 +231,8 @@
 </template>
 
 <script setup>
+import EditPage from "./EditPage.vue";
+
 import { QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
