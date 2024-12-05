@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @keydown="handle" tabindex="0">
     <q-layout view="hHr LpR lFf" container style="height: 100vh">
       <q-drawer
         v-if="!isAuthPage"
@@ -39,6 +39,7 @@
       <q-page-container>
         <q-page padding>
           <router-view />
+          <KeyboardPage ref="childRef" />
         </q-page>
       </q-page-container>
     </q-layout>
@@ -46,6 +47,8 @@
 </template>
 
 <script setup>
+import KeyboardPage from "../pages/KeyboardPage.vue";
+
 import axios from "axios";
 import { useUserStore } from "src/stores/getApi-store";
 import { onMounted, ref, watch, computed, onBeforeMount } from "vue";
@@ -62,6 +65,24 @@ const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
+
+const childRef = ref(null);
+
+const callChildMethod = () => {
+  childRef.value?.show();
+};
+
+const isKeyDownHandled = ref(false);
+const handle = (event) => {
+  if (event.key === "Shift") {
+    callChildMethod();
+    window.removeEventListener("keydown", handle); // Удаляем обработчик
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("keydown", handle);
+});
 
 const isAuthPage = computed(() => {
   return route.path === "/authorization" || route.path === "/registration";
@@ -97,6 +118,7 @@ const defineRole = () => {
 
 onBeforeMount(() => {
   defineRole();
+  // window.removeEventListener("keydown", handle);
 });
 
 const nav = (route) => {

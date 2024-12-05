@@ -115,6 +115,7 @@ module.exports = configure(function (/* ctx */) {
         "Notify",
         "Loading", // Your other plugins...
         "Cookies",
+        "BottomSheet",
       ],
     },
 
