@@ -16,6 +16,9 @@ export const useUserStore = defineStore("user", {
   }),
   actions: {
     async getUserInfo() {
+      if (!localStorage.getItem("accessToken")) {
+        window.location.reload();
+      }
       try {
         const response = await axios.get(`${this.serverUrl}getInfo`, {
           headers: {
@@ -29,6 +32,7 @@ export const useUserStore = defineStore("user", {
         this.role = response.data.job.name;
       } catch (error) {
         console.error("Ошибка при получении данных пользователя:", error);
+        localStorage.clear();
       }
     },
     async getAllNames() {

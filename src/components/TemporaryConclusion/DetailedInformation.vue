@@ -206,7 +206,9 @@
               </q-list>
             </q-tab-panel>
             <q-tab-panel name="edit">
-              <EditPage />
+              <EditPage
+                :conclusionInformation="props.conclusionDetailedInformation"
+              />
             </q-tab-panel>
           </q-tab-panels>
         </div>

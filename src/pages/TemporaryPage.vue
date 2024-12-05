@@ -119,13 +119,18 @@ const getTemporaryConclusion = async () => {
     $q.loading.hide();
   } catch (error) {
     $q.loading.hide();
-    console.log(error);
+    console.error(error);
     notifyStore.notifyError($q, `Ошибка при получении заключении: ${error}`);
   }
 };
 
 onMounted(() => {
-  getTemporaryConclusion();
+  if (localStorage.getItem("accessToken")) {
+    getTemporaryConclusion();
+  } else {
+    localStorage.clear();
+    window.location.href = "http://localhost:9000/#/authorization";
+  }
 });
 </script>
 
