@@ -15,12 +15,43 @@ function show(grid) {
     grid,
     actions: [
       {
-        label: "Авторизация",
+        label: "Регистрация",
         icon: "filter_1",
       },
       {
+        label: "Создать аккаунт (Enter)",
+        icon: "keyboard_command",
+      },
+      {},
+      {
+        label: "Авторизация",
+        icon: "filter_2",
+      },
+      {
         label: "Авторизоваться (Enter)",
-        icon: "1",
+        icon: "keyboard_command",
+      },
+      {},
+      {
+        label: "Главная страница",
+        icon: "filter_3",
+      },
+      {
+        label: "Фильтрация (Enter)",
+        icon: "keyboard_command",
+      },
+      {
+        label: "Очистить поля фильтрации (Backspace + Shift)",
+        icon: "keyboard_command",
+      },
+      {},
+      {
+        label: "Допольнительно",
+        icon: "filter_4",
+      },
+      {
+        label: "Показать подсказку горячих клавиш (Shift)",
+        icon: "keyboard_command",
       },
     ],
   })
