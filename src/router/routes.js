@@ -27,6 +27,10 @@ const routes = [
     path: "/temporary-conclusion",
     component: () => import("../pages/TemporaryPage.vue"),
   },
+  {
+    path: "/edit-temps",
+    component: () => import("../components/TemporaryConclusion/EditPage.vue"),
+  },
 
   // Always leave this as last one,
   // but you can also remove it
