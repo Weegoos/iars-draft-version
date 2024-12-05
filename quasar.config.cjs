@@ -114,6 +114,7 @@ module.exports = configure(function (/* ctx */) {
       plugins: [
         "Notify",
         "Loading", // Your other plugins...
+        "Cookies",
       ],
     },
 

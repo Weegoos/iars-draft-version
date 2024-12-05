@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row q-gutter-sm">
+    <div class="row q-gutter-sm" @keydown="handleFilter">
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
@@ -139,6 +139,9 @@
         label="Скачать в формате excel"
         @click="downloadExcel"
       />
+      <div>
+        <q-tooltip> I am groot! </q-tooltip>
+      </div>
     </div>
     <q-table
       flat
@@ -162,12 +165,14 @@ import DetailedInformation from "../components/CardPage/DetailedInformation.vue"
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar, Cookies } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 
 const $q = useQuasar();
+Cookies.has("cookie_name");
+console.log(Cookies.has("access_token"));
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
@@ -364,6 +369,17 @@ const filter = async () => {
   } catch (error) {
     console.error("Error during filter request:", error);
   }
+};
+
+const handleFilter = (event) => {
+  if (event.key === "Enter") {
+    filter();
+  }
+  if (event.key === "Backspace" && event.shiftKey) {
+    statusOfDocuments.value = "";
+  }
+
+  console.log(event);
 };
 
 const defineList = async () => {

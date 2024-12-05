@@ -58,7 +58,7 @@
 
 <script setup>
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { QSpinnerGears, useQuasar, Cookies } from "quasar";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { getCurrentInstance } from "vue";
@@ -95,6 +95,7 @@ const login = async () => {
     });
 
     localStorage.setItem("accessToken", response.data.accessToken);
+    Cookies.set("access_token", response.data.accessToken);
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
 
