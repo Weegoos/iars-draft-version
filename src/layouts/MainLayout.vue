@@ -37,7 +37,7 @@
         </q-list>
       </q-drawer>
       <q-page-container>
-        <q-page padding>
+        <q-page>
           <router-view />
           <KeyboardPage ref="childRef" />
         </q-page>

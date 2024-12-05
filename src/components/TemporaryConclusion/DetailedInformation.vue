@@ -219,6 +219,7 @@
             label="Согласовать"
             @click="turnToPermanent(props.conclusionDetailedInformation)"
           />
+          <q-btn color="orange-4" no-caps label="Редактировать" @click="edit" />
           <q-btn
             color="red-4"
             flat
@@ -243,6 +244,7 @@ import { computed, getCurrentInstance, ref, watch } from "vue";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
 const tab = ref("info");
 const $q = useQuasar();
 const javascriptStore = useJavaScriptFunction();
@@ -316,6 +318,13 @@ const turnToPermanent = async (documentInfo) => {
     notifyStore.notifyError($q, `Ошибка при смене статуса документа: ${error}`);
     console.error(error);
   }
+};
+
+const edit = async () => {
+  window.open(
+    `${webUrl}edit-temps?registrationNumber=${props.conclusionDetailedInformation.registrationNumber}`,
+    "_blank"
+  );
 };
 </script>
 
