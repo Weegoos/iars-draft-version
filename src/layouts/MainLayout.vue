@@ -73,9 +73,10 @@ const callChildMethod = () => {
 };
 
 const handle = (event) => {
-  if (event.key === "Shift") {
+  if (event.key === "Shift" && event.altKey) {
     callChildMethod();
     window.removeEventListener("keydown", handle);
+    console.log(777);
   }
 };
 

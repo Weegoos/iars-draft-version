@@ -50,7 +50,7 @@ function show(grid) {
         icon: "filter_4",
       },
       {
-        label: "Показать подсказку горячих клавиш (Shift)",
+        label: "Показать подсказку горячих клавиш (Alt + Shift)",
         icon: "keyboard_command",
       },
     ],

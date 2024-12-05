@@ -189,7 +189,7 @@ onMounted(() => {
   interval = setInterval(() => {
     slideIndex = (slideIndex + 1) % slides.length;
     slide.value = slides[slideIndex];
-  }, 7500);
+  }, 5500);
 });
 
 onBeforeMount(() => {

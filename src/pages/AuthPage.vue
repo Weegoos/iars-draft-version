@@ -4,15 +4,38 @@
     style="display: flex; height: 100vh; width: 100vw"
     @keydown="handleKeydown"
   >
-    <div style="flex: 1; position: relative; overflow: hidden">
+    <div
+      style="
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+      "
+    >
       <video
         src="../assets/video/background.mp4"
         autoplay
         muted
         loop
         playsinline
-        style="width: 100%; height: 100%; object-fit: cover"
+        style="
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: -1;
+        "
       ></video>
+
+      <div class="typewriter">
+        <p class="text-body1">«Автоматизация повесток и вызовов»</p>
+      </div>
     </div>
     <div class="content">
       <q-card class="my-card" style="width: 50vw">
@@ -129,5 +152,50 @@ const pushToRegistrationPage = () => {
   align-items: center;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+.typewriter p {
+  color: white;
+  overflow: hidden;
+  border-right: 0.15em solid orange; /* The typwriter cursor */
+  white-space: nowrap;
+  margin: 0 auto;
+  font-family: monospace;
+  letter-spacing: 0.15em;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
+
+.fade-in p {
+  opacity: 0;
+  animation: fadeIn 2s forwards; /* Анимация плавного появления */
+}
+
+/* Определяем саму анимацию */
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Начинаем с невидимости */
+  }
+  to {
+    opacity: 1; /* Плавно становимся видимым */
+  }
 }
 </style>
