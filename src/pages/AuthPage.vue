@@ -1,5 +1,9 @@
 <template>
-  <div class="fixed-center" style="display: flex; height: 100vh; width: 100vw">
+  <div
+    class="fixed-center"
+    style="display: flex; height: 100vh; width: 100vw"
+    @keydown="handleKeydown"
+  >
     <div style="flex: 1; position: relative; overflow: hidden">
       <video
         src="../assets/video/background.mp4"
@@ -74,6 +78,8 @@ const isPwd = ref(true);
 
 const login = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
+  console.log("Key");
+
   try {
     const data = {
       email: email.value,
@@ -99,6 +105,12 @@ const login = async () => {
     console.error("Error during registration:", error);
     $q.loading.hide();
     notifyStore.notifyError($q, `Ошибка при авторизации: ${error}`);
+  }
+};
+
+const handleKeydown = (event) => {
+  if (event.key === "Enter") {
+    login();
   }
 };
 

@@ -16,9 +16,6 @@ export const useUserStore = defineStore("user", {
   }),
   actions: {
     async getUserInfo() {
-      if (!localStorage.getItem("accessToken")) {
-        window.location.reload();
-      }
       try {
         const response = await axios.get(`${this.serverUrl}getInfo`, {
           headers: {
