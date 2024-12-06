@@ -40,7 +40,7 @@
             />
           </section>
         </div>
-        <div class="row q-gutter">
+        <div class="row q-gutter-md">
           <section class="col">
             <q-input
               v-model="jobTitle"
@@ -48,6 +48,17 @@
               label="Должность вызываемого"
               color="white"
               :hint="currentJobTitle"
+              input-class="input"
+              dark
+            />
+          </section>
+          <section class="col">
+            <q-input
+              v-model="region"
+              label-color="white"
+              label="Регион"
+              color="white"
+              :hint="currentRegion"
               input-class="input"
               dark
             />
@@ -96,6 +107,7 @@ const currentIdNumber = ref("");
 const currentIINOfCalled = ref("");
 const currentBin = ref("");
 const currentJobTitle = ref("");
+const currentRegion = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   try {
     const response = await axios.get(
@@ -113,6 +125,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
     currentBin.value = `${current} БИН/ИИН: ${response.data.calledPersonBIN}`;
     currentJobTitle.value = `${current} должность вызываемого: ${response.data.calledPersonPosition}`;
+    currentRegion.value = `${current} регион: ${response.data.region.name}`;
     console.log(response.data);
   } catch (error) {
     console.error(error);
@@ -125,6 +138,7 @@ const idNumber = ref("");
 const iinOfCalled = ref("");
 const bin = ref("");
 const jobTitle = ref("");
+const region = ref("");
 const editTemporaryConclusion = async () => {
   try {
     await userStore.getUserInfo();
@@ -136,6 +150,7 @@ const editTemporaryConclusion = async () => {
     if (iinOfCalled.value) params.append("iinOfCalled", iinOfCalled.value);
     if (bin.value) params.append("BIN", bin.value);
     if (jobTitle.value) params.append("jobTitle", jobTitle.value);
+    if (region.value) params.append("region", region.value);
     params.append("iinOfInvestigator", userInfo.iin);
 
     const response = await axios.put(
@@ -151,7 +166,7 @@ const editTemporaryConclusion = async () => {
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error(error.data);
   }
 };
 
