@@ -149,6 +149,17 @@
               :options="listOfRegion"
             />
           </section>
+          <section class="col">
+            <!-- Отношение вызывающего к событию и субъекту  -->
+            <q-input
+              v-model="relation"
+              dark
+              label-color="white"
+              label="Отношение вызывающего к событию и субъекту"
+              color="white"
+              :hint="currentRelation"
+            />
+          </section>
         </div>
       </q-card-section>
       <q-card-actions vertical align="center">
@@ -201,6 +212,7 @@ const currentRegion = ref("");
 const currentPlannedAction = ref("");
 const currentDateTime = ref("");
 const currentEventPlace = ref("");
+const currentRelation = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -223,6 +235,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentPlannedAction.value = `${current} планируемые следственные действия: ${response.data.plannedInvestigativeActions}`;
     currentDateTime.value = `${current} дата и время проведения: ${response.data.eventDateTime}`;
     currentEventPlace.value = `${current} место проведения: ${response.data.eventPlace}`;
+    currentRelation.value = `${current} отношение вызывающего: ${response.data.relationToEvent}`;
 
     console.log(response.data);
     $q.loading.hide();
@@ -245,6 +258,7 @@ const plannedAction = ref("");
 const date = ref("");
 const formattedDate = ref("Дата и время проведения");
 const eventPlace = ref("");
+const relation = ref("");
 
 function updateFormattedDate(newValue) {
   date.value = newValue;
@@ -273,6 +287,7 @@ const editTemporaryConclusion = async () => {
     params.append("iinOfInvestigator", userInfo.iin);
     if (date.value) params.append("eventDateTime", formattedDate.value);
     if (eventPlace.value) params.append("eventPlace", eventPlace.value);
+    if (relation.value) params.append("relation", relation.value);
 
     const response = await axios.put(
       `${serverUrl}edit?${params.toString()}`,
