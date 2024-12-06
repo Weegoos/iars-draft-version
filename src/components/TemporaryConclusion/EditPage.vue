@@ -53,7 +53,7 @@
             />
           </section>
           <section class="col">
-            <q-input
+            <q-select
               v-model="region"
               label-color="white"
               label="Регион"
@@ -61,6 +61,7 @@
               :hint="currentRegion"
               input-class="input"
               dark
+              :options="listOfRegion"
             />
           </section>
           <section class="col">
@@ -136,6 +137,18 @@
               </template>
             </q-input>
           </section>
+          <section class="col">
+            <q-select
+              v-model="eventPlace"
+              label-color="white"
+              label="Место проведения"
+              color="white"
+              :hint="currentEventPlace"
+              input-class="input"
+              dark
+              :options="listOfRegion"
+            />
+          </section>
         </div>
       </q-card-section>
       <q-card-actions vertical align="center">
@@ -187,6 +200,7 @@ const currentJobTitle = ref("");
 const currentRegion = ref("");
 const currentPlannedAction = ref("");
 const currentDateTime = ref("");
+const currentEventPlace = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -208,6 +222,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentRegion.value = `${current} регион: ${response.data.region.name}`;
     currentPlannedAction.value = `${current} планируемые следственные действия: ${response.data.plannedInvestigativeActions}`;
     currentDateTime.value = `${current} дата и время проведения: ${response.data.eventDateTime}`;
+    currentEventPlace.value = `${current} место проведения: ${response.data.eventPlace}`;
 
     console.log(response.data);
     $q.loading.hide();
@@ -229,9 +244,11 @@ const region = ref("");
 const plannedAction = ref("");
 const date = ref("");
 const formattedDate = ref("Дата и время проведения");
+const eventPlace = ref("");
+
 function updateFormattedDate(newValue) {
   date.value = newValue;
-  formattedDate.value = newValue.replace(" ", "T"); // Заменяем пробел на 'T'
+  formattedDate.value = newValue.replace(" ", "T");
 }
 
 watch(date, (newVal) => {
@@ -254,8 +271,8 @@ const editTemporaryConclusion = async () => {
     if (plannedAction.value)
       params.append("plannedActions", plannedAction.value);
     params.append("iinOfInvestigator", userInfo.iin);
-    if (formattedDate.value)
-      params.append("eventDateTime", formattedDate.value);
+    if (date.value) params.append("eventDateTime", formattedDate.value);
+    if (eventPlace.value) params.append("eventPlace", eventPlace.value);
 
     const response = await axios.put(
       `${serverUrl}edit?${params.toString()}`,
@@ -276,20 +293,23 @@ const editTemporaryConclusion = async () => {
     }, 1500);
   } catch (error) {
     $q.loading.hide();
-    console.error(error.data);
-    notifyStore.notifyError(
-      $q,
-      `Ошибка во время редактирование: ${error.data}`
-    );
+    console.error(error);
+    notifyStore.notifyError($q, `Ошибка во время редактирование: ${error}`);
   }
 };
 
 const listOfUD = ref("");
+const listOfRegion = ref("");
 const getNeccessaryAPI = async () => {
   try {
     await userStore.getAllUD();
     const allUD = userStore.allUD;
+
+    await userStore.getAllRegions();
+    const allRegions = userStore.allRegions;
+
     listOfUD.value = allUD;
+    listOfRegion.value = allRegions;
   } catch (error) {
     console.log(error);
   }
