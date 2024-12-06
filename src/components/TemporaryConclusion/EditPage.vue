@@ -195,6 +195,30 @@
             />
           </section>
         </div>
+        <div class="row q-gutter-md">
+          <section class="col">
+            <q-input
+              v-model="justification"
+              type="text"
+              label="Обоснование и необходимость участия предпринимателя"
+              dark
+              label-color="white"
+              color="white"
+              :hint="currentJustification"
+            />
+          </section>
+          <section class="col">
+            <q-input
+              v-model="result"
+              type="text"
+              label="Результат от планируемого следственного действия"
+              dark
+              label-color="white"
+              color="white"
+              :hint="currentResult"
+            />
+          </section>
+        </div>
       </q-card-section>
       <q-card-actions vertical align="center">
         <q-btn
@@ -250,6 +274,8 @@ const currentRelation = ref("");
 const currentInvestigationType = ref("");
 const currentRelatesToBusiness = ref("");
 const currentIinDefender = ref("");
+const currentJustification = ref("");
+const currentResult = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -276,6 +302,8 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentInvestigationType.value = `${current} вид планируемого следствия: ${response.data.investigationTypes}`;
     currentRelatesToBusiness.value = `Текушее отношение к бизнесу: ${response.data.relatesToBusiness}`;
     currentIinDefender.value = `${current} ИИН защитника: ${response.data.defenseAttorneyIIN}`;
+    currentJustification.value = `Текущее обоснование и необходимость участия предпринимателя: ${response.data.justification}`;
+    currentResult.value = `${current} результат: ${response.data.result}`;
 
     console.log(response.data);
     $q.loading.hide();
@@ -301,6 +329,8 @@ const eventPlace = ref("");
 const relation = ref("");
 const investigationType = ref("");
 const relatesToBusiness = ref("");
+const justification = ref("");
+const result = ref("");
 
 function updateFormattedDate(newValue) {
   date.value = newValue;
@@ -334,6 +364,9 @@ const editTemporaryConclusion = async () => {
       params.append("investigationType", investigationType.value);
     if (relatesToBusiness.value)
       params.append("relatesToBusiness", relatesToBusiness.value);
+    if (justification.value)
+      params.append("justification", justification.value);
+    if (result.value) params.append("result", result.value);
 
     const response = await axios.put(
       `${serverUrl}edit?${params.toString()}`,
