@@ -13,6 +13,7 @@ export const useUserStore = defineStore("user", {
     allRegions: null,
     allDepartments: null,
     allActions: null,
+    allBusiness: null,
     serverUrl: "http://localhost:5002/",
   }),
   actions: {
@@ -114,6 +115,20 @@ export const useUserStore = defineStore("user", {
           withCredentials: true,
         });
         this.allActions = response.data;
+      } catch (error) {
+        console.error("Ошибка при запросе:", error);
+      }
+    },
+    async getAllBusiness() {
+      try {
+        const response = await axios.get(`${this.serverUrl}allBusinesses`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        });
+        this.allBusiness = response.data;
       } catch (error) {
         console.error("Ошибка при запросе:", error);
       }

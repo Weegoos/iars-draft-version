@@ -172,6 +172,17 @@
               :options="listOfInvestigationType"
             />
           </section>
+          <section class="col">
+            <q-select
+              v-model="relatesToBusiness"
+              dark
+              label-color="white"
+              label="Относится ли к бизнесу"
+              color="white"
+              :hint="currentRelatesToBusiness"
+              :options="listOfRelatesToBusiness"
+            />
+          </section>
         </div>
       </q-card-section>
       <q-card-actions vertical align="center">
@@ -226,6 +237,7 @@ const currentDateTime = ref("");
 const currentEventPlace = ref("");
 const currentRelation = ref("");
 const currentInvestigationType = ref("");
+const currentRelatesToBusiness = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -250,6 +262,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentEventPlace.value = `${current} место проведения: ${response.data.eventPlace}`;
     currentRelation.value = `${current} отношение вызывающего: ${response.data.relationToEvent}`;
     currentInvestigationType.value = `${current} вид планируемого следствия: ${response.data.investigationTypes}`;
+    currentRelatesToBusiness.value = `Текушее отношение к бизнесу: ${response.data.relatesToBusiness}`;
 
     console.log(response.data);
     $q.loading.hide();
@@ -274,6 +287,7 @@ const formattedDate = ref("Дата и время проведения");
 const eventPlace = ref("");
 const relation = ref("");
 const investigationType = ref("");
+const relatesToBusiness = ref("");
 
 function updateFormattedDate(newValue) {
   date.value = newValue;
@@ -305,6 +319,8 @@ const editTemporaryConclusion = async () => {
     if (relation.value) params.append("relation", relation.value);
     if (investigationType.value)
       params.append("investigationType", investigationType.value);
+    if (relatesToBusiness.value)
+      params.append("relatesToBusiness", relatesToBusiness.value);
 
     const response = await axios.put(
       `${serverUrl}edit?${params.toString()}`,
@@ -333,8 +349,14 @@ const editTemporaryConclusion = async () => {
 const listOfUD = ref("");
 const listOfRegion = ref("");
 const listOfInvestigationType = ref("");
+const listOfRelatesToBusiness = ref("");
 const getNeccessaryAPI = async () => {
   try {
+    notifyStore.loading(
+      $q,
+      "Подождите, данные с базы загружаются...",
+      QSpinnerGears
+    );
     await userStore.getAllUD();
     const allUD = userStore.allUD;
 
@@ -344,11 +366,18 @@ const getNeccessaryAPI = async () => {
     await userStore.getAllActions();
     const allInvestigationType = userStore.allActions;
 
+    await userStore.getAllBusiness();
+    listOfRelatesToBusiness.value = userStore.allBusiness;
+
     listOfUD.value = allUD;
     listOfRegion.value = allRegions;
     listOfInvestigationType.value = allInvestigationType;
+
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Данные успешно загружены с базы данных");
   } catch (error) {
     console.log(error);
+    notifyStore.notifyError($q, `Ошибка: ${error}`);
   }
 };
 
