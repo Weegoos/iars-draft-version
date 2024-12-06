@@ -75,6 +75,68 @@
             />
           </section>
         </div>
+        <div class="row q-gutter-md">
+          <section class="col">
+            <q-input
+              v-model="formattedDate"
+              dark
+              label-color="white"
+              color="white"
+              :hint="currentDateTime"
+            >
+              <template v-slot:prepend>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date
+                      v-model="date"
+                      mask="YYYY-MM-DD HH:mm"
+                      @update:model-value="updateFormattedDate"
+                    >
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+
+              <template v-slot:append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-time
+                      v-model="date"
+                      mask="YYYY-MM-DD HH:mm"
+                      format24h
+                      @update:model-value="updateFormattedDate"
+                    >
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-time>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </section>
+        </div>
       </q-card-section>
       <q-card-actions vertical align="center">
         <q-btn
@@ -94,7 +156,7 @@ import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
 
 const userStore = useUserStore();
@@ -124,6 +186,7 @@ const currentBin = ref("");
 const currentJobTitle = ref("");
 const currentRegion = ref("");
 const currentPlannedAction = ref("");
+const currentDateTime = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -144,6 +207,8 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentJobTitle.value = `${current} должность вызываемого: ${response.data.calledPersonPosition}`;
     currentRegion.value = `${current} регион: ${response.data.region.name}`;
     currentPlannedAction.value = `${current} планируемые следственные действия: ${response.data.plannedInvestigativeActions}`;
+    currentDateTime.value = `${current} дата и время проведения: ${response.data.eventDateTime}`;
+
     console.log(response.data);
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Данные успешно загружены");
@@ -162,6 +227,17 @@ const bin = ref("");
 const jobTitle = ref("");
 const region = ref("");
 const plannedAction = ref("");
+const date = ref("");
+const formattedDate = ref("Дата и время проведения");
+function updateFormattedDate(newValue) {
+  date.value = newValue;
+  formattedDate.value = newValue.replace(" ", "T"); // Заменяем пробел на 'T'
+}
+
+watch(date, (newVal) => {
+  formattedDate.value = newVal.replace(" ", "T");
+});
+
 const editTemporaryConclusion = async () => {
   try {
     notifyStore.loading($q, "Редактирование в процессе...", QSpinnerGears);
@@ -178,6 +254,8 @@ const editTemporaryConclusion = async () => {
     if (plannedAction.value)
       params.append("plannedActions", plannedAction.value);
     params.append("iinOfInvestigator", userInfo.iin);
+    if (formattedDate.value)
+      params.append("eventDateTime", formattedDate.value);
 
     const response = await axios.put(
       `${serverUrl}edit?${params.toString()}`,
