@@ -1,10 +1,17 @@
 <template>
   <div class="text-white edit">
-    <!-- <q-card class="my-card fixed-center text-white">
-      <q-card-section>
-        <q-input v-model="text" label="Label (stacked)" stack-label />
+    <q-card class="my-card fixed-center text-white" style="width: 500px">
+      <q-card-section class="text-white">
+        <q-input
+          v-model="text"
+          label-color="white"
+          label="Номер УД "
+          color="white"
+          standout
+          style="color: white"
+        />
       </q-card-section>
-    </q-card> -->
+    </q-card>
   </div>
 </template>
 

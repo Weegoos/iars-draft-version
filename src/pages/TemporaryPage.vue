@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <p class="text-h5 text-bold text-center">Временные заключении</p>
     <q-table
       flat
