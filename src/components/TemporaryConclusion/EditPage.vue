@@ -150,6 +150,7 @@ const jobTitle = ref("");
 const region = ref("");
 const editTemporaryConclusion = async () => {
   try {
+    notifyStore.loading($q, "Редактирование в процессе...", QSpinnerGears);
     await userStore.getUserInfo();
     const userInfo = userStore.userInfo;
     const params = new URLSearchParams();
@@ -174,8 +175,18 @@ const editTemporaryConclusion = async () => {
         withCredentials: true,
       }
     );
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Заключение было успешно отредактировано");
+    setTimeout(() => {
+      location.reload();
+    }, 1500);
   } catch (error) {
+    $q.loading.hide();
     console.error(error.data);
+    notifyStore.notifyError(
+      $q,
+      `Ошибка во время редактирование: ${error.data}`
+    );
   }
 };
 
