@@ -1,6 +1,6 @@
 <template>
   <div class="text-white edit">
-    <q-card class="my-card fixed-center text-white" style="width: 700px">
+    <q-card class="my-card fixed-center text-white" style="width: 1000px">
       <q-card-section class="text-white">
         <div class="row q-gutter-md">
           <section class="col">
@@ -22,6 +22,18 @@
               label="ИИН вызываемого"
               color="white"
               :hint="currentIINOfCalled"
+              input-class="input"
+              dark
+              mask="############"
+            />
+          </section>
+          <section class="col">
+            <q-input
+              v-model="bin"
+              label-color="white"
+              label="БИН/ИИН"
+              color="white"
+              :hint="currentBin"
               input-class="input"
               dark
               mask="############"
@@ -69,6 +81,7 @@ if (hash.includes("?")) {
 const current = "Текущий";
 const currentIdNumber = ref("");
 const currentIINOfCalled = ref("");
+const currentBin = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   try {
     const response = await axios.get(
@@ -84,6 +97,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     );
     currentIdNumber.value = `${current} номер УД: ${response.data.udNumber}`;
     currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
+    currentBin.value = `${current} БИН/ИИН: ${response.data.calledPersonBIN}`;
     console.log(response.data);
   } catch (error) {
     console.error(error);
@@ -94,6 +108,7 @@ getInformationBasedOnRegistrationNumber();
 
 const idNumber = ref("");
 const iinOfCalled = ref("");
+const bin = ref("");
 const editTemporaryConclusion = async () => {
   try {
     await userStore.getUserInfo();
@@ -103,6 +118,7 @@ const editTemporaryConclusion = async () => {
     params.append("registrationNumber", registrationNumber.value);
     if (idNumber.value) params.append("UD", idNumber.value);
     if (iinOfCalled.value) params.append("iinOfCalled", iinOfCalled.value);
+    if (bin.value) params.append("BIN", bin.value);
     params.append("iinOfInvestigator", userInfo.iin);
 
     const response = await axios.put(
