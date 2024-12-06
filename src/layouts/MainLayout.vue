@@ -88,7 +88,8 @@ const isAuthPage = computed(() => {
   return (
     route.path === "/authorization" ||
     route.path === "/registration" ||
-    route.path === "/edit-temps"
+    route.path === "/edit-temps" ||
+    route.path === "/remake-temps"
   );
 });
 

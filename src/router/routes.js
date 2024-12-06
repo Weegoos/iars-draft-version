@@ -31,6 +31,10 @@ const routes = [
     path: "/edit-temps",
     component: () => import("../components/TemporaryConclusion/EditPage.vue"),
   },
+  {
+    path: "/remake-temps",
+    component: () => import("../components/Remake/RemakePage.vue"),
+  },
 
   // Always leave this as last one,
   // but you can also remove it
