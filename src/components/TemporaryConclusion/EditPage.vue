@@ -40,6 +40,19 @@
             />
           </section>
         </div>
+        <div class="row q-gutter">
+          <section class="col">
+            <q-input
+              v-model="jobTitle"
+              label-color="white"
+              label="Должность вызываемого"
+              color="white"
+              :hint="currentJobTitle"
+              input-class="input"
+              dark
+            />
+          </section>
+        </div>
       </q-card-section>
       <q-card-actions vertical align="center">
         <q-btn
@@ -82,6 +95,7 @@ const current = "Текущий";
 const currentIdNumber = ref("");
 const currentIINOfCalled = ref("");
 const currentBin = ref("");
+const currentJobTitle = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   try {
     const response = await axios.get(
@@ -98,6 +112,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentIdNumber.value = `${current} номер УД: ${response.data.udNumber}`;
     currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
     currentBin.value = `${current} БИН/ИИН: ${response.data.calledPersonBIN}`;
+    currentJobTitle.value = `${current} должность вызываемого: ${response.data.calledPersonPosition}`;
     console.log(response.data);
   } catch (error) {
     console.error(error);
@@ -109,6 +124,7 @@ getInformationBasedOnRegistrationNumber();
 const idNumber = ref("");
 const iinOfCalled = ref("");
 const bin = ref("");
+const jobTitle = ref("");
 const editTemporaryConclusion = async () => {
   try {
     await userStore.getUserInfo();
@@ -119,6 +135,7 @@ const editTemporaryConclusion = async () => {
     if (idNumber.value) params.append("UD", idNumber.value);
     if (iinOfCalled.value) params.append("iinOfCalled", iinOfCalled.value);
     if (bin.value) params.append("BIN", bin.value);
+    if (jobTitle.value) params.append("jobTitle", jobTitle.value);
     params.append("iinOfInvestigator", userInfo.iin);
 
     const response = await axios.put(
