@@ -150,7 +150,6 @@
             />
           </section>
           <section class="col">
-            <!-- Отношение вызывающего к событию и субъекту  -->
             <q-input
               v-model="relation"
               dark
@@ -163,13 +162,14 @@
         </div>
         <div class="row q-gutter-md">
           <section class="col">
-            <q-input
-              v-model="relation"
+            <q-select
+              v-model="investigationType"
               dark
               label-color="white"
-              label="Отношение вызывающего к событию и субъекту"
+              label="Виды планируемого следствия"
               color="white"
-              :hint="currentRelation"
+              :hint="currentInvestigationType"
+              :options="listOfInvestigationType"
             />
           </section>
         </div>
@@ -225,6 +225,7 @@ const currentPlannedAction = ref("");
 const currentDateTime = ref("");
 const currentEventPlace = ref("");
 const currentRelation = ref("");
+const currentInvestigationType = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -248,6 +249,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentDateTime.value = `${current} дата и время проведения: ${response.data.eventDateTime}`;
     currentEventPlace.value = `${current} место проведения: ${response.data.eventPlace}`;
     currentRelation.value = `${current} отношение вызывающего: ${response.data.relationToEvent}`;
+    currentInvestigationType.value = `${current} вид планируемого следствия: ${response.data.investigationTypes}`;
 
     console.log(response.data);
     $q.loading.hide();
@@ -271,6 +273,7 @@ const date = ref("");
 const formattedDate = ref("Дата и время проведения");
 const eventPlace = ref("");
 const relation = ref("");
+const investigationType = ref("");
 
 function updateFormattedDate(newValue) {
   date.value = newValue;
@@ -300,6 +303,8 @@ const editTemporaryConclusion = async () => {
     if (date.value) params.append("eventDateTime", formattedDate.value);
     if (eventPlace.value) params.append("eventPlace", eventPlace.value);
     if (relation.value) params.append("relation", relation.value);
+    if (investigationType.value)
+      params.append("investigationType", investigationType.value);
 
     const response = await axios.put(
       `${serverUrl}edit?${params.toString()}`,
@@ -327,6 +332,7 @@ const editTemporaryConclusion = async () => {
 
 const listOfUD = ref("");
 const listOfRegion = ref("");
+const listOfInvestigationType = ref("");
 const getNeccessaryAPI = async () => {
   try {
     await userStore.getAllUD();
@@ -335,8 +341,12 @@ const getNeccessaryAPI = async () => {
     await userStore.getAllRegions();
     const allRegions = userStore.allRegions;
 
+    await userStore.getAllActions();
+    const allInvestigationType = userStore.allActions;
+
     listOfUD.value = allUD;
     listOfRegion.value = allRegions;
+    listOfInvestigationType.value = allInvestigationType;
   } catch (error) {
     console.log(error);
   }

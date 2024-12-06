@@ -12,6 +12,7 @@ export const useUserStore = defineStore("user", {
     allUD: null,
     allRegions: null,
     allDepartments: null,
+    allActions: null,
     serverUrl: "http://localhost:5002/",
   }),
   actions: {
@@ -99,6 +100,20 @@ export const useUserStore = defineStore("user", {
           withCredentials: true,
         });
         this.allDepartments = response.data;
+      } catch (error) {
+        console.error("Ошибка при запросе:", error);
+      }
+    },
+    async getAllActions() {
+      try {
+        const response = await axios.get(`${this.serverUrl}allActions`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        });
+        this.allActions = response.data;
       } catch (error) {
         console.error("Ошибка при запросе:", error);
       }
