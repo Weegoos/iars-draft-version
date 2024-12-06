@@ -80,13 +80,17 @@
 
 <script setup>
 import axios from "axios";
+import { QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
+import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 
 const userStore = useUserStore();
+const notifyStore = useNotifyStore();
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const $q = useQuasar();
 
 const hash = window.location.hash;
 const registrationNumber = ref("");
@@ -109,6 +113,7 @@ const currentBin = ref("");
 const currentJobTitle = ref("");
 const currentRegion = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
+  notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
     const response = await axios.get(
       `http://localhost:5002/fullTempConclusion?regNumber=${registrationNumber.value}`,
@@ -127,8 +132,12 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentJobTitle.value = `${current} должность вызываемого: ${response.data.calledPersonPosition}`;
     currentRegion.value = `${current} регион: ${response.data.region.name}`;
     console.log(response.data);
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, "Данные успешно загружены");
   } catch (error) {
-    console.error(error);
+    $q.loading.hide();
+    console.error(error.data);
+    notifyStore.notifyError($q, `Ошибка при получении данных: ${error.data}`);
   }
 };
 
