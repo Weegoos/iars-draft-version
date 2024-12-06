@@ -150,6 +150,7 @@
       :columns="columns"
       row-key="id"
       @row-click="viewDetailedInformation"
+      v-model:pagination="pagination"
     />
     <DetailedInformation
       :isOpen="isOpen"
@@ -180,6 +181,7 @@ const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 const javascriptFunction = useJavaScriptFunction();
 
+const pagination = ref({ rowsPerPage: 0 });
 const isOpen = ref(false);
 const detialedInformation = ref("");
 const viewDetailedInformation = (evt, row, index) => {
