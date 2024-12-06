@@ -63,6 +63,17 @@
               dark
             />
           </section>
+          <section class="col">
+            <q-input
+              v-model="plannedAction"
+              label-color="white"
+              label="Планируемые следственные действия"
+              color="white"
+              :hint="currentPlannedAction"
+              input-class="input"
+              dark
+            />
+          </section>
         </div>
       </q-card-section>
       <q-card-actions vertical align="center">
@@ -112,6 +123,7 @@ const currentIINOfCalled = ref("");
 const currentBin = ref("");
 const currentJobTitle = ref("");
 const currentRegion = ref("");
+const currentPlannedAction = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -131,6 +143,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentBin.value = `${current} БИН/ИИН: ${response.data.calledPersonBIN}`;
     currentJobTitle.value = `${current} должность вызываемого: ${response.data.calledPersonPosition}`;
     currentRegion.value = `${current} регион: ${response.data.region.name}`;
+    currentPlannedAction.value = `${current} планируемые следственные действия: ${response.data.plannedInvestigativeActions}`;
     console.log(response.data);
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Данные успешно загружены");
@@ -148,6 +161,7 @@ const iinOfCalled = ref("");
 const bin = ref("");
 const jobTitle = ref("");
 const region = ref("");
+const plannedAction = ref("");
 const editTemporaryConclusion = async () => {
   try {
     notifyStore.loading($q, "Редактирование в процессе...", QSpinnerGears);
@@ -161,6 +175,8 @@ const editTemporaryConclusion = async () => {
     if (bin.value) params.append("BIN", bin.value);
     if (jobTitle.value) params.append("jobTitle", jobTitle.value);
     if (region.value) params.append("region", region.value);
+    if (plannedAction.value)
+      params.append("plannedActions", plannedAction.value);
     params.append("iinOfInvestigator", userInfo.iin);
 
     const response = await axios.put(
