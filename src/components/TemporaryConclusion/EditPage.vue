@@ -183,6 +183,17 @@
               :options="listOfRelatesToBusiness"
             />
           </section>
+          <section class="col">
+            <q-input
+              v-model="iinDefender"
+              type="text"
+              label="ИИН защитника"
+              dark
+              label-color="white"
+              color="white"
+              :hint="currentIinDefender"
+            />
+          </section>
         </div>
       </q-card-section>
       <q-card-actions vertical align="center">
@@ -238,6 +249,7 @@ const currentEventPlace = ref("");
 const currentRelation = ref("");
 const currentInvestigationType = ref("");
 const currentRelatesToBusiness = ref("");
+const currentIinDefender = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
@@ -263,6 +275,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentRelation.value = `${current} отношение вызывающего: ${response.data.relationToEvent}`;
     currentInvestigationType.value = `${current} вид планируемого следствия: ${response.data.investigationTypes}`;
     currentRelatesToBusiness.value = `Текушее отношение к бизнесу: ${response.data.relatesToBusiness}`;
+    currentIinDefender.value = `${current} ИИН защитника: ${response.data.defenseAttorneyIIN}`;
 
     console.log(response.data);
     $q.loading.hide();
