@@ -94,7 +94,7 @@
                       </p>
                       <span class="infoHeadline">Место работы</span>
                       <p class="infoStyle">
-                        {{ props.conclusionDetailedInformation }}
+                        {{ props.conclusionDetailedInformation.workPlace }}
                       </p>
                       <span class="infoHeadline">Регион</span>
                       <p class="infoStyle">

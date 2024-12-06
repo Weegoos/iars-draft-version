@@ -1,15 +1,32 @@
 <template>
   <div class="text-white edit">
-    <q-card class="my-card fixed-center text-white" style="width: 500px">
+    <q-card class="my-card fixed-center text-white" style="width: 700px">
       <q-card-section class="text-white">
-        <q-input
-          v-model="idNumber"
-          label-color="white"
-          label="Номер УД "
-          color="white"
-          standout
-          style="color: white"
-        />
+        <div class="row q-gutter-md">
+          <section class="col">
+            <q-input
+              v-model="idNumber"
+              label-color="white"
+              label="Номер УД "
+              color="white"
+              :hint="currentIdNumber"
+              input-class="input"
+              dark
+            />
+          </section>
+          <section class="col">
+            <q-input
+              v-model="iinOfCalled"
+              label-color="white"
+              label="ИИН вызываемого"
+              color="white"
+              :hint="currentIINOfCalled"
+              input-class="input"
+              dark
+              mask="############"
+            />
+          </section>
+        </div>
       </q-card-section>
       <q-card-actions vertical align="center">
         <q-btn
@@ -48,6 +65,9 @@ if (hash.includes("?")) {
   console.log("Нет параметров в хэше");
 }
 
+const current = "Текущий";
+const currentIdNumber = ref("");
+const currentIINOfCalled = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   try {
     const response = await axios.get(
@@ -61,16 +81,18 @@ const getInformationBasedOnRegistrationNumber = async () => {
         withCredentials: true,
       }
     );
-
+    currentIdNumber.value = `${current} номер УД: ${response.data.udNumber}`;
+    currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
     console.log(response.data);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
 getInformationBasedOnRegistrationNumber();
 
 const idNumber = ref("");
+const iinOfCalled = ref("");
 const editTemporaryConclusion = async () => {
   try {
     await userStore.getUserInfo();
@@ -79,6 +101,7 @@ const editTemporaryConclusion = async () => {
 
     params.append("registrationNumber", registrationNumber.value);
     if (idNumber.value) params.append("UD", idNumber.value);
+    if (iinOfCalled.value) params.append("iinOfCalled", iinOfCalled.value);
     params.append("iinOfInvestigator", userInfo.iin);
 
     const response = await axios.put(
@@ -114,5 +137,9 @@ const clickToEditButton = () => {
 
 .my-card {
   background-color: #0e1012;
+}
+
+.input {
+  color: white;
 }
 </style>
