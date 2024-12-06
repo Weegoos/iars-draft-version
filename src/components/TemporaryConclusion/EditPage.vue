@@ -4,7 +4,7 @@
       <q-card-section class="text-white">
         <div class="row q-gutter-md">
           <section class="col">
-            <q-input
+            <q-select
               v-model="idNumber"
               label-color="white"
               label="Номер УД "
@@ -12,6 +12,7 @@
               :hint="currentIdNumber"
               input-class="input"
               dark
+              :options="listOfUD"
             />
           </section>
           <section class="col">
@@ -44,7 +45,7 @@
 <script setup>
 import axios from "axios";
 import { useUserStore } from "src/stores/getApi-store";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 
 const userStore = useUserStore();
@@ -121,9 +122,24 @@ const editTemporaryConclusion = async () => {
   }
 };
 
+const listOfUD = ref("");
+const getNeccessaryAPI = async () => {
+  try {
+    await userStore.getAllUD();
+    const allUD = userStore.allUD;
+    listOfUD.value = allUD;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const clickToEditButton = () => {
   editTemporaryConclusion();
 };
+
+onMounted(() => {
+  getNeccessaryAPI();
+});
 </script>
 
 <style scoped>
