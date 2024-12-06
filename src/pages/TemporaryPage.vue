@@ -25,10 +25,12 @@ import { useNotifyStore } from "src/stores/notify-store";
 import { getCurrentInstance, onMounted, ref } from "vue";
 
 import DetailedInformation from "../components/TemporaryConclusion/DetailedInformation.vue";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const userStore = useUserStore();
+const javascriptFunction = useJavaScriptFunction();
 const notifyStore = useNotifyStore();
 const $q = useQuasar();
 
@@ -57,6 +59,7 @@ const columns = [
     name: "creationDate",
     align: "center",
     label: "Дата создания документа",
+    format: (val) => javascriptFunction.formatDate(val),
     field: "creationDate",
     sortable: true,
   },
