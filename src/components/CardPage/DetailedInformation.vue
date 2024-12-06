@@ -186,6 +186,16 @@
           </q-tab-panels>
         </div>
         <q-card-actions align="center">
+          <div
+            v-if="props.detialedInformation.status == 'Отправлено на доработку'"
+          >
+            <q-btn
+              color="orange-4"
+              no-caps
+              label="Редактировать"
+              @click="closeWindow"
+            />
+          </div>
           <q-btn
             color="red-4"
             flat
