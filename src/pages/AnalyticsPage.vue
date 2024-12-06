@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <div class="row q-gutter-sm">
       <div class="col">
         <div class="row q-gutter-sm">
