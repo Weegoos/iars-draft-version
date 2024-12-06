@@ -161,6 +161,18 @@
             />
           </section>
         </div>
+        <div class="row q-gutter-md">
+          <section class="col">
+            <q-input
+              v-model="relation"
+              dark
+              label-color="white"
+              label="Отношение вызывающего к событию и субъекту"
+              color="white"
+              :hint="currentRelation"
+            />
+          </section>
+        </div>
       </q-card-section>
       <q-card-actions vertical align="center">
         <q-btn
