@@ -1,5 +1,12 @@
 <template>
   <div class="text-white edit">
+    <q-card class="bg-transparent fixed-center text-white">
+      <q-card-section class="bg-transparent">
+        <div class="typewriter" v-show="isTyping">
+          <p class="text-body1">К сожалению, вы перешли в неправильный URL!</p>
+        </div>
+      </q-card-section>
+    </q-card>
     <q-card
       class="my-card fixed-center text-white"
       style="width: 1000px"
@@ -279,6 +286,7 @@ const currentIinDefender = ref("");
 const currentJustification = ref("");
 const currentResult = ref("");
 const isVisible = ref(false);
+const isTyping = ref(false);
 const getInformationBasedOnRegistrationNumber = async () => {
   try {
     await userStore.getUserInfo();
@@ -302,7 +310,8 @@ const getInformationBasedOnRegistrationNumber = async () => {
         "Подождите, данные загружаются...",
         QSpinnerGears
       );
-    }
+    } else isTyping.value = true;
+
     currentIdNumber.value = `${current} номер УД: ${response.data.udNumber}`;
     currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
     currentBin.value = `${current} БИН/ИИН: ${response.data.calledPersonBIN}`;
@@ -462,5 +471,49 @@ const clickToEditButton = () => {
 
 .input {
   color: white;
+}
+
+.typewriter p {
+  color: white;
+  overflow: hidden;
+  border-right: 0.15em solid orange;
+  white-space: nowrap;
+  margin: 0 auto;
+  font-family: monospace;
+  letter-spacing: 0.15em;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
+
+.fade-in p {
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

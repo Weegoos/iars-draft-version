@@ -157,7 +157,7 @@ const pushToRegistrationPage = () => {
 .typewriter p {
   color: white;
   overflow: hidden;
-  border-right: 0.15em solid orange; /* The typwriter cursor */
+  border-right: 0.15em solid orange;
   white-space: nowrap;
   margin: 0 auto;
   font-family: monospace;
@@ -186,16 +186,15 @@ const pushToRegistrationPage = () => {
 
 .fade-in p {
   opacity: 0;
-  animation: fadeIn 2s forwards; /* Анимация плавного появления */
+  animation: fadeIn 2s forwards;
 }
 
-/* Определяем саму анимацию */
 @keyframes fadeIn {
   from {
-    opacity: 0; /* Начинаем с невидимости */
+    opacity: 0;
   }
   to {
-    opacity: 1; /* Плавно становимся видимым */
+    opacity: 1;
   }
 }
 </style>
