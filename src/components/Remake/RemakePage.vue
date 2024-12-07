@@ -249,14 +249,13 @@ const $q = useQuasar();
 
 const hash = window.location.hash;
 const registrationNumber = ref("");
+const iinOfInvestigator = ref("");
 if (hash.includes("?")) {
   const queryString = hash.split("?")[1];
 
   const urlParams = new URLSearchParams(queryString);
 
   registrationNumber.value = urlParams.get("registrationNumber");
-
-  // console.log(registrationNumber);
 } else {
   console.log("Нет параметров в хэше");
 }
@@ -279,8 +278,11 @@ const currentResult = ref("");
 const getInformationBasedOnRegistrationNumber = async () => {
   notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
+    await userStore.getUserInfo();
+    const iin = userStore.userInfo.iin;
+
     const response = await axios.get(
-      `http://localhost:5002/fullConclusion?regNumber=${registrationNumber.value}`,
+      `http://localhost:5002/fullConclusion?regNumber=${registrationNumber.value}&iin=${iin}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
