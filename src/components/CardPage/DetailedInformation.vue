@@ -186,6 +186,9 @@
           </q-tab-panels>
         </div>
         <q-card-actions align="center">
+          <div v-if="props.detialedInformation.status == 'Согласовано'">
+            <q-btn color="green-4" no-caps label="Скачать" @click="download" />
+          </div>
           <div
             v-if="props.detialedInformation.status == 'Отправлено на доработку'"
           >

@@ -139,9 +139,6 @@
         label="Скачать в формате excel"
         @click="downloadExcel"
       />
-      <div>
-        <q-tooltip> I am groot! </q-tooltip>
-      </div>
     </div>
     <q-table
       flat
