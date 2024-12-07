@@ -193,7 +193,7 @@
               color="orange-4"
               no-caps
               label="Редактировать"
-              @click="closeWindow"
+              @click="editPage"
             />
           </div>
           <q-btn
@@ -211,9 +211,12 @@
 
 <script setup>
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, getCurrentInstance } from "vue";
 
 const javascriptStore = useJavaScriptFunction();
+
+const { proxy } = getCurrentInstance();
+const webUrl = proxy.$webUrl;
 
 const props = defineProps({
   isOpen: {
@@ -244,6 +247,13 @@ watch(
 const emit = defineEmits(["closeWindow"]);
 const closeWindow = () => {
   emit("closeWindow");
+};
+
+const editPage = async () => {
+  window.open(
+    `${webUrl}remake-temps?registrationNumber=${props.detialedInformation.registrationNumber}`,
+    "_blank"
+  );
 };
 
 const tab = ref("info");
