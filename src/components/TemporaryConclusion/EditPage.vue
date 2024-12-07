@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white edit">
+  <div class="text-white edit" @keydown="handleKey">
     <q-card class="bg-transparent fixed-center text-white">
       <q-card-section>
         <div class="typewriter" v-show="isTyping">
@@ -414,6 +414,12 @@ const editTemporaryConclusion = async () => {
     $q.loading.hide();
     console.error(error);
     notifyStore.notifyError($q, `Ошибка во время редактирование: ${error}`);
+  }
+};
+
+const handleKey = (event) => {
+  if (event.key === "Enter") {
+    editTemporaryConclusion();
   }
 };
 

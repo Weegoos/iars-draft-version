@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white remake">
+  <div class="text-white remake" @keydown="handleKey">
     <q-card class="bg-transparent fixed-center text-white">
       <q-card-section class="bg-transparent">
         <div class="typewriter" v-show="isTyping">
@@ -237,7 +237,7 @@
           no-caps
           color="orange-4"
           label="Редактировать"
-          @click="clickToEditButton"
+          @click="remakeConclusion"
         />
       </q-card-actions>
     </q-card>
@@ -364,7 +364,7 @@ watch(date, (newVal) => {
   formattedDate.value = newVal.replace(" ", "T");
 });
 
-const editTemporaryConclusion = async () => {
+const remakeConclusion = async () => {
   try {
     notifyStore.loading($q, "Редактирование в процессе...", QSpinnerGears);
     await userStore.getUserInfo();
@@ -412,6 +412,12 @@ const editTemporaryConclusion = async () => {
     $q.loading.hide();
     console.error(error);
     notifyStore.notifyError($q, `Ошибка во время редактирование: ${error}`);
+  }
+};
+
+const handleKey = (event) => {
+  if (event.key === "Enter") {
+    remakeConclusion();
   }
 };
 
