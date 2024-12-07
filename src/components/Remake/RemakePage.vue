@@ -1,7 +1,11 @@
 <template>
   <div class="text-white remake">
     <q-card class="bg-transparent fixed-center text-white">
-      <q-card-section class="bg-transparent"> </q-card-section>
+      <q-card-section class="bg-transparent">
+        <div class="typewriter" v-show="isTyping">
+          <p class="text-body1">К сожалению, вы перешли в неправильный URL!</p>
+        </div>
+      </q-card-section>
     </q-card>
     <q-card
       class="my-card fixed-center text-white"
@@ -284,6 +288,11 @@ const currentResult = ref("");
 const isVisible = ref(false);
 const isTyping = ref(false);
 const getInformationBasedOnRegistrationNumber = async () => {
+  notifyStore.loading(
+    $q,
+    "Подождите, выполняется проверка данных...",
+    QSpinnerGears
+  );
   try {
     await userStore.getUserInfo();
     const iin = userStore.userInfo.iin;
@@ -299,14 +308,6 @@ const getInformationBasedOnRegistrationNumber = async () => {
         withCredentials: true,
       }
     );
-    if (response.data.status === "Отправлено на доработку") {
-      isVisible.value = true;
-      notifyStore.loading(
-        $q,
-        "Подождите, данные загружаются...",
-        QSpinnerGears
-      );
-    } else isTyping.value = true;
 
     currentIdNumber.value = `${current} номер УД: ${response.data.udNumber}`;
     currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
@@ -327,7 +328,8 @@ const getInformationBasedOnRegistrationNumber = async () => {
     if (response.data.status === "Отправлено на доработку") {
       notifyStore.nofifySuccess($q, "Данные успешно загружены");
       getNeccessaryAPI();
-    }
+      isVisible.value = true;
+    } else isTyping.value = true;
   } catch (error) {
     $q.loading.hide();
     console.error(error.data);
