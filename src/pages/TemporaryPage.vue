@@ -8,6 +8,7 @@
       :columns="columns"
       row-key="id"
       @row-click="viewDetailedInformation"
+      v-model:pagination="pagination"
     />
     <DetailedInformation
       :isOpenDialog="isOpenDialog"
@@ -35,6 +36,7 @@ const notifyStore = useNotifyStore();
 const $q = useQuasar();
 
 const isOpenDialog = ref(false);
+const pagination = ref({ rowsPerPage: 0 });
 const conclusionDetailedInformation = ref("");
 const viewDetailedInformation = (evt, row, index) => {
   isOpenDialog.value = true;
