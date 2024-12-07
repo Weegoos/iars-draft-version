@@ -147,14 +147,26 @@
               v-model="typesOfPlannedInvestigation"
               type="text"
               label="Виды планируемого следствия"
+              list="allTypes"
             />
+            <datalist id="allTypes">
+              <div v-for="(item, index) in types" :key="index">
+                <option :value="item">{{ item }}</option>
+              </div>
+            </datalist>
           </div>
           <div class="col">
             <q-input
               v-model="isApplyToBusiness"
               type="text"
               label="Относится ли к бизнесу"
+              list="business"
             />
+            <datalist id="business">
+              <div v-for="(item, index) in business" :key="index">
+                <option :value="item">{{ item }}</option>
+              </div>
+            </datalist>
           </div>
           <div class="col">
             <q-input
@@ -390,9 +402,48 @@ const getAllRegions = async () => {
   }
 };
 
+const types = ref("");
+const getAllTypes = async () => {
+  try {
+    notifyStore.loading(
+      $q,
+      "Подождите, виды планируемого следствия загружаются...",
+      QSpinnerGears
+    );
+    await userStore.getAllActions();
+    types.value = userStore.allActions;
+
+    notifyStore.nofifySuccess(
+      $q,
+      "Виды планируемого следствия загружаются успешно загружены"
+    );
+    $q.loading.hide();
+  } catch (error) {
+    $q.loading.hide();
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
+const business = ref("");
+const getAllBusiness = async () => {
+  try {
+    notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
+    await userStore.getAllBusiness();
+    business.value = userStore.allBusiness;
+
+    notifyStore.nofifySuccess($q, "Данные успешно загружены");
+    $q.loading.hide();
+  } catch (error) {
+    $q.loading.hide();
+    console.error("Ошибка при запросе:", error);
+  }
+};
+
 onMounted(() => {
   getAllUd();
   getAllRegions();
+  getAllTypes();
+  getAllBusiness();
 });
 </script>
 
