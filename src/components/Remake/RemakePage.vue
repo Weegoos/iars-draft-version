@@ -1,11 +1,7 @@
 <template>
-  <div class="text-white edit">
+  <div class="text-white remake">
     <q-card class="bg-transparent fixed-center text-white">
-      <q-card-section class="bg-transparent">
-        <div class="typewriter" v-show="isTyping">
-          <p class="text-body1">К сожалению, вы перешли в неправильный URL!</p>
-        </div>
-      </q-card-section>
+      <q-card-section class="bg-transparent"> </q-card-section>
     </q-card>
     <q-card
       class="my-card fixed-center text-white"
@@ -336,6 +332,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
     $q.loading.hide();
     console.error(error.data);
     notifyStore.notifyError($q, `Ошибка при получении данных: ${error.data}`);
+    isTyping.value = true;
   }
 };
 
@@ -457,7 +454,7 @@ const clickToEditButton = () => {
 </script>
 
 <style scoped>
-.edit {
+.remake {
   background-image: url("https://images.unsplash.com/photo-1559242550-bdfaa5081d95?q=80&w=2081&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   background-size: cover;
   background-position: center;
@@ -471,49 +468,5 @@ const clickToEditButton = () => {
 
 .input {
   color: white;
-}
-
-.typewriter p {
-  color: white;
-  overflow: hidden;
-  border-right: 0.15em solid orange;
-  white-space: nowrap;
-  margin: 0 auto;
-  font-family: monospace;
-  letter-spacing: 0.15em;
-  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: white;
-  }
-}
-
-.fade-in p {
-  opacity: 0;
-  animation: fadeIn 2s forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 </style>

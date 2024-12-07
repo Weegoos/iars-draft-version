@@ -1,6 +1,17 @@
 <template>
   <div class="text-white edit">
-    <q-card class="my-card fixed-center text-white" style="width: 1000px">
+    <q-card class="bg-transparent fixed-center text-white">
+      <q-card-section>
+        <div class="typewriter" v-show="isTyping">
+          <p class="text-body1">К сожалению, вы перешли в неправильный URL!</p>
+        </div>
+      </q-card-section>
+    </q-card>
+    <q-card
+      class="my-card fixed-center text-white"
+      style="width: 1000px"
+      v-show="isVisible"
+    >
       <q-card-section class="text-white">
         <div class="row q-gutter-md">
           <section class="col">
@@ -276,11 +287,19 @@ const currentRelatesToBusiness = ref("");
 const currentIinDefender = ref("");
 const currentJustification = ref("");
 const currentResult = ref("");
+const isVisible = ref(false);
+const isTyping = ref(false);
 const getInformationBasedOnRegistrationNumber = async () => {
-  notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
+  notifyStore.loading(
+    $q,
+    "Подождите, выполняется проверка данных...",
+    QSpinnerGears
+  );
   try {
+    await userStore.getUserInfo();
+    const iin = userStore.userInfo.iin;
     const response = await axios.get(
-      `http://localhost:5002/fullTempConclusion?regNumber=${registrationNumber.value}`,
+      `http://localhost:5002/fullTempConclusion?regNumber=${registrationNumber.value}&iin=${iin}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -306,11 +325,17 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentResult.value = `${current} результат: ${response.data.result}`;
 
     console.log(response.data);
+
+    if (response.data.status === "В работе") {
+      isVisible.value = true;
+      getNeccessaryAPI();
+    } else isTyping.value = true;
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Данные успешно загружены");
   } catch (error) {
     $q.loading.hide();
     console.error(error.data);
+    isTyping.value = true;
     notifyStore.notifyError($q, `Ошибка при получении данных: ${error.data}`);
   }
 };
@@ -430,10 +455,6 @@ const getNeccessaryAPI = async () => {
 const clickToEditButton = () => {
   editTemporaryConclusion();
 };
-
-onMounted(() => {
-  getNeccessaryAPI();
-});
 </script>
 
 <style scoped>
