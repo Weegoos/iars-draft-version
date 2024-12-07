@@ -1,6 +1,10 @@
 <template>
   <div class="text-white edit">
-    <q-card class="my-card fixed-center text-white" style="width: 1000px">
+    <q-card
+      class="my-card fixed-center text-white"
+      style="width: 1000px"
+      v-show="isVisible"
+    >
       <q-card-section class="text-white">
         <div class="row q-gutter-md">
           <section class="col">
@@ -249,7 +253,6 @@ const $q = useQuasar();
 
 const hash = window.location.hash;
 const registrationNumber = ref("");
-const iinOfInvestigator = ref("");
 if (hash.includes("?")) {
   const queryString = hash.split("?")[1];
 
@@ -275,8 +278,8 @@ const currentRelatesToBusiness = ref("");
 const currentIinDefender = ref("");
 const currentJustification = ref("");
 const currentResult = ref("");
+const isVisible = ref(false);
 const getInformationBasedOnRegistrationNumber = async () => {
-  notifyStore.loading($q, "Подождите, данные загружаются...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
     const iin = userStore.userInfo.iin;
@@ -292,6 +295,14 @@ const getInformationBasedOnRegistrationNumber = async () => {
         withCredentials: true,
       }
     );
+    if (response.data.status === "Отправлено на доработку") {
+      isVisible.value = true;
+      notifyStore.loading(
+        $q,
+        "Подождите, данные загружаются...",
+        QSpinnerGears
+      );
+    }
     currentIdNumber.value = `${current} номер УД: ${response.data.udNumber}`;
     currentIINOfCalled.value = `${current} ИИН вызываемого: ${response.data.calledPersonIIN}`;
     currentBin.value = `${current} БИН/ИИН: ${response.data.calledPersonBIN}`;
@@ -307,9 +318,11 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentJustification.value = `Текущее обоснование и необходимость участия предпринимателя: ${response.data.justification}`;
     currentResult.value = `${current} результат: ${response.data.result}`;
 
-    console.log(response.data);
     $q.loading.hide();
-    notifyStore.nofifySuccess($q, "Данные успешно загружены");
+    if (response.data.status === "Отправлено на доработку") {
+      notifyStore.nofifySuccess($q, "Данные успешно загружены");
+      getNeccessaryAPI();
+    }
   } catch (error) {
     $q.loading.hide();
     console.error(error.data);
@@ -432,10 +445,6 @@ const getNeccessaryAPI = async () => {
 const clickToEditButton = () => {
   editTemporaryConclusion();
 };
-
-onMounted(() => {
-  getNeccessaryAPI();
-});
 </script>
 
 <style scoped>
