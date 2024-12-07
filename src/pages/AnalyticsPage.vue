@@ -168,6 +168,7 @@ import DetailedInformation from "../components/AnalyticsPage/DetailedInformation
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
@@ -179,6 +180,7 @@ const webUrl = proxy.$webUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
 const userStore = useUserStore();
+const javascriptFunction = useJavaScriptFunction();
 
 const columns = [
   {
@@ -194,6 +196,7 @@ const columns = [
     name: "creationDate",
     align: "center",
     label: "Дата создания документа",
+    format: (val) => javascriptFunction.formatDate(val),
     field: "creationDate",
     sortable: true,
   },

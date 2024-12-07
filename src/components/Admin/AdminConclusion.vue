@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <q-table
       flat
       bordered
@@ -7,6 +7,7 @@
       :columns="columns"
       row-key="id"
       @row-click="viewDetailedInformation"
+      v-model:pagination="pagination"
     />
 
     <AdminDetailedInformation
@@ -22,6 +23,7 @@ import AdminDetailedInformation from "./DetailedInformation/AdminDetailedInforma
 
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
@@ -30,7 +32,9 @@ const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
+const javascriptFunction = useJavaScriptFunction();
 
+const pagination = ref({ rowsPerPage: 0 });
 const columns = [
   {
     name: "id",
@@ -46,6 +50,7 @@ const columns = [
     align: "center",
     label: "Дата создания документа",
     field: "creationDate",
+    format: (val) => javascriptFunction.formatDate(val),
     sortable: true,
   },
   {

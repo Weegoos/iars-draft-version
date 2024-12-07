@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <q-table
       flat
       bordered
@@ -7,6 +7,7 @@
       :columns="columns"
       row-key="id"
       @row-click="viewDetailedInformation"
+      v-model:pagination="pagination"
     />
 
     <UserDetailedInformation
@@ -22,6 +23,7 @@ import UserDetailedInformation from "./DetailedInformation/UserDetailedInformati
 
 import axios from "axios";
 import { QSpinnerGears, useQuasar } from "quasar";
+import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
@@ -32,8 +34,10 @@ const webUrl = proxy.$webUrl;
 
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
+const javascriptFunction = useJavaScriptFunction();
 
 const accessToken = localStorage.getItem("accessToken");
+const pagination = ref({ rowsPerPage: 0 });
 
 const defineToken = () => {
   if (!accessToken) {
@@ -109,6 +113,7 @@ const columns = [
     label: "Дата регистрации",
     align: "left",
     field: "registrationDate",
+    format: (val) => javascriptFunction.formatDate(val),
     sortable: true,
   },
   {
