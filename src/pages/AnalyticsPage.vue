@@ -152,7 +152,47 @@
       virtual-scroll
       class="my-sticky-header-column-table"
       v-model:pagination="pagination"
-    />
+    >
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td v-for="col in columns" :key="col.name" :props="props">
+            <!-- Условное форматирование для столбца "id" -->
+            <template v-if="col.name === 'id'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row[col.field] }}
+              </span>
+              <span v-else>
+                {{ props.row[col.field] }}
+              </span>
+            </template>
+
+            <template v-else-if="col.name === 'creationDate'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row[col.field] }}
+              </span>
+              <span v-else>
+                {{ props.row[col.field] }}
+              </span>
+            </template>
+
+            <!-- Условное форматирование для столбца "status" -->
+            <template v-else-if="col.name === 'status'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row.status }}
+              </span>
+              <span v-else>
+                {{ props.row.status }}
+              </span>
+            </template>
+
+            <!-- Общий случай для других столбцов -->
+            <template v-else>
+              {{ props.row[col.field] }}
+            </template>
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
 
     <DetailedInformation
       :isOpenDetailedWindow="isOpenDetailedWindow"
@@ -501,5 +541,11 @@ const closeWindow = () => {
 .on-approval {
   background: linear-gradient(90deg, #a8e063, #56ab2f) !important;
   color: white !important;
+}
+
+.analytics {
+  color: white;
+  background-color: green;
+  padding: 5px;
 }
 </style>
