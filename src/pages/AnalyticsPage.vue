@@ -175,6 +175,42 @@
               </span>
             </template>
 
+            <template v-else-if="col.name === 'registrationNumber'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row[col.field] }}
+              </span>
+              <span v-else>
+                {{ props.row[col.field] }}
+              </span>
+            </template>
+
+            <template v-else-if="col.name === 'udNumber'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row[col.field] }}
+              </span>
+              <span v-else>
+                {{ props.row[col.field] }}
+              </span>
+            </template>
+
+            <template v-else-if="col.name === 'calledPersonFullName'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row[col.field] }}
+              </span>
+              <span v-else>
+                {{ props.row[col.field] }}
+              </span>
+            </template>
+
+            <template v-else-if="col.name === 'defenseAttorneyFullName'">
+              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
+                {{ props.row[col.field] }}
+              </span>
+              <span v-else>
+                {{ props.row[col.field] }}
+              </span>
+            </template>
+
             <!-- Условное форматирование для столбца "status" -->
             <template v-else-if="col.name === 'status'">
               <span v-if="props.row.status !== 'Согласовано'" class="analytics">
@@ -545,7 +581,7 @@ const closeWindow = () => {
 
 .analytics {
   color: white;
-  background-color: green;
+  background-color: #006400;
   padding: 5px;
 }
 </style>
