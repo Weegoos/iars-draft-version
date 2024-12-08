@@ -51,15 +51,15 @@
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
-            <q-input v-model="startDate" mask="date" :rules="['date']">
-              <template v-slot:append>
+            <q-input v-model="startDate" label="С">
+              <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
                     cover
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="startDate">
+                    <q-date v-model="startDate" mask="YYYY-MM-DD">
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -75,15 +75,15 @@
             </q-input>
           </div>
           <div class="col">
-            <q-input v-model="endDate" mask="date" :rules="['date']">
-              <template v-slot:append>
+            <q-input v-model="endDate" label="По">
+              <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
                     cover
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="endDate">
+                    <q-date v-model="endDate" mask="YYYY-MM-DD">
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -118,7 +118,7 @@
         </datalist>
       </div>
     </div>
-    <div class="col q-gutter-md" align="right">
+    <div class="col q-gutter-md q-mt-md" align="right">
       <q-btn
         color="primary"
         no-caps
@@ -152,83 +152,7 @@
       virtual-scroll
       class="my-sticky-header-column-table"
       v-model:pagination="pagination"
-    >
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td v-for="col in columns" :key="col.name" :props="props">
-            <!-- Условное форматирование для столбца "id" -->
-            <template v-if="col.name === 'id'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row[col.field] }}
-              </span>
-              <span v-else>
-                {{ props.row[col.field] }}
-              </span>
-            </template>
-
-            <template v-else-if="col.name === 'creationDate'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row[col.field] }}
-              </span>
-              <span v-else>
-                {{ props.row[col.field] }}
-              </span>
-            </template>
-
-            <template v-else-if="col.name === 'registrationNumber'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row[col.field] }}
-              </span>
-              <span v-else>
-                {{ props.row[col.field] }}
-              </span>
-            </template>
-
-            <template v-else-if="col.name === 'udNumber'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row[col.field] }}
-              </span>
-              <span v-else>
-                {{ props.row[col.field] }}
-              </span>
-            </template>
-
-            <template v-else-if="col.name === 'calledPersonFullName'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row[col.field] }}
-              </span>
-              <span v-else>
-                {{ props.row[col.field] }}
-              </span>
-            </template>
-
-            <template v-else-if="col.name === 'defenseAttorneyFullName'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row[col.field] }}
-              </span>
-              <span v-else>
-                {{ props.row[col.field] }}
-              </span>
-            </template>
-
-            <!-- Условное форматирование для столбца "status" -->
-            <template v-else-if="col.name === 'status'">
-              <span v-if="props.row.status !== 'Согласовано'" class="analytics">
-                {{ props.row.status }}
-              </span>
-              <span v-else>
-                {{ props.row.status }}
-              </span>
-            </template>
-
-            <!-- Общий случай для других столбцов -->
-            <template v-else>
-              {{ props.row[col.field] }}
-            </template>
-          </q-td>
-        </q-tr>
-      </template>
-    </q-table>
+    />
 
     <DetailedInformation
       :isOpenDetailedWindow="isOpenDetailedWindow"
@@ -415,8 +339,6 @@ const getUserDocs = async () => {
       ...item,
       id: index + 1,
     }));
-
-    console.log(getRowStyle(rows.value));
   } catch (error) {
     console.error("Ошибка при получении документов:", error);
     throw error;
@@ -429,8 +351,9 @@ const documentsOptions = ref("");
 const registrationNumber = ref("");
 const region = ref("");
 const regionList = ref("");
-const startDate = ref("2019/05/05");
-const endDate = ref("2024/03/03");
+const date = ref("YYYY-MM-DD");
+const startDate = ref("");
+const endDate = ref("");
 const iinOfCalled = ref("");
 const idNumber = ref("");
 const idNumberList = ref();
@@ -481,6 +404,12 @@ const filter = async () => {
     if (iinOfCalled.value) {
       params.append("iinOfCalled", iinOfCalled.value);
     }
+    if (startDate.value) {
+      params.append("from", startDate.value);
+    }
+    if (endDate.value) {
+      params.append("to", endDate.value);
+    }
 
     params.append("iin", iin);
     const response = await axios.get(
@@ -513,6 +442,18 @@ const filter = async () => {
 const handleKey = (e) => {
   if (e.key === "Enter") {
     filter();
+  }
+
+  if (event.key == "Backspace" && event.shiftKey) {
+    statusOfDocuments.value = "";
+    registrationNumber.value = "";
+    region.value = "";
+    fcsConcordant.value = "";
+    date.value = "";
+    startDate.value = "";
+    endDate.value = "";
+    iinOfCalled.value = "";
+    idNumber.value = "";
   }
 };
 
