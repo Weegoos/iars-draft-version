@@ -226,6 +226,7 @@ import { useUserStore } from "src/stores/getApi-store";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
+const webUrl = proxy.$webUrl;
 const $q = useQuasar();
 const notifyStore = useNotifyStore();
 const userStore = useUserStore();
@@ -249,10 +250,9 @@ const results = ref("");
 
 function updateFormattedDate(newValue) {
   date.value = newValue;
-  formattedDate.value = newValue.replace(" ", "T"); // Заменяем пробел на 'T'
+  formattedDate.value = newValue.replace(" ", "T");
 }
 
-// Следим за изменениями и сразу форматируем
 watch(date, (newVal) => {
   formattedDate.value = newVal.replace(" ", "T");
 });
@@ -320,7 +320,6 @@ const saveEvent = async () => {
     await userStore.getUserInfo();
     const userData = userStore.userInfo;
     const iinofInvestigator = userData.iin;
-    console.log(iinofInvestigator);
 
     const data = {
       jobTitle: positionTheCalledPerson.value,
@@ -440,10 +439,12 @@ const getAllBusiness = async () => {
 };
 
 onMounted(() => {
-  getAllUd();
-  getAllRegions();
-  getAllTypes();
-  getAllBusiness();
+  if (Cookies.has("access_token")) {
+    getAllUd();
+    getAllRegions();
+    getAllTypes();
+    getAllBusiness();
+  } else window.location.href = `${webUrl}authorization`;
 });
 </script>
 

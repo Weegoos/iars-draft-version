@@ -77,7 +77,6 @@ const handle = (event) => {
   if (event.key === "Shift" && event.altKey) {
     callChildMethod();
     window.removeEventListener("keydown", handle);
-    console.log(777);
   }
 };
 
@@ -121,11 +120,6 @@ const defineRole = () => {
     navigation.value = employeeNavigation;
   }
 };
-
-onBeforeMount(() => {
-  defineRole();
-  // window.removeEventListener("keydown", handle);
-});
 
 const nav = (route) => {
   router.push(route);

@@ -289,7 +289,7 @@ const downloadExcel = async () => {
         Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
         Accept:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
       responseType: "blob",
       withCredentials: true,
@@ -315,8 +315,6 @@ const rows = ref([]);
 
 const pagination = ref({ rowsPerPage: 0 });
 const getRowStyle = (row) => {
-  console.log("Row in getRowStyle:", row);
-
   if (row.status === "Согласовано") {
     return { backgroundColor: "green", color: "white" };
   }

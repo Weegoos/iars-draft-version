@@ -169,8 +169,7 @@ import { useNotifyStore } from "src/stores/notify-store";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 
 const $q = useQuasar();
-Cookies.has("cookie_name");
-console.log(Cookies.has("access_token"));
+
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
 const webUrl = proxy.$webUrl;
@@ -377,8 +376,6 @@ const handleFilter = (event) => {
   if (event.key === "Backspace" && event.shiftKey) {
     statusOfDocuments.value = "";
   }
-
-  console.log(event);
 };
 
 const defineList = async () => {

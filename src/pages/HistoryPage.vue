@@ -34,7 +34,6 @@ const getHistory = async () => {
         withCredentials: true,
       }
     );
-    console.log(response.data);
     history.value = response.data;
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);

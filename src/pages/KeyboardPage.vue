@@ -7,7 +7,6 @@ import { useQuasar } from "quasar";
 
 const $q = useQuasar();
 
-// Определяем функцию show
 function show(grid) {
   $q.bottomSheet({
     dark: true,
@@ -66,7 +65,6 @@ function show(grid) {
     });
 }
 
-// Делаем функцию show доступной для родительского компонента
 defineExpose({ show });
 </script>
 

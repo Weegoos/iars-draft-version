@@ -100,8 +100,6 @@ const refuseButton = async () => {
       iin: iinofInvestigator,
     };
 
-    console.log(props.informationForRefusedComponent.registrationNumber);
-
     const response = await axios.post(`${serverUrl}decision`, data, {
       headers: {
         Authorization: `Bearer ${Cookies.get("access_token")}`,

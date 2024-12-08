@@ -101,8 +101,6 @@ const isPwd = ref(true);
 
 const login = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
-  console.log("Key");
-
   try {
     const data = {
       email: email.value,
@@ -117,7 +115,6 @@ const login = async () => {
       withCredentials: true,
     });
 
-    localStorage.setItem("accessToken", response.data.accessToken);
     Cookies.set("access_token", response.data.accessToken);
     Cookies.set("refresh_token", response.data.refreshToken);
 

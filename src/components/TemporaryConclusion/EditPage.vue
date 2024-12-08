@@ -266,8 +266,6 @@ if (hash.includes("?")) {
   const urlParams = new URLSearchParams(queryString);
 
   registrationNumber.value = urlParams.get("registrationNumber");
-
-  // console.log(registrationNumber);
 } else {
   console.log("Нет параметров в хэше");
 }
@@ -323,8 +321,6 @@ const getInformationBasedOnRegistrationNumber = async () => {
     currentIinDefender.value = `${current} ИИН защитника: ${response.data.defenseAttorneyIIN}`;
     currentJustification.value = `Текущее обоснование и необходимость участия предпринимателя: ${response.data.justification}`;
     currentResult.value = `${current} результат: ${response.data.result}`;
-
-    console.log(response.data);
 
     if (response.data.status === "В работе") {
       isVisible.value = true;

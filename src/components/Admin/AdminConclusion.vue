@@ -97,7 +97,6 @@ const conclusionDetailedInformation = ref("");
 const viewDetailedInformation = (evt, row, index) => {
   isOpenAdminDialogPage.value = true;
   conclusionDetailedInformation.value = row;
-  console.log(row);
 };
 
 const closeAdminDialogPage = () => {

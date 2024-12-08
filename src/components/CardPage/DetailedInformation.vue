@@ -240,13 +240,6 @@ watch(
   }
 );
 
-watch(
-  () => props.conclusions,
-  (newVal) => {
-    console.log(newVal);
-  }
-);
-
 const emit = defineEmits(["closeWindow"]);
 const closeWindow = () => {
   emit("closeWindow");

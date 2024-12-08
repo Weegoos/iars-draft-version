@@ -289,9 +289,6 @@ const formattedEventDateTime = computed(() =>
 );
 
 const turnToPermanent = async (documentInfo) => {
-  console.log(
-    `${serverUrl}turn?registrationNumber=${documentInfo.registrationNumber}`
-  );
   try {
     notifyStore.loading($q, "Подождите, документ в обработке", QSpinnerGears);
 

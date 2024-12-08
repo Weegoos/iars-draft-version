@@ -291,12 +291,6 @@ const deleteConclusion = async (item) => {
       QSpinnerGears
     );
     const accessToken = Cookies.get("access_token");
-    console.log(accessToken);
-
-    console.log(
-      "Отправка запроса на удаление с номером:",
-      item.registrationNumber
-    );
 
     const response = await axios.delete(`${serverUrl}admin/deleteConclusion`, {
       params: { registrationNumber: item.registrationNumber },

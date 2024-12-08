@@ -50,7 +50,6 @@ const getInfo = async () => {
       },
       withCredentials: true,
     });
-    console.log(response.data.job.name);
     role.value = response.data.job.name;
     localStorage.setItem("role", role.value);
     $q.loading.hide();
