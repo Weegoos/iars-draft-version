@@ -5,7 +5,6 @@
         <div>
           <q-tabs v-model="tab" class="text-teal">
             <q-tab name="info" icon="info" label="Подробная информация" />
-            <q-tab name="edit" icon="edit" label="Редактировать" />
           </q-tabs>
 
           <q-tab-panels
@@ -204,11 +203,6 @@
                   </q-card>
                 </q-expansion-item>
               </q-list>
-            </q-tab-panel>
-            <q-tab-panel name="edit">
-              <EditPage
-                :conclusionInformation="props.conclusionDetailedInformation"
-              />
             </q-tab-panel>
           </q-tab-panels>
         </div>
