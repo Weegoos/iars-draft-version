@@ -1,5 +1,9 @@
 <template>
-  <div class="fixed-center" style="display: flex; height: 100vh; width: 100vw">
+  <div
+    class="fixed-center"
+    style="display: flex; height: 100vh; width: 100vw"
+    @keydown="handleKey"
+  >
     <!-- Левая половина с видео -->
     <div style="flex: 1; position: relative; overflow: hidden">
       <video
@@ -250,6 +254,12 @@ const registration = async () => {
       $q,
       `Ошибка при регистрации: ${error.response.data}`
     );
+  }
+};
+
+const handleKey = (e) => {
+  if (e.key === "Enter") {
+    registration();
   }
 };
 

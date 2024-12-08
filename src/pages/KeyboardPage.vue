@@ -45,8 +45,17 @@ function show(grid) {
       },
       {},
       {
-        label: "Допольнительно",
+        label: "Редактирование",
         icon: "filter_4",
+      },
+      {
+        label: "Редактировать (Enter)",
+        icon: "keyboard_command",
+      },
+      {},
+      {
+        label: "Допольнительно",
+        icon: "filter_5",
       },
       {
         label: "Показать подсказку горячих клавиш (Alt + Shift)",
