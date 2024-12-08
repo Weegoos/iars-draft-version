@@ -59,7 +59,7 @@ const closeEditDialog = () => {
 
 const editProfile = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = Cookies.get("access_token");
   if (!accessToken) {
     notifyStore.notifyError($q, "Ошибка: Токен не найден");
     $q.loading.hide();

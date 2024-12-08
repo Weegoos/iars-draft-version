@@ -36,7 +36,7 @@ const $q = useQuasar();
 const notifyStore = useNotifyStore();
 const javascriptFunction = useJavaScriptFunction();
 
-const accessToken = Cookies.get("accessToken");
+const accessToken = Cookies.get("access_token");
 const pagination = ref({ rowsPerPage: 0 });
 
 const defineToken = () => {

@@ -301,7 +301,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
       `http://localhost:5002/fullConclusion?regNumber=${registrationNumber.value}&iin=${iin}`,
       {
         headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },

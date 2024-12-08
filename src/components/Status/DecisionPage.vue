@@ -104,7 +104,7 @@ const refuseButton = async () => {
 
     const response = await axios.post(`${serverUrl}decision`, data, {
       headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
       },
       withCredentials: true,

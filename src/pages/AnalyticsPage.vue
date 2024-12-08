@@ -166,7 +166,7 @@
 import DetailedInformation from "../components/AnalyticsPage/DetailedInformation.vue";
 
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
@@ -250,7 +250,7 @@ const downloadPdf = async () => {
     }
     const response = await axios.get(`${serverUrl}pdf?IIN=${iin}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
         "Content-Type": "application/json",
         Accept: "application/pdf",
       },
@@ -286,7 +286,7 @@ const downloadExcel = async () => {
 
     const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
         "Content-Type": "application/json",
         Accept:
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
@@ -323,7 +323,7 @@ const getRowStyle = (row) => {
   return {};
 };
 const getUserDocs = async () => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   try {
     await userStore.getUserInfo();
     const data = userStore.userInfo;
@@ -375,7 +375,7 @@ watch(
 const filter = async () => {
   try {
     notifyStore.loading($q, "Подождите, фильтрация в обработке", QSpinnerGears);
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Cookies.get("accessToken");
     if (!accessToken) {
       console.error("Access token is missing");
       notifyStore.notifyError($q, "Access token is missing");
@@ -475,7 +475,7 @@ const redirectToKeycloakLogin = () => {
   window.location.href = `${webUrl}authorization`;
 };
 onBeforeMount(() => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   if (!accessToken) {
     redirectToKeycloakLogin();
     window.location.reload();

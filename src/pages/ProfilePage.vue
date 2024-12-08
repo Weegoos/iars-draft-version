@@ -55,7 +55,7 @@
 
 <script setup>
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 import { getCurrentInstance } from "vue";
 
@@ -72,7 +72,7 @@ const $q = useQuasar();
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 const javascriptStore = useJavaScriptFunction();
-const accessToken = localStorage.getItem("accessToken");
+const accessToken = Cookies.get("accessToken");
 
 const name = ref("");
 const department = ref("");
@@ -86,7 +86,7 @@ const isVisible = ref(false);
 
 const getProfile = async () => {
   try {
-    if (localStorage.getItem("accessToken")) {
+    if (Cookies.get("accessToken")) {
       notifyStore.loading(
         $q,
         "Подождите, данные загружаются...",
@@ -138,7 +138,7 @@ onMounted(() => {
 });
 
 const logout = () => {
-  localStorage.clear();
+  Cookies.remove("access_token");
   window.location.reload();
 };
 

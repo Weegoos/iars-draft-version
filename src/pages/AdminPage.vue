@@ -63,7 +63,7 @@ const downloadPdf = async () => {
 
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
           "Content-Type": "application/json",
           Accept: "application/pdf",
         },
@@ -99,7 +99,7 @@ const downloadExcel = async () => {
 
     const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
         "Content-Type": "application/json",
         Accept:
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

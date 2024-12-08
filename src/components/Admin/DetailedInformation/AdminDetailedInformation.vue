@@ -290,7 +290,7 @@ const deleteConclusion = async (item) => {
       "Подождите, удаление в обработке...",
       QSpinnerGears
     );
-    const accessToken = Cookies.get("accessToken");
+    const accessToken = Cookies.get("access_token");
     console.log(accessToken);
 
     console.log(

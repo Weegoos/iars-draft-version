@@ -134,7 +134,7 @@ const closeAdminDialogPage = () => {
 };
 
 const promoteUser = async (item) => {
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = Cookies.get("access_token");
   try {
     notifyStore.loading(
       $q,
@@ -178,7 +178,7 @@ const deleteUser = async (item) => {
       QSpinnerGears
     );
 
-    const accessToken = Cookies.get("accessToken");
+    const accessToken = "accessToken";
     if (!accessToken) {
       throw new Error("Токен отсутствует, повторите авторизацию.");
     }

@@ -216,7 +216,7 @@
 <script setup>
 import MorphPage from "../components/Morph/MorphPage.vue";
 
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
 
@@ -288,7 +288,7 @@ const createEvent = async () => {
 
     const response = await axios.post(`${serverUrl}create`, data, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
@@ -342,7 +342,7 @@ const saveEvent = async () => {
 
     const response = await axios.post(`${serverUrl}save`, data, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
         "Content-Type": "application/json",
       },
       withCredentials: true,
