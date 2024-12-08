@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-md">
-    <div class="row q-gutter-sm" @keydown="handleFilter">
+  <div class="q-pa-md" @keydown="handleFilter">
+    <div class="row q-gutter-sm">
       <div class="col">
         <div class="row q-gutter-sm">
           <div class="col">
@@ -302,7 +302,7 @@ watch(
 const filter = async () => {
   try {
     notifyStore.loading($q, "Подождите, фильтрация в обработке", QSpinnerGears);
-    const accessToken = Cookies.getItem("access_token");
+    const accessToken = Cookies.get("access_token");
     if (!accessToken) {
       console.error("Access token is missing");
       notifyStore.notifyError($q, "Access token is missing");
@@ -369,12 +369,21 @@ const filter = async () => {
   }
 };
 
-const handleFilter = (event) => {
+const handleFilter = async (event) => {
   if (event.key === "Enter") {
     filter();
   }
-  if (event.key === "Backspace" && event.shiftKey) {
+
+  if (event.key == "Backspace" && event.shiftKey) {
     statusOfDocuments.value = "";
+    registrationNumber.value = "";
+    region.value = "";
+    fcsConcordant.value = "";
+    date.value = "";
+    startDate.value = "";
+    endDate.value = "";
+    iinOfCalled.value = "";
+    idNumber.value = "";
   }
 };
 

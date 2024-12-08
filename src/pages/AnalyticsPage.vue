@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md" @keydown="handleKey">
     <div class="row q-gutter-sm">
       <div class="col">
         <div class="row q-gutter-sm">
@@ -507,6 +507,12 @@ const filter = async () => {
     notifyStore.nofifySuccess($q, "Документы загружены с помощью фильтрации");
   } catch (error) {
     console.error("Error during filter request:", error);
+  }
+};
+
+const handleKey = (e) => {
+  if (e.key === "Enter") {
+    filter();
   }
 };
 
