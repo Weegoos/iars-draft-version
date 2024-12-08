@@ -32,7 +32,7 @@
 
 <script setup>
 import axios from "axios";
-import { useQuasar } from "quasar";
+import { Cookies, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { ref, watch } from "vue";
@@ -104,7 +104,7 @@ const refuseButton = async () => {
 
     const response = await axios.post(`${serverUrl}decision`, data, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
         "Content-Type": "application/json",
       },
       withCredentials: true,

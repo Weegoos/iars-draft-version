@@ -233,7 +233,7 @@
 
 <script setup>
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { computed, ref, watch } from "vue";
@@ -290,7 +290,7 @@ const deleteConclusion = async (item) => {
       "Подождите, удаление в обработке...",
       QSpinnerGears
     );
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Cookies.get("accessToken");
     console.log(accessToken);
 
     console.log(

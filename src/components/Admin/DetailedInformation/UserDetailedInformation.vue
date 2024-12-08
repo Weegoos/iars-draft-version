@@ -96,7 +96,7 @@
 
 <script setup>
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { computed, ref, watch } from "vue";
@@ -134,7 +134,7 @@ const closeAdminDialogPage = () => {
 };
 
 const promoteUser = async (item) => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   try {
     notifyStore.loading(
       $q,
@@ -178,7 +178,7 @@ const deleteUser = async (item) => {
       QSpinnerGears
     );
 
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Cookies.get("accessToken");
     if (!accessToken) {
       throw new Error("Токен отсутствует, повторите авторизацию.");
     }

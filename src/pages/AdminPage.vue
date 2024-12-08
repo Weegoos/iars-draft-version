@@ -29,7 +29,7 @@ import axios from "axios";
 import { getCurrentInstance } from "vue";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 
 const $q = useQuasar();
 const { proxy } = getCurrentInstance();
@@ -38,7 +38,7 @@ const webUrl = proxy.$webUrl;
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 
-const accessToken = localStorage.getItem("accessToken");
+const accessToken = Cookies.get("accessToken");
 
 onMounted(() => {
   if (!accessToken) {

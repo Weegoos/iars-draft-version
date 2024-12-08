@@ -22,7 +22,7 @@
 import UserDetailedInformation from "./DetailedInformation/UserDetailedInformation.vue";
 
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref } from "vue";
@@ -36,7 +36,7 @@ const $q = useQuasar();
 const notifyStore = useNotifyStore();
 const javascriptFunction = useJavaScriptFunction();
 
-const accessToken = localStorage.getItem("accessToken");
+const accessToken = Cookies.get("accessToken");
 const pagination = ref({ rowsPerPage: 0 });
 
 const defineToken = () => {

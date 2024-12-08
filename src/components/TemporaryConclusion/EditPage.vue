@@ -246,7 +246,7 @@
 
 <script setup>
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { onMounted, ref, watch } from "vue";
@@ -302,7 +302,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
       `http://localhost:5002/fullTempConclusion?regNumber=${registrationNumber.value}&iin=${iin}`,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -398,7 +398,7 @@ const editTemporaryConclusion = async () => {
       null,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },

@@ -24,7 +24,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import axios from "axios";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import { getCurrentInstance } from "vue";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
@@ -59,14 +59,13 @@ const closeEditDialog = () => {
 
 const editProfile = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   if (!accessToken) {
     notifyStore.notifyError($q, "Ошибка: Токен не найден");
     $q.loading.hide();
     return;
   }
   try {
-    // Формируем параметры URL
     const params = new URLSearchParams();
     await userStore.getUserInfo();
     const userInfo = userStore.userInfo;

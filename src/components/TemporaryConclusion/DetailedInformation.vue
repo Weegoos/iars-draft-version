@@ -236,7 +236,7 @@
 <script setup>
 import EditPage from "./EditPage.vue";
 
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
@@ -300,7 +300,7 @@ const turnToPermanent = async (documentInfo) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
