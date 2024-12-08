@@ -314,6 +314,14 @@ const downloadExcel = async () => {
 const rows = ref([]);
 
 const pagination = ref({ rowsPerPage: 0 });
+const getRowStyle = (row) => {
+  console.log("Row in getRowStyle:", row);
+
+  if (row.status === "Согласовано") {
+    return { backgroundColor: "green", color: "white" };
+  }
+  return {};
+};
 const getUserDocs = async () => {
   const accessToken = localStorage.getItem("accessToken");
   try {
@@ -333,6 +341,8 @@ const getUserDocs = async () => {
       ...item,
       id: index + 1,
     }));
+
+    console.log(getRowStyle(rows.value));
   } catch (error) {
     console.error("Ошибка при получении документов:", error);
     throw error;
