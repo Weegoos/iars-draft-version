@@ -72,7 +72,7 @@ const $q = useQuasar();
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 const javascriptStore = useJavaScriptFunction();
-const accessToken = Cookies.get("accessToken");
+const accessToken = Cookies.get("access_token");
 
 const name = ref("");
 const department = ref("");
@@ -86,7 +86,7 @@ const isVisible = ref(false);
 
 const getProfile = async () => {
   try {
-    if (Cookies.get("accessToken")) {
+    if (Cookies.get("access_token")) {
       notifyStore.loading(
         $q,
         "Подождите, данные загружаются...",

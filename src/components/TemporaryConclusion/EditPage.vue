@@ -302,7 +302,7 @@ const getInformationBasedOnRegistrationNumber = async () => {
       `http://localhost:5002/fullTempConclusion?regNumber=${registrationNumber.value}&iin=${iin}`,
       {
         headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -398,7 +398,7 @@ const editTemporaryConclusion = async () => {
       null,
       {
         headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },

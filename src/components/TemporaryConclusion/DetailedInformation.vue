@@ -300,7 +300,7 @@ const turnToPermanent = async (documentInfo) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },

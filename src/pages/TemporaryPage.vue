@@ -130,7 +130,7 @@ const getTemporaryConclusion = async () => {
 };
 
 onMounted(() => {
-  if (localStorage.getItem("accessToken")) {
+  if (localStorage.getItem("access_token")) {
     getTemporaryConclusion();
   } else {
     localStorage.clear();

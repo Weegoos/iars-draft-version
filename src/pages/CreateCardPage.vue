@@ -288,7 +288,7 @@ const createEvent = async () => {
 
     const response = await axios.post(`${serverUrl}create`, data, {
       headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
@@ -342,7 +342,7 @@ const saveEvent = async () => {
 
     const response = await axios.post(`${serverUrl}save`, data, {
       headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
       },
       withCredentials: true,

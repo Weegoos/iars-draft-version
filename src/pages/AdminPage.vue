@@ -38,7 +38,7 @@ const webUrl = proxy.$webUrl;
 const userStore = useUserStore();
 const notifyStore = useNotifyStore();
 
-const accessToken = Cookies.get("accessToken");
+const accessToken = Cookies.get("access_token");
 
 onMounted(() => {
   if (!accessToken) {
@@ -63,7 +63,7 @@ const downloadPdf = async () => {
 
       {
         headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
           "Content-Type": "application/json",
           Accept: "application/pdf",
         },
@@ -99,7 +99,7 @@ const downloadExcel = async () => {
 
     const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
       headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
         Accept:
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

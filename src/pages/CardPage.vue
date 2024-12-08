@@ -303,7 +303,7 @@ watch(
 const filter = async () => {
   try {
     notifyStore.loading($q, "Подождите, фильтрация в обработке", QSpinnerGears);
-    const accessToken = Cookies.getItem("accessToken");
+    const accessToken = Cookies.getItem("access_token");
     if (!accessToken) {
       console.error("Access token is missing");
       notifyStore.notifyError($q, "Access token is missing");
@@ -427,7 +427,7 @@ const downloadPdf = async () => {
     }
     const response = await axios.get(`${serverUrl}pdf?IIN=${iin}`, {
       headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
         Accept: "application/pdf",
       },
@@ -463,10 +463,10 @@ const downloadExcel = async () => {
 
     const response = await axios.get(`${serverUrl}excel?IIN=${iin}`, {
       headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
         "Content-Type": "application/json",
         Accept:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME для Excel
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
       responseType: "blob",
       withCredentials: true,
@@ -497,7 +497,7 @@ const redirectToKeycloakLogin = () => {
 };
 
 onBeforeMount(() => {
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = Cookies.get("access_token");
   if (!accessToken) {
     redirectToKeycloakLogin();
     window.location.reload();
