@@ -54,12 +54,13 @@ import { useUserStore } from "src/stores/getApi-store";
 import { onMounted, ref, watch, computed, onBeforeMount } from "vue";
 import { getCurrentInstance } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { Cookies } from "quasar";
 
 const { proxy } = getCurrentInstance();
 const webUrl = proxy.$webUrl;
 const serverUrl = proxy.$serverUrl;
 
-const accessToken = localStorage.getItem("accessToken");
+const accessToken = Cookies.get("access_token");
 const drawer = ref(true);
 const userStore = useUserStore();
 
