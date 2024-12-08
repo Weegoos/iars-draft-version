@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { event, QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, event, QSpinnerGears, useQuasar } from "quasar";
 import axios from "axios";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
@@ -130,7 +130,7 @@ const getTemporaryConclusion = async () => {
 };
 
 onMounted(() => {
-  if (localStorage.getItem("access_token")) {
+  if (Cookies.get("access_token")) {
     getTemporaryConclusion();
   } else {
     localStorage.clear();

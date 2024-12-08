@@ -178,7 +178,7 @@ const deleteUser = async (item) => {
       QSpinnerGears
     );
 
-    const accessToken = "accessToken";
+    const accessToken = Cookies.get("access_token");
     if (!accessToken) {
       throw new Error("Токен отсутствует, повторите авторизацию.");
     }
