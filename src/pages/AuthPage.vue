@@ -119,6 +119,8 @@ const login = async () => {
 
     localStorage.setItem("accessToken", response.data.accessToken);
     Cookies.set("access_token", response.data.accessToken);
+    Cookies.set("refresh_token", response.data.refreshToken);
+
     $q.loading.hide();
     notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
 

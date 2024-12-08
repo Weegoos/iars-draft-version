@@ -26,7 +26,7 @@ import CardPage from "../pages/CardPage.vue";
 import AnalyticsPage from "../pages/AnalyticsPage.vue";
 import AdminPage from "../pages/AdminPage.vue";
 import { useNotifyStore } from "src/stores/notify-store";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
 
 const { proxy } = getCurrentInstance();
 const serverUrl = proxy.$serverUrl;
@@ -67,7 +67,7 @@ const getInfo = async () => {
   }
 };
 
-const accessToken = localStorage.getItem("accessToken");
+const accessToken = Cookies.get("access_token");
 onMounted(() => {
   if (!accessToken) {
     window.location.href = `${webUrl}authorization`;
