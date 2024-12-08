@@ -124,6 +124,10 @@ const defineRole = () => {
 const nav = (route) => {
   router.push(route);
 };
+
+onMounted(() => {
+  defineRole();
+});
 </script>
 
 <style scoped></style>
