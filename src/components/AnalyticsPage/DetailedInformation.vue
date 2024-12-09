@@ -306,11 +306,13 @@ import HistoryPage from "../../pages/HistoryPage.vue";
 import { computed, ref, watch, getCurrentInstance } from "vue";
 import axios from "axios";
 import { useNotifyStore } from "src/stores/notify-store";
-import { QSpinnerGears, useQuasar } from "quasar";
+import { Cookies, QSpinnerGears, useQuasar } from "quasar";
+import { useUserStore } from "src/stores/getApi-store";
 
 const tab = ref("info");
 const javascriptStore = useJavaScriptFunction();
 const notifyStore = useNotifyStore();
+const userStore = useUserStore();
 const $q = useQuasar();
 const { proxy } = getCurrentInstance();
 const webUrl = proxy.$webUrl;
@@ -387,6 +389,46 @@ const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
       `Ошибка при получении данных пользователя: ${error}`
     );
     throw error;
+  }
+};
+
+const download = async () => {
+  console.log(props.conclusionInfo);
+
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
+  try {
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+    const response = await axios.get(
+      `${serverUrl}pdfConclusion?registerNumber=${props.conclusionInfo.registrationNumber}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
+          "Content-Type": "application/json",
+          Accept: "application/pdf",
+        },
+        responseType: "blob",
+        withCredentials: true,
+      }
+    );
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.pdf`;
+    link.click();
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, `PDF успешно загружен.`);
+  } catch (error) {
+    $q.loading.hide();
+    console.error("Ошибка при загрузке PDF:", error);
+    notifyStore.notifyError($q, `Ошибка при загрузке PDF:", ${error}`);
   }
 };
 
