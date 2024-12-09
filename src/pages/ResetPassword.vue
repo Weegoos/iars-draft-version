@@ -34,13 +34,13 @@
       ></video>
 
       <div class="typewriter">
-        <p class="text-body1">«Автоматизация повесток и вызовов»</p>
+        <p class="text-body1">«Проверьте почту после сброса пароля!»</p>
       </div>
     </div>
     <div class="content">
       <q-card class="my-card" style="width: 50vw">
         <q-card-section align="center">
-          <p class="text-h5">Авторизация</p>
+          <p class="text-h5">Сброс пароля</p>
         </q-card-section>
         <q-card-section class="q-px-xl">
           <q-input
@@ -49,43 +49,9 @@
             label="Напишите почту"
             hint="Например: example@gmail.com"
           />
-
-          <q-input
-            v-model="password"
-            :type="isPwd ? 'password' : 'text'"
-            label="Введите пароль"
-          >
-            <template v-slot:append>
-              <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
-                class="cursor-pointer"
-                @click="isPwd = !isPwd"
-              />
-            </template>
-          </q-input>
         </q-card-section>
         <q-card-actions vertical class="q-px-xl">
-          <q-btn color="positive" no-caps label="Войти" @click="login" />
-          <div class="row q-gutter-sm q-mt-sm">
-            <section class="col" align="center">
-              <q-btn
-                no-caps
-                flat
-                color="primary"
-                label="Нету аккаунта? "
-                @click="pushToRegistrationPage"
-              />
-            </section>
-            <section class="col" align="center">
-              <q-btn
-                no-caps
-                flat
-                color="primary"
-                label="Забыли пароль? "
-                @click="pushToResetPassword"
-              />
-            </section>
-          </div>
+          <q-btn color="positive" no-caps label="Сброс" @click="reset" />
         </q-card-actions>
       </q-card>
     </div>
@@ -109,44 +75,45 @@ const notifyStore = useNotifyStore();
 
 // login
 const email = ref("");
-const password = ref("");
-const isPwd = ref(true);
 
-const login = async () => {
+const reset = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
+
   try {
-    const data = {
-      email: email.value,
-      password: password.value,
-    };
+    const response = await axios.put(
+      `${serverUrl}reset-password?email=${email.value}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
 
-    const jsonData = JSON.stringify(data);
-    const response = await axios.post(`${serverUrl}login`, jsonData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
-
-    Cookies.set("access_token", response.data.accessToken);
-    Cookies.set("refresh_token", response.data.refreshToken);
-
+    console.log("Ответ сервера:", response.data);
     $q.loading.hide();
-    notifyStore.nofifySuccess($q, "Пользователь успешно вошел в систему");
+    notifyStore.nofifySuccess(
+      $q,
+      "Ссылка для сброса пароля отправлена на почту"
+    );
 
     setTimeout(() => {
       router.push("/");
     }, 2500);
   } catch (error) {
-    console.error("Error during registration:", error);
+    console.error("Ошибка при сбросе пароля:", error);
     $q.loading.hide();
-    notifyStore.notifyError($q, `Ошибка при авторизации: ${error}`);
+    notifyStore.notifyError(
+      $q,
+      `Ошибка: ${error.response?.data || error.message}`
+    );
   }
 };
 
 const handleKeydown = (event) => {
   if (event.key === "Enter") {
-    login();
+    reset();
   }
 };
 

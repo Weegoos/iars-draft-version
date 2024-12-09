@@ -35,6 +35,10 @@ const routes = [
     path: "/remake-temps",
     component: () => import("../components/Remake/RemakePage.vue"),
   },
+  {
+    path: "/reset-password",
+    component: () => import("../pages/ResetPassword.vue"),
+  },
 
   // Always leave this as last one,
   // but you can also remove it
