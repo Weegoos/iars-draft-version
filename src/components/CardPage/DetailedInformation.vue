@@ -249,12 +249,14 @@
 
 <script setup>
 import axios from "axios";
+import { QSpinnerGears, useQuasar } from "quasar";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { computed, ref, watch, getCurrentInstance, onMounted } from "vue";
 
 const javascriptStore = useJavaScriptFunction();
 const notifyStore = useNotifyStore();
+const $q = useQuasar();
 
 const { proxy } = getCurrentInstance();
 const webUrl = proxy.$webUrl;
@@ -288,6 +290,7 @@ const history = ref("");
 const isCalledHistory = ref(false);
 const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
   try {
+    notifyStore.loading($q, "Подождите, история загружается...", QSpinnerGears);
     const response = await axios.get(
       `${serverUrl}history?iinOfCalled=${calledPersonIIN}&iinUser=${investigatorIIN}&goal=${goal}`,
       {
@@ -298,11 +301,17 @@ const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
         withCredentials: true,
       }
     );
-    console.log(response.data);
+    $q.loading.hide();
     history.value = response.data;
     isCalledHistory.value = true;
+    notifyStore.nofifySuccess($q, "История успешно загружена");
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при получении данных пользователя:", error);
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при получении данных пользователя: ${error}`
+    );
     throw error;
   }
 };
