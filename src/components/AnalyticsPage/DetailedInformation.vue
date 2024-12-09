@@ -393,8 +393,6 @@ const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
 };
 
 const download = async () => {
-  console.log(props.conclusionInfo);
-
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
   try {
     await userStore.getUserInfo();
