@@ -368,7 +368,6 @@ const getAgreement = async () => {
       }
     );
 
-    console.log("Agreements data:", response.data);
     pathCall.value = response.data;
   } catch (error) {
     console.error("Error fetching agreements:", error);

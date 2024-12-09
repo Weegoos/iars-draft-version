@@ -2,7 +2,13 @@
   <div class="fixed-center" v-if="isVisible == true">
     <q-card class="my-card" style="width: 550px">
       <q-card-section align="center">
-        <q-icon name="person" size="100px" />
+        <q-img
+          src="../assets/img/profile.jpg"
+          :ratio="16 / 9"
+          spinner-color="primary"
+          spinner-size="82px"
+          @click="imgClick"
+        />
         <div class="text-h5">{{ name }} - {{ job.name }}</div>
       </q-card-section>
       <q-card-section align="center">
@@ -50,6 +56,7 @@
       @closeDialog="closeDialog"
     />
     <EditPage :editDialog="editDialog" @closeEditDialog="closeEditDialog" />
+    <ChangeProfileImg :openChangeImg="openChangeImg" @close="close" />
   </div>
 </template>
 
@@ -61,6 +68,7 @@ import { getCurrentInstance } from "vue";
 
 import ChangePassword from "../components/Profile/ChangePassword.vue";
 import EditPage from "../components/Profile/EditPage.vue";
+import ChangeProfileImg from "../components/Profile/ChangeProfileImg.vue";
 import { useUserStore } from "src/stores/getApi-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
@@ -83,6 +91,15 @@ const formattedDate = computed(() =>
   javascriptStore.formatDate(registrationDate.value)
 );
 const isVisible = ref(false);
+const openChangeImg = ref(false);
+
+const imgClick = () => {
+  openChangeImg.value = true;
+};
+
+const close = () => {
+  openChangeImg.value = false;
+};
 
 const getProfile = async () => {
   try {

@@ -218,7 +218,28 @@
               />
             </q-tab-panel>
             <q-tab-panel name="path">
-              <div>map-outline</div>
+              <span class="infoHeadline">Должность</span>
+              <p class="infoStyle">
+                {{ pathCall.jobTitle }}
+              </p>
+              <span class="infoHeadline">ФИО</span>
+              <p class="infoStyle">
+                {{ pathCall.fullName }}
+              </p>
+              <span class="infoHeadline">Статус согласования</span>
+              <p class="infoStyle">
+                {{ pathCall.status }}
+              </p>
+              <span class="infoHeadline">Дата и время согласования</span>
+              <p class="infoStyle">
+                {{ formattedPathCallDate || "Не указано" }}
+              </p>
+              <span class="infoHeadline"
+                >Причины отправки на доработку/отказ/без рассмотрения</span
+              >
+              <p class="infoStyle">
+                {{ pathCall.reason }}
+              </p>
             </q-tab-panel>
           </q-tab-panels>
         </div>
@@ -348,6 +369,7 @@ watch(
   () => props.isOpenDetailedWindow,
   (newVal) => {
     openDialogPage.value = newVal;
+    getAgreement();
   }
 );
 
@@ -396,22 +418,22 @@ const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
   }
 };
 
-const getAgreements = async () => {
+const pathCall = ref("");
+const getAgreement = async () => {
   try {
-    if (!props.conclusionInfo || !props.conclusionInfo.investigatorIIN) {
-      console.warn("registrationNumber отсутствует");
+    if (
+      !props.conclusionInfo.registrationNumber ||
+      !props.conclusionInfo.investigatorIIN
+    ) {
+      console.warn("registrationNumber или investigatorIIN отсутствуют");
       return;
     }
 
-    console.log(
-      "Fetching agreements for registrationNumber:",
-      props.conclusionInfo.investigatorIIN
-    );
-
     const response = await axios.get(
-      `${serverUrl}usersAgreements?IIN=${props.conclusionInfo.investigatorIIN}`,
+      `${serverUrl}usersAgreements?IIN=${props.conclusionInfo.investigatorIIN}&regNum=${props.conclusionInfo.registrationNumber}`,
       {
         headers: {
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -419,13 +441,11 @@ const getAgreements = async () => {
       }
     );
 
-    console.log("Agreements data:", response.data);
+    pathCall.value = response.data;
   } catch (error) {
     console.error("Error fetching agreements:", error);
   }
 };
-
-getAgreements();
 
 const download = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
