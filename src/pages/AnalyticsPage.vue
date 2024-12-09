@@ -126,13 +126,13 @@
         class="q-mb-md"
         @click="filter"
       />
-      <!-- <q-btn
+      <q-btn
         color="primary"
         class="q-mb-md"
         icon="download"
         label="Скачать в формате pdf"
         @click="downloadPdf"
-      /> -->
+      />
       <q-btn
         color="primary"
         class="q-mb-md"

@@ -6,6 +6,7 @@
           <q-tabs v-model="tab" class="text-teal">
             <q-tab name="info" icon="info" label="Подробная информация" />
             <q-tab name="history" icon="history" label="История" />
+            <q-tab name="path" icon="map" label="Путь согласования " />
           </q-tabs>
 
           <q-tab-panels
@@ -216,6 +217,9 @@
                 @click="showHistory"
               />
             </q-tab-panel>
+            <q-tab-panel name="path">
+              <div>map-outline</div>
+            </q-tab-panel>
           </q-tab-panels>
         </div>
         <q-card-actions align="center">
@@ -303,7 +307,7 @@
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import DesicionPage from "../Status/DecisionPage.vue";
 import HistoryPage from "../../pages/HistoryPage.vue";
-import { computed, ref, watch, getCurrentInstance } from "vue";
+import { computed, ref, watch, getCurrentInstance, onMounted } from "vue";
 import axios from "axios";
 import { useNotifyStore } from "src/stores/notify-store";
 import { Cookies, QSpinnerGears, useQuasar } from "quasar";
@@ -391,6 +395,37 @@ const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
     throw error;
   }
 };
+
+const getAgreements = async () => {
+  try {
+    if (!props.conclusionInfo || !props.conclusionInfo.investigatorIIN) {
+      console.warn("registrationNumber отсутствует");
+      return;
+    }
+
+    console.log(
+      "Fetching agreements for registrationNumber:",
+      props.conclusionInfo.investigatorIIN
+    );
+
+    const response = await axios.get(
+      `${serverUrl}usersAgreements?IIN=${props.conclusionInfo.investigatorIIN}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    console.log("Agreements data:", response.data);
+  } catch (error) {
+    console.error("Error fetching agreements:", error);
+  }
+};
+
+getAgreements();
 
 const download = async () => {
   notifyStore.loading($q, "Подождите...", QSpinnerGears);
