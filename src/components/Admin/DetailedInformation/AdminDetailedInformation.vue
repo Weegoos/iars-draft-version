@@ -207,7 +207,42 @@
             </q-tab-panel>
 
             <q-tab-panel name="history">
-              <p>История будет храниться здесь</p>
+              <q-input
+                v-model="goal"
+                type="text"
+                label="Причины и цели повторного вызова"
+              />
+
+              <div class="q-mt-sm" v-show="isCalledHistory">
+                <span class="infoHeadline">Статус предыдущего вызова</span>
+                <p class="infoStyle">
+                  {{ history.prevCall }}
+                </p>
+                <span class="infoHeadline">Статус согласования</span>
+                <p class="infoStyle">
+                  {{ history.status }}
+                </p>
+                <span class="infoHeadline">Время прихода</span>
+                <p class="infoStyle">
+                  {{ formattedCameTime }}
+                </p>
+                <span class="infoHeadline">Время ухода</span>
+                <p class="infoStyle">
+                  {{ formattedLeaveTime || "Не указано" }}
+                </p>
+                <span class="infoHeadline"
+                  >Причины и цели повторного вызова</span
+                >
+                <p class="infoStyle">
+                  {{ history.goal }}
+                </p>
+              </div>
+              <q-btn
+                no-caps
+                color="primary"
+                label="Получить историю"
+                @click="emitGoal"
+              />
             </q-tab-panel>
           </q-tab-panels>
         </div>
@@ -269,6 +304,45 @@ const closeAdminDialogPage = () => {
   emit("closeAdminDialogPage");
 };
 
+const history = ref("");
+const isCalledHistory = ref(false);
+const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
+  try {
+    notifyStore.loading($q, "Подождите, история загружается...", QSpinnerGears);
+    const response = await axios.get(
+      `${serverUrl}history?iinOfCalled=${calledPersonIIN}&iinUser=${investigatorIIN}&goal=${goal}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    $q.loading.hide();
+    history.value = response.data;
+    isCalledHistory.value = true;
+    notifyStore.nofifySuccess($q, "История успешно загружена");
+  } catch (error) {
+    $q.loading.hide();
+    console.error("Ошибка при получении данных пользователя:", error);
+    notifyStore.notifyError(
+      $q,
+      `Ошибка при получении данных пользователя: ${error}`
+    );
+    throw error;
+  }
+};
+
+const goal = ref("");
+const emitGoal = () => {
+  getHistory(
+    props.conclusionDetailedInformation.calledPersonIIN,
+    props.conclusionDetailedInformation.investigatorIIN,
+    goal.value
+  );
+};
+
 const formattedDate = computed(() =>
   javascriptStore.formatDate(props.conclusionDetailedInformation.creationDate)
 );
@@ -281,6 +355,14 @@ const formattedRegistrationDate = computed(() =>
 
 const formattedEventDateTime = computed(() =>
   javascriptStore.formatDate(props.conclusionDetailedInformation.eventDateTime)
+);
+
+const formattedCameTime = computed(() =>
+  javascriptStore.formatDate(history.value.came)
+);
+
+const formattedLeaveTime = computed(() =>
+  javascriptStore.formatDate(history.value.leave)
 );
 
 const deleteConclusion = async (item) => {
