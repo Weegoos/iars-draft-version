@@ -6,7 +6,6 @@
           <q-tabs v-model="tab" class="text-teal">
             <q-tab name="info" icon="info" label="Подробная информация" />
             <q-tab name="history" icon="history" label="История" />
-            <q-tab name="path" icon="map" label="Путь согласования " />
           </q-tabs>
 
           <q-tab-panels
@@ -244,9 +243,6 @@
                 label="Получить историю"
                 @click="emitGoal"
               />
-            </q-tab-panel>
-            <q-tab-panel name="path">
-              <div>map-outline</div>
             </q-tab-panel>
           </q-tab-panels>
         </div>
