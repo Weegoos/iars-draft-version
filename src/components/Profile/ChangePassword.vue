@@ -60,7 +60,7 @@
 
 <script setup>
 import axios from "axios";
-import { useQuasar } from "quasar";
+import { Cookies, useQuasar } from "quasar";
 import { useNotifyStore } from "src/stores/notify-store";
 import { ref, watch } from "vue";
 import { getCurrentInstance } from "vue";
@@ -103,23 +103,29 @@ const savePassword = async () => {
       oldPassword: oldPassword.value,
       newPassword: newPassword.value,
     };
-    const jsonData = JSON.stringify(data);
-    const response = await axios.put(`${serverUrl}password`, jsonData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const response = await axios.put(
+      `${serverUrl}password?email=${email.value}&oldPass=${oldPassword.value}&newPass=${newPassword.value}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
+        },
+        withCredentials: true,
+      }
+    );
     notifyStore.nofifySuccess($q, `Пароль успешно изменен`);
     email.value = "";
     oldPassword.value = "";
     newPassword.value = "";
+
+    console.log("Отправка данных:", response.data);
   } catch (error) {
     notifyStore.notifyError(
       $q,
       `Ошибка при изменении пароля: ${error.response.data}`
     );
-    console.error("Ошибка при изменении пароля", error);
+    console.error("Ошибка при изменении пароля", error.response.data);
   }
 };
 </script>
