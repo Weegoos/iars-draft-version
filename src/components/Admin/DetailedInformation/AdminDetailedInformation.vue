@@ -247,6 +247,12 @@
           </q-tab-panels>
         </div>
         <q-card-actions align="center">
+          <div
+            class="q-mr-sm"
+            v-if="props.conclusionDetailedInformation.status == 'Согласовано'"
+          >
+            <q-btn color="green-4" no-caps label="Скачать" @click="download" />
+          </div>
           <q-btn
             color="red-4"
             no-caps
@@ -269,6 +275,7 @@
 <script setup>
 import axios from "axios";
 import { Cookies, QSpinnerGears, useQuasar } from "quasar";
+import { useUserStore } from "src/stores/getApi-store";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
 import { useNotifyStore } from "src/stores/notify-store";
 import { computed, ref, watch } from "vue";
@@ -280,6 +287,8 @@ const tab = ref("info");
 const javascriptStore = useJavaScriptFunction();
 const notifyStore = useNotifyStore();
 const $q = useQuasar();
+const userStore = useUserStore();
+
 const props = defineProps({
   isOpenAdminDialogPage: {
     type: Boolean,
@@ -341,6 +350,44 @@ const emitGoal = () => {
     props.conclusionDetailedInformation.investigatorIIN,
     goal.value
   );
+};
+
+const download = async () => {
+  notifyStore.loading($q, "Подождите...", QSpinnerGears);
+  try {
+    await userStore.getUserInfo();
+    const data = userStore.userInfo;
+    const iin = data.iin;
+
+    if (!iin) {
+      console.error("IIN не найден!");
+      return;
+    }
+    const response = await axios.get(
+      `${serverUrl}pdfConclusion?registerNumber=${props.conclusionDetailedInformation.registrationNumber}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
+          "Content-Type": "application/json",
+          Accept: "application/pdf",
+        },
+        responseType: "blob",
+        withCredentials: true,
+      }
+    );
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `User_${iin}.pdf`;
+    link.click();
+    $q.loading.hide();
+    notifyStore.nofifySuccess($q, `PDF успешно загружен.`);
+  } catch (error) {
+    $q.loading.hide();
+    console.error("Ошибка при загрузке PDF:", error);
+    notifyStore.notifyError($q, `Ошибка при загрузке PDF:", ${error}`);
+  }
 };
 
 const formattedDate = computed(() =>
