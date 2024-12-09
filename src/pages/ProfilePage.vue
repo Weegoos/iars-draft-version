@@ -3,12 +3,22 @@
     <q-card class="my-card" style="width: 550px">
       <q-card-section align="center">
         <q-img
-          src="../assets/img/profile.jpg"
+          v-if="userImg"
+          :src="userImg"
           :ratio="16 / 9"
           spinner-color="primary"
           spinner-size="82px"
           @click="imgClick"
         />
+        <div v-else>
+          <q-img
+            src="../assets/img/profile.jpg"
+            :ratio="16 / 9"
+            spinner-color="primary"
+            spinner-size="82px"
+            @click="imgClick"
+          />
+        </div>
         <div class="text-h5">{{ name }} - {{ job.name }}</div>
       </q-card-section>
       <q-card-section align="center">
@@ -56,7 +66,11 @@
       @closeDialog="closeDialog"
     />
     <EditPage :editDialog="editDialog" @closeEditDialog="closeEditDialog" />
-    <ChangeProfileImg :openChangeImg="openChangeImg" @close="close" />
+    <ChangeProfileImg
+      :openChangeImg="openChangeImg"
+      @close="close"
+      :iin="iin"
+    />
   </div>
 </template>
 
@@ -101,6 +115,7 @@ const close = () => {
   openChangeImg.value = false;
 };
 
+const iin = ref("");
 const getProfile = async () => {
   try {
     if (Cookies.get("access_token")) {
@@ -125,6 +140,9 @@ const getProfile = async () => {
       }
     );
 
+    getImg(response.data.profileImage);
+    iin.value = response.data.iin;
+
     if (response.data) {
       userEmail.value = response.data.email;
       name.value = `${response.data.name} ${response.data.secondName}`;
@@ -147,10 +165,32 @@ const getProfile = async () => {
   }
 };
 
+const userImg = ref("");
+const getImg = async (field) => {
+  try {
+    const response = await axios.get(`${serverUrl}image/${field}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      responseType: "arraybuffer",
+      withCredentials: true,
+    });
+
+    const blob = new Blob([response.data], { type: "image/webp" });
+    const objectUrl = URL.createObjectURL(blob);
+
+    userImg.value = objectUrl;
+  } catch (error) {
+    console.error("Ошибка при загрузке изображения:", error);
+  }
+};
 onMounted(() => {
-  getProfile();
   if (!accessToken) {
     window.location.href = `${webUrl}authorization`;
+  } else {
+    getProfile();
   }
 });
 
