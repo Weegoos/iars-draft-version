@@ -181,7 +181,42 @@
             </q-tab-panel>
 
             <q-tab-panel name="history">
-              <p>История будет храниться здесь</p>
+              <q-input
+                v-model="goal"
+                type="text"
+                label="Причины и цели повторного вызова"
+              />
+
+              <div class="q-mt-sm" v-show="isCalledHistory">
+                <span class="infoHeadline">Статус предыдущего вызова</span>
+                <p class="infoStyle">
+                  {{ history.prevCall }}
+                </p>
+                <span class="infoHeadline">Статус согласования</span>
+                <p class="infoStyle">
+                  {{ history.status }}
+                </p>
+                <span class="infoHeadline">Время прихода</span>
+                <p class="infoStyle">
+                  {{ formattedCameTime }}
+                </p>
+                <span class="infoHeadline">Время ухода</span>
+                <p class="infoStyle">
+                  {{ formattedLeaveTime || "Не указано" }}
+                </p>
+                <span class="infoHeadline"
+                  >Причины и цели повторного вызова</span
+                >
+                <p class="infoStyle">
+                  {{ history.goal }}
+                </p>
+              </div>
+              <q-btn
+                no-caps
+                color="primary"
+                label="Получить историю"
+                @click="emitGoal"
+              />
             </q-tab-panel>
           </q-tab-panels>
         </div>
@@ -213,13 +248,17 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { useJavaScriptFunction } from "src/stores/javascript-function-store";
-import { computed, ref, watch, getCurrentInstance } from "vue";
+import { useNotifyStore } from "src/stores/notify-store";
+import { computed, ref, watch, getCurrentInstance, onMounted } from "vue";
 
 const javascriptStore = useJavaScriptFunction();
+const notifyStore = useNotifyStore();
 
 const { proxy } = getCurrentInstance();
 const webUrl = proxy.$webUrl;
+const serverUrl = proxy.$serverUrl;
 
 const props = defineProps({
   isOpen: {
@@ -245,6 +284,38 @@ const closeWindow = () => {
   emit("closeWindow");
 };
 
+const history = ref("");
+const isCalledHistory = ref(false);
+const getHistory = async (calledPersonIIN, investigatorIIN, goal) => {
+  try {
+    const response = await axios.get(
+      `${serverUrl}history?iinOfCalled=${calledPersonIIN}&iinUser=${investigatorIIN}&goal=${goal}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(response.data);
+    history.value = response.data;
+    isCalledHistory.value = true;
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
+    throw error;
+  }
+};
+
+const goal = ref("");
+const emitGoal = () => {
+  getHistory(
+    props.detialedInformation.calledPersonIIN,
+    props.detialedInformation.investigatorIIN,
+    goal.value
+  );
+};
+
 const editPage = async () => {
   window.open(
     `${webUrl}remake-temps?registrationNumber=${props.detialedInformation.registrationNumber}`,
@@ -264,6 +335,14 @@ const formattedRegistrationDate = computed(() =>
 
 const formattedEventDateTime = computed(() =>
   javascriptStore.formatDate(props.detialedInformation.eventDateTime)
+);
+
+const formattedCameTime = computed(() =>
+  javascriptStore.formatDate(history.value.came)
+);
+
+const formattedLeaveTime = computed(() =>
+  javascriptStore.formatDate(history.value.leave)
 );
 </script>
 

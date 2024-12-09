@@ -180,6 +180,7 @@ const javascriptFunction = useJavaScriptFunction();
 const pagination = ref({ rowsPerPage: 0 });
 const isOpen = ref(false);
 const detialedInformation = ref("");
+
 const viewDetailedInformation = (evt, row, index) => {
   isOpen.value = true;
   detialedInformation.value = row;
