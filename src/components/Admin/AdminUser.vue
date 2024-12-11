@@ -7,7 +7,6 @@
       :columns="columns"
       row-key="id"
       @row-click="viewDetailedInformation"
-      v-model:pagination="pagination"
     />
 
     <UserDetailedInformation
@@ -37,7 +36,7 @@ const notifyStore = useNotifyStore();
 const javascriptFunction = useJavaScriptFunction();
 
 const accessToken = Cookies.get("access_token");
-const pagination = ref({ rowsPerPage: 0 });
+// const pagination = ref({ rowsPerPage: 0 });
 
 const defineToken = () => {
   if (!accessToken) {
@@ -143,9 +142,11 @@ const getAllUsers = async () => {
       ...user,
       id: index + 1,
     }));
+    console.log("response.data:", response.data);
     notifyStore.nofifySuccess($q, "Все пользователи успешно загружены");
     $q.loading.hide();
   } catch (error) {
+    $q.loading.hide();
     console.error("Ошибка при получении всех пользователей:", error);
     throw error;
   }
