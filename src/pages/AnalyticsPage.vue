@@ -181,7 +181,6 @@ const $q = useQuasar();
 const notifyStore = useNotifyStore();
 const userStore = useUserStore();
 const javascriptFunction = useJavaScriptFunction();
-
 const columns = [
   {
     name: "id",
@@ -257,7 +256,6 @@ const downloadPdf = async () => {
       responseType: "blob",
       withCredentials: true,
     });
-
     const blob = new Blob([response.data], { type: "application/pdf" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
